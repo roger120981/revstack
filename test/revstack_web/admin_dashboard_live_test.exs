@@ -29,6 +29,12 @@ defmodule RevstackWeb.AdminDashboardLiveTest do
              to_string(Application.fetch_env!(:revstack, :environment))
            )
 
+    assert has_element?(
+             view,
+             "#dashboard-system-app-version",
+             to_string(Application.spec(:revstack, :vsn))
+           )
+
     assert has_element?(view, "a[href='/admin/leads']", "View all leads")
     assert has_element?(view, "a[href='/admin/estimates']", "View all estimate requests")
   end

@@ -31,7 +31,8 @@ defmodule RevstackWeb.Admin.DashboardLive do
        new_lead_count: new_lead_count,
        estimate_count: estimate_count,
        new_estimate_count: new_estimate_count,
-       environment: runtime_environment()
+       environment: runtime_environment(),
+       app_version: current_app_version()
      )}
   end
 
@@ -126,6 +127,10 @@ defmodule RevstackWeb.Admin.DashboardLive do
                 <dd id="dashboard-system-environment" class="text-gray-200">{@environment}</dd>
               </div>
               <div class="flex justify-between">
+                <dt class="text-gray-400">Version</dt>
+                <dd id="dashboard-system-app-version" class="text-gray-200">{@app_version}</dd>
+              </div>
+              <div class="flex justify-between">
                 <dt class="text-gray-400">Phoenix</dt>
                 <dd class="text-gray-200">{Application.spec(:phoenix, :vsn)}</dd>
               </div>
@@ -180,6 +185,12 @@ defmodule RevstackWeb.Admin.DashboardLive do
   defp runtime_environment do
     :revstack
     |> Application.get_env(:environment, :prod)
+    |> to_string()
+  end
+
+  defp current_app_version do
+    :revstack
+    |> Application.spec(:vsn)
     |> to_string()
   end
 end

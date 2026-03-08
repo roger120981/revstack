@@ -91,7 +91,7 @@ defmodule RevstackWeb.HomeLive do
             <.help_card
               icon="hero-rocket-launch"
               title="Build New BEAM Systems"
-              description="From greenfield to production — architecture, implementation, and deployment of Elixir/Erlang applications."
+              description="From greenfield to production, architecture, implementation, and deployment of Elixir/Erlang applications."
             />
             <.help_card
               icon="hero-wrench-screwdriver"

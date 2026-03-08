@@ -258,7 +258,7 @@ defmodule RevstackWeb.WhoamiLive do
                 "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
                 "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
                 "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-                "Architected and built NetAdmin from inception — a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+                "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
                 "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery."
               ]}
             />
@@ -1304,7 +1304,7 @@ defmodule RevstackWeb.WhoamiLive do
           ],
           time_to_production: "Built and evolved alongside the monitoring fleet",
           post_production_issues: [
-            "Minimal instability — stable and low-maintenance from early on",
+            "Minimal instability,  stable and low-maintenance from early on",
             "Emphasis shifted toward pragmatic health signals rather than overly heavy metrics"
           ],
           installation_or_deployment: [

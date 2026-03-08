@@ -2,8 +2,10 @@ This is a web application written using the Phoenix web framework.
 
 ## Project guidelines
 
+- **CRITICAL: Write tests for EVERY change you make.** No feature, bug fix, or modification is complete without corresponding tests. This is non-negotiable.
+- **MANDATORY: Run `mix test` after EVERY change to ensure all tests pass 100%.** Never consider a change complete until you've verified all tests are green.
 - Use `mix precommit` alias when you are done with all changes and fix any pending issues
-- Use the already included and available `:req` (`Req`) library for HTTP requests, **avoid** `:httpoison`, `:tesla`, and `:httpc`. Req is included by default and is the preferred HTTP client for Phoenix apps
+- Use the already included and available `:req` (`Req`) library for HTTP requests, **avoid** `:httpoison`, `:tesla`, and `:httrc`. Req is included by default and is the preferred HTTP client for Phoenix apps
 
 ### Phoenix v1.8 guidelines
 
@@ -93,6 +95,8 @@ custom classes must fully style the input
 
 ## Test guidelines
 
+- **MANDATORY: Every feature implementation, bug fix, or code modification MUST include corresponding tests.** Do not consider any work complete until tests are written and passing.
+- **MANDATORY: Run `mix test` after every change to verify 100% test pass rate.** All tests must be green before moving on to the next task.
 - **Always use `start_supervised!/1`** to start processes in tests as it guarantees cleanup between tests
 - **Avoid** `Process.sleep/1` and `Process.alive?/1` in tests
   - Instead of sleeping to wait for a process to finish, **always** use `Process.monitor/1` and assert on the DOWN message:

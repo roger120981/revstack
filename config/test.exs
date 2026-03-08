@@ -6,7 +6,8 @@ config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true
 # Test admin credentials
 config :revstack,
   admin_email: "admin@test.com",
-  admin_password: "testpassword123!"
+  admin_password: "testpassword123!",
+  geolocation_provider: :disabled
 
 # Configure your database
 #

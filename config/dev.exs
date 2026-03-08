@@ -71,6 +71,9 @@ config :revstack, RevstackWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :revstack, dev_routes: true, token_signing_secret: "MduSjK8bg5vmRM3yRCAErmrftwaxOH8P"
 
+# Disable geolocation in development (only enabled in production)
+config :revstack, geolocation_provider: :disabled
+
 # Dev admin credentials (override via env vars if desired)
 config :revstack,
   admin_email: System.get_env("ADMIN_EMAIL", "admin@revenuelink.net"),

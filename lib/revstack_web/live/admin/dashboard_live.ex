@@ -23,6 +23,10 @@ defmodule RevstackWeb.Admin.DashboardLive do
       |> Ash.Query.filter(status == :new)
       |> Ash.count!(authorize?: false)
 
+    visitor_count =
+      Revstack.Tracking.Visitor
+      |> Ash.count!(authorize?: false)
+
     {:ok,
      assign(socket,
        page_title: "Admin Dashboard",
@@ -31,6 +35,7 @@ defmodule RevstackWeb.Admin.DashboardLive do
        new_lead_count: new_lead_count,
        estimate_count: estimate_count,
        new_estimate_count: new_estimate_count,
+       visitor_count: visitor_count,
        environment: runtime_environment(),
        app_version: current_app_version()
      )}
@@ -48,7 +53,7 @@ defmodule RevstackWeb.Admin.DashboardLive do
 
       <div class="space-y-8">
         <%!-- Stats grid --%>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           <.stat_card
             id="dashboard-total-leads"
             title="Total Leads"
@@ -79,6 +84,13 @@ defmodule RevstackWeb.Admin.DashboardLive do
             color="yellow"
             href={~p"/admin/estimates"}
           />
+          <.stat_card
+            id="dashboard-total-visitors"
+            title="Total Visitors"
+            value={@visitor_count}
+            icon="hero-eye"
+            href={~p"/admin/visitors"}
+          />
         </div>
 
         <%!-- Quick actions --%>
@@ -99,6 +111,13 @@ defmodule RevstackWeb.Admin.DashboardLive do
               >
                 <.icon name="hero-document-text" class="size-5 text-indigo-400" />
                 View all estimate requests
+                <.icon name="hero-arrow-right" class="size-4 ml-auto text-gray-500" />
+              </.link>
+              <.link
+                navigate={~p"/admin/visitors"}
+                class="flex items-center gap-3 rounded-lg bg-gray-700/50 p-3 text-sm text-gray-200 hover:bg-gray-700 transition-colors"
+              >
+                <.icon name="hero-eye" class="size-5 text-indigo-400" /> View all visitors
                 <.icon name="hero-arrow-right" class="size-4 ml-auto text-gray-500" />
               </.link>
               <.link

@@ -197,6 +197,29 @@ defmodule RevstackWeb.AdminLayouts do
                 /> Estimate Requests
               </.link>
             </li>
+            <li>
+              <.link
+                navigate={~p"/admin/visitors"}
+                class={[
+                  "group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold transition-colors",
+                  if(String.starts_with?(@current_path, "/admin/visitors"),
+                    do: "bg-indigo-950/25 text-white",
+                    else: "text-indigo-100 hover:bg-indigo-950/25 hover:text-white"
+                  )
+                ]}
+              >
+                <.icon
+                  name="hero-eye"
+                  class={[
+                    "size-6 shrink-0",
+                    if(String.starts_with?(@current_path, "/admin/visitors"),
+                      do: "text-white",
+                      else: "text-indigo-100 group-hover:text-white"
+                    )
+                  ]}
+                /> Visitors
+              </.link>
+            </li>
           </ul>
         </li>
         <li class="mt-auto">

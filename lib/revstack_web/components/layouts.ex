@@ -214,7 +214,7 @@ defmodule RevstackWeb.Layouts do
           >
             Contact
           </.link>
-          <.link
+          <%!-- <.link
             navigate="/whoami"
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
@@ -222,7 +222,7 @@ defmodule RevstackWeb.Layouts do
           </.link>
           <.link navigate="/estimate" class="btn btn-primary btn-sm mt-2 shadow-sm">
             Get an Estimate
-          </.link>
+          </.link> --%>
         </div>
       </div>
     </header>

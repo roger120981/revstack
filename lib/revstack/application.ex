@@ -12,6 +12,7 @@ defmodule Revstack.Application do
       Revstack.Repo,
       {DNSCluster, query: Application.get_env(:revstack, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Revstack.PubSub},
+      {Task.Supervisor, name: Revstack.TaskSupervisor},
       # Start a worker by calling: Revstack.Worker.start_link(arg)
       # {Revstack.Worker, arg},
       # Start to serve requests, typically the last entry

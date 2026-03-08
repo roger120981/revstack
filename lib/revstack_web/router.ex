@@ -13,6 +13,7 @@ defmodule RevstackWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :load_from_session
+    plug RevstackWeb.Plugs.VisitorTracking
   end
 
   pipeline :api do
@@ -26,7 +27,10 @@ defmodule RevstackWeb.Router do
     pipe_through :browser
 
     ash_authentication_live_session :public_routes,
-      on_mount: [{RevstackWeb.LiveUserAuth, :live_user_optional}] do
+      on_mount: [
+        {RevstackWeb.LiveUserAuth, :live_user_optional},
+        {RevstackWeb.LiveUserAuth, :track_visitor}
+      ] do
       live "/", WhoamiLive
       live "/about", AboutLive
       live "/services", ServicesLive
@@ -51,6 +55,8 @@ defmodule RevstackWeb.Router do
       live "/estimates", EstimateRequestLive.Index, :index
       live "/estimates/:id", EstimateRequestLive.Show, :show
       live "/estimates/:id/edit", EstimateRequestLive.Show, :edit
+      live "/visitors", VisitorLive.Index, :index
+      live "/visitors/:id", VisitorLive.Show, :show
     end
   end
 

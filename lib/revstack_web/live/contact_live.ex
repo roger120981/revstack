@@ -2,7 +2,7 @@ defmodule RevstackWeb.ContactLive do
   use RevstackWeb, :live_view
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     form =
       Revstack.Consulting.Lead
       |> AshPhoenix.Form.for_create(:create,
@@ -13,7 +13,9 @@ defmodule RevstackWeb.ContactLive do
     {:ok,
      socket
      |> assign(page_title: "Contact — Revstack")
-     |> assign(form: form)}
+     |> assign(form: form)
+     |> assign(visitor_ip: session["visitor_ip"])
+     |> assign(visitor_user_agent: session["visitor_user_agent"])}
   end
 
   @impl true
@@ -27,6 +29,12 @@ defmodule RevstackWeb.ContactLive do
 
   @impl true
   def handle_event("submit", %{"form" => params}, socket) do
+    # Inject visitor tracking context into form params
+    params =
+      params
+      |> Map.put("request_ip", socket.assigns.visitor_ip)
+      |> Map.put("request_user_agent", socket.assigns.visitor_user_agent)
+
     case AshPhoenix.Form.submit(socket.assigns.form.source, params: params) do
       {:ok, _lead} ->
         {:noreply,

@@ -81,6 +81,22 @@ if config_env() == :prod do
       System.get_env("ADMIN_PASSWORD") ||
         raise("Missing environment variable `ADMIN_PASSWORD`!")
 
+  # Trust proxy headers (X-Forwarded-For) from Fly.io load balancer
+  config :revstack, trust_proxy: true
+
+  # MaxMind GeoLite2 web service for IP geolocation (optional)
+  # Sign up free at https://www.maxmind.com/en/geolite2/signup
+  # Set MAXMIND_ACCOUNT_ID and MAXMIND_LICENSE_KEY environment variables
+  maxmind_account_id = System.get_env("MAXMIND_ACCOUNT_ID")
+  maxmind_license_key = System.get_env("MAXMIND_LICENSE_KEY")
+
+  if maxmind_account_id && maxmind_license_key do
+    config :revstack,
+      geolocation_provider: :maxmind,
+      maxmind_account_id: maxmind_account_id,
+      maxmind_license_key: maxmind_license_key
+  end
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key

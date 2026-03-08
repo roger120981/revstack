@@ -30,7 +30,10 @@ defmodule Revstack.Consulting.EstimateRequest do
         :timeline,
         :summary,
         :details,
-        :source
+        :source,
+        :visitor_id,
+        :request_ip,
+        :request_user_agent
       ]
     end
 
@@ -132,6 +135,21 @@ defmodule Revstack.Consulting.EstimateRequest do
       allow_nil? true
       public? true
       default "website"
+    end
+
+    attribute :visitor_id, :uuid do
+      allow_nil? true
+      public? true
+    end
+
+    attribute :request_ip, :string do
+      allow_nil? true
+      public? true
+    end
+
+    attribute :request_user_agent, :string do
+      allow_nil? true
+      public? true
     end
 
     timestamps()

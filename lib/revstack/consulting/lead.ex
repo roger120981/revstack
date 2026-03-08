@@ -29,7 +29,10 @@ defmodule Revstack.Consulting.Lead do
         :preferred_contact_method,
         :phone,
         :source,
-        :honeypot
+        :honeypot,
+        :visitor_id,
+        :request_ip,
+        :request_user_agent
       ]
     end
 
@@ -121,6 +124,21 @@ defmodule Revstack.Consulting.Lead do
       allow_nil? true
       public? true
       default ""
+    end
+
+    attribute :visitor_id, :uuid do
+      allow_nil? true
+      public? true
+    end
+
+    attribute :request_ip, :string do
+      allow_nil? true
+      public? true
+    end
+
+    attribute :request_user_agent, :string do
+      allow_nil? true
+      public? true
     end
 
     timestamps()

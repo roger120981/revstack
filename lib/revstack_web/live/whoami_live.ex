@@ -17,7 +17,7 @@ defmodule RevstackWeb.WhoamiLive do
         career_modal_open?: false,
         career_selected_project_id: nil,
         career_detail_view?: false,
-        career_phases: [career_portfolio_phase_one()]
+        career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()]
       )
 
     socket =
@@ -297,7 +297,11 @@ defmodule RevstackWeb.WhoamiLive do
             <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
             <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
             <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-              Selected professional systems from across my career 💰 <b>click any project for the full story</b>.
+              Selected professional systems from across my career. 💰 <br />
+              <b class="text-xl"><.icon
+                  name="hero-cursor-arrow-rays"
+                  class="size-5 inline-block align-text-bottom"
+                /> click any project for the full story</b>.
             </p>
           </div>
           <%= for phase <- @career_phases do %>
@@ -473,6 +477,38 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-building-office-2" class="size-4" /> Visit RevenueLink Tech
               </.link>
             </div> --%>
+          </div>
+        </div>
+      </section>
+
+      <%!-- GitHub Repository --%>
+      <section class="pb-20">
+        <div class="mx-auto max-w-3xl">
+          <div class="rounded-2xl border border-base-300 bg-base-200/50 p-8 text-center">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-content/10 mx-auto mb-4">
+              <svg
+                viewBox="0 0 16 16"
+                class="size-7 fill-current text-base-content"
+                aria-hidden="true"
+              >
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-base-content mb-2">View the Source Code</h3>
+            <p class="text-sm text-base-content/70 mb-4 max-w-md mx-auto">
+              This portfolio site is open source. Check out the code on GitHub to see how it's built with Phoenix LiveView.
+            </p>
+            <a
+              href="https://github.com/kyle-neal/revstack"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline gap-2 transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+              View on GitHub
+            </a>
           </div>
         </div>
       </section>
@@ -652,15 +688,62 @@ defmodule RevstackWeb.WhoamiLive do
   defp career_phase_section(assigns) do
     ~H"""
     <div class="mb-12 last:mb-0">
-      <div class="flex items-center gap-3 mb-8">
+      <div class="flex items-center gap-3 mb-6">
         <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
           <.icon name="hero-folder-open" class="size-4" />
         </div>
         <h3 class="text-base font-bold text-primary">{@phase.title}</h3>
       </div>
+      <p
+        :if={Map.get(@phase, :overview)}
+        class="text-sm text-base-content/70 leading-relaxed mb-6 max-w-3xl"
+      >
+        {@phase.overview}
+      </p>
+      <.phase_scale_metrics :if={Map.get(@phase, :metrics)} metrics={@phase.metrics} />
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <.career_project_card :for={project <- @phase.projects} project={project} />
       </div>
+      <.phase_team_section :if={Map.get(@phase, :team)} team={@phase.team} />
+    </div>
+    """
+  end
+
+  defp phase_scale_metrics(assigns) do
+    ~H"""
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-2.5">
+        <div
+          :for={metric <- @metrics}
+          class="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5"
+        >
+          <span class="text-sm font-bold text-primary">{metric.value}</span>
+          <span class="text-xs text-base-content/60">{metric.label}</span>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp phase_team_section(assigns) do
+    ~H"""
+    <div class="mt-8 rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+          <.icon name="hero-user-group" class="size-4" />
+        </div>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide">Team & Leadership</h4>
+      </div>
+      <p class="text-sm text-base-content/80 leading-relaxed mb-4">{@team.description}</p>
+      <ul class="space-y-2">
+        <li
+          :for={item <- @team.members}
+          class="flex items-start gap-2.5 text-sm text-base-content/70 leading-relaxed"
+        >
+          <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+          <span>{item}</span>
+        </li>
+      </ul>
     </div>
     """
   end
@@ -713,8 +796,7 @@ defmodule RevstackWeb.WhoamiLive do
       phx-key="Escape"
       phx-hook="LockBodyScroll"
     >
-      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_career_modal">
-      </div>
+      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_career_modal"></div>
       <div class="relative flex min-h-full items-start justify-center p-4 sm:p-6 lg:p-8">
         <div class="relative w-full max-w-4xl my-8 rounded-2xl border border-base-300 bg-base-100 shadow-2xl">
           <%!-- Header --%>
@@ -847,12 +929,14 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
       </div>
 
-      <%!-- How I Designed It --%>
-      <div>
-        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">How I Designed It</h4>
+      <%!-- Architecture (Phase 2) or How I Designed It (Phase 1) --%>
+      <div :if={Map.get(@project, :architecture) || Map.get(@project, :design)}>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
+          {if Map.get(@project, :architecture), do: "Architecture", else: "How I Designed It"}
+        </h4>
         <ul class="space-y-2">
           <li
-            :for={item <- @project.design}
+            :for={item <- Map.get(@project, :architecture) || Map.get(@project, :design, [])}
             class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
           >
             <.icon name="hero-check-circle" class="size-4 text-primary shrink-0 mt-0.5" />
@@ -861,14 +945,42 @@ defmodule RevstackWeb.WhoamiLive do
         </ul>
       </div>
 
+      <%!-- Responsibilities --%>
+      <div :if={Map.get(@project, :responsibilities)}>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Responsibilities</h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- Map.get(@project, :responsibilities, [])}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
+      <%!-- Scale --%>
+      <div :if={Map.get(@project, :scale)}>
+        <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Scale</h4>
+        <ul class="space-y-2">
+          <li
+            :for={item <- Map.get(@project, :scale, [])}
+            class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
+          >
+            <.icon name="hero-arrow-trending-up" class="size-4 text-success shrink-0 mt-0.5" />
+            <span>{item}</span>
+          </li>
+        </ul>
+      </div>
+
       <%!-- Challenges Encountered --%>
-      <div>
+      <div :if={Map.get(@project, :challenges)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
           Challenges Encountered
         </h4>
         <ul class="space-y-2">
           <li
-            :for={item <- @project.challenges}
+            :for={item <- Map.get(@project, :challenges, [])}
             class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
           >
             <.icon name="hero-exclamation-triangle" class="size-4 text-amber-500 shrink-0 mt-0.5" />
@@ -878,11 +990,11 @@ defmodule RevstackWeb.WhoamiLive do
       </div>
 
       <%!-- Subsystems --%>
-      <div>
+      <div :if={Map.get(@project, :subsystems)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Subsystems</h4>
         <div class="flex flex-wrap gap-2">
           <span
-            :for={item <- @project.subsystems}
+            :for={item <- Map.get(@project, :subsystems, [])}
             class="inline-flex items-center rounded-lg bg-base-200 px-3 py-1.5 text-xs font-medium text-base-content/70"
           >
             {item}
@@ -891,21 +1003,21 @@ defmodule RevstackWeb.WhoamiLive do
       </div>
 
       <%!-- Time to Production --%>
-      <div>
+      <div :if={Map.get(@project, :time_to_production)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
           Time to Production
         </h4>
-        <p class="text-sm text-base-content/80">{@project.time_to_production}</p>
+        <p class="text-sm text-base-content/80">{Map.get(@project, :time_to_production)}</p>
       </div>
 
       <%!-- Post-Production Lessons --%>
-      <div>
+      <div :if={Map.get(@project, :post_production_issues)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
           Post-Production Lessons
         </h4>
         <ul class="space-y-2">
           <li
-            :for={item <- @project.post_production_issues}
+            :for={item <- Map.get(@project, :post_production_issues, [])}
             class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
           >
             <.icon name="hero-light-bulb" class="size-4 text-primary shrink-0 mt-0.5" />
@@ -915,13 +1027,13 @@ defmodule RevstackWeb.WhoamiLive do
       </div>
 
       <%!-- Installation & Deployment --%>
-      <div>
+      <div :if={Map.get(@project, :installation_or_deployment)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">
           Installation & Deployment
         </h4>
         <ul class="space-y-2">
           <li
-            :for={item <- @project.installation_or_deployment}
+            :for={item <- Map.get(@project, :installation_or_deployment, [])}
             class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
           >
             <.icon name="hero-rocket-launch" class="size-4 text-primary shrink-0 mt-0.5" />
@@ -931,11 +1043,11 @@ defmodule RevstackWeb.WhoamiLive do
       </div>
 
       <%!-- Business Impact --%>
-      <div>
+      <div :if={Map.get(@project, :business_impact)}>
         <h4 class="text-sm font-bold text-primary uppercase tracking-wide mb-3">Business Impact</h4>
         <ul class="space-y-2">
           <li
-            :for={item <- @project.business_impact}
+            :for={item <- Map.get(@project, :business_impact, [])}
             class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
           >
             <.icon name="hero-arrow-trending-up" class="size-4 text-success shrink-0 mt-0.5" />
@@ -1315,6 +1427,265 @@ defmodule RevstackWeb.WhoamiLive do
             "Gave the team a focused DNS appliance for a specific infrastructure need"
           ],
           timeline_order: 6
+        }
+      ]
+    }
+  end
+
+  defp career_portfolio_phase_two do
+    %{
+      id: "phase-2",
+      title: "Affiliate Network Platform & Infrastructure Leadership",
+      overview:
+        "Architected and operated backend systems powering a large affiliate marketing platform processing millions of daily events. Later built internal infrastructure management tooling used across multiple company systems.",
+      metrics: [
+        %{value: "1.5M+", label: "events / day"},
+        %{value: "~250", label: "peak events / sec"},
+        %{value: "~600", label: "peak redirects / sec"},
+        %{value: "6-node", label: "Cassandra cluster"},
+        %{value: "3-node", label: "ES cluster"},
+        %{value: "~600 TB", label: "Cassandra footprint"},
+        %{value: "~600 TB", label: "ES analytics"},
+        %{value: "12+", label: "years ownership"}
+      ],
+      team: %{
+        description:
+          "Kyle served as the lead backend engineer for the affiliate platform, responsible for architecture, development, and production operations.",
+        members: [
+          "CTO worked on a separate SMS platform",
+          "Kyle owned the entire affiliate network backend stack",
+          "Led 1 UI engineer",
+          "Collaborated with 3 infrastructure engineers"
+        ]
+      },
+      projects: [
+        %{
+          id: "affiliate-network-platform",
+          title: "Affiliate Network Platform",
+          tagline:
+            "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations",
+          period_label: "Core Platform",
+          phase: 2,
+          icon: "hero-chart-bar",
+          card_copy:
+            "Revenue-critical Erlang platform handling click tracking, conversion attribution, campaign management, reporting, and partner integrations across millions of daily events.",
+          summary:
+            "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations. Built in Erlang/OTP with Cassandra, Elasticsearch, RabbitMQ, and PostgreSQL as the primary data and messaging layer.",
+          tech_used: [
+            "Erlang/OTP",
+            "Cassandra",
+            "Elasticsearch",
+            "RabbitMQ",
+            "PostgreSQL",
+            "Apache Spark"
+          ],
+          responsibilities: [
+            "Click tracking",
+            "Impression tracking",
+            "Conversion attribution",
+            "Affiliate management",
+            "Advertiser management",
+            "Campaign configuration and payout rules",
+            "Reporting and analytics",
+            "CSV export pipelines",
+            "Moderation workflows",
+            "Suppression list management",
+            "Creative and landing page management",
+            "External APIs and integrations"
+          ],
+          scale: [
+            "Millions of events processed daily",
+            "Revenue-critical production system supporting $2.5M+ monthly revenue"
+          ],
+          timeline_order: 1
+        },
+        %{
+          id: "edge-redirect-service",
+          title: "Edge Redirect Service",
+          tagline:
+            "High-performance edge service handling affiliate tracking links and routing traffic based on campaign rules",
+          period_label: "Edge Infrastructure",
+          phase: 2,
+          icon: "hero-arrows-right-left",
+          card_copy:
+            "Erlang edge service on disposable VPS nodes generating real-time redirect responses for affiliate tracking links based on campaign routing rules.",
+          summary:
+            "High-performance edge service responsible for handling affiliate tracking links and routing traffic based on campaign rules. Deployed on disposable VPS nodes with DNS tracking domains pointed to these nodes.",
+          tech_used: [
+            "Erlang/OTP",
+            "DNS",
+            "HTTP",
+            "VPS Infrastructure"
+          ],
+          architecture: [
+            "Erlang service deployed on disposable VPS nodes",
+            "DNS tracking domains pointed to these nodes",
+            "Nodes retrieved campaign configuration from backend services",
+            "Redirect responses generated in real time"
+          ],
+          responsibilities: [
+            "Campaign routing",
+            "Geo targeting",
+            "Sub-ID tracking",
+            "Redirect decision logic",
+            "Campaign cap enforcement"
+          ],
+          timeline_order: 2
+        },
+        %{
+          id: "traffic-analytics-pipeline",
+          title: "Traffic Logging & Analytics Pipeline",
+          tagline:
+            "Distributed event pipeline for ingesting click, impression, and conversion events powering analytics and reporting",
+          period_label: "Data & Analytics",
+          phase: 2,
+          icon: "hero-circle-stack",
+          card_copy:
+            "Distributed pipeline ingesting click, impression, and conversion events into Cassandra and Elasticsearch, powering real-time analytics and report aggregation.",
+          summary:
+            "Distributed event pipeline responsible for ingesting click, impression, and conversion events and powering analytics and reporting across the affiliate network.",
+          tech_used: [
+            "Cassandra",
+            "Elasticsearch",
+            "RabbitMQ",
+            "Apache Spark"
+          ],
+          responsibilities: [
+            "Event ingestion",
+            "Traffic logging",
+            "Analytics indexing",
+            "Report aggregation",
+            "Export dataset generation"
+          ],
+          scale: [
+            "~150\u2013250 peak events per second",
+            "Multi-terabyte traffic datasets"
+          ],
+          timeline_order: 3
+        },
+        %{
+          id: "conversion-callback-engine",
+          title: "Conversion Callback Engine",
+          tagline: "Reliable delivery system for advertiser and affiliate conversion callbacks",
+          period_label: "Core Platform",
+          phase: 2,
+          icon: "hero-paper-airplane",
+          card_copy:
+            "Reliable server-to-server callback delivery system handling conversion notifications with retry logic, macro substitution, and delivery tracking.",
+          summary:
+            "Reliable delivery system for advertiser and affiliate conversion callbacks. Handles server-to-server conversion notifications with retries, macro substitution, and failure tracking.",
+          tech_used: [
+            "RabbitMQ",
+            "Erlang Worker Pools",
+            "HTTP Callback Integrations"
+          ],
+          responsibilities: [
+            "Server-to-server conversion notifications",
+            "Retry handling",
+            "Macro substitution",
+            "Delivery tracking",
+            "Failure handling"
+          ],
+          timeline_order: 4
+        },
+        %{
+          id: "tracking-domain-infra",
+          title: "Tracking Domain Infrastructure",
+          tagline: "Infrastructure for managing tracking domains and routing configuration",
+          period_label: "Infrastructure",
+          phase: 2,
+          icon: "hero-globe-alt",
+          card_copy:
+            "Managed tracking domain lifecycle including SSL certificates, DNS routing, and domain rotation experiments to reduce blacklist risk.",
+          summary:
+            "Infrastructure responsible for managing tracking domains and routing configuration. Handled domain lifecycle, SSL certificates, and DNS routing across the affiliate network.",
+          tech_used: [
+            "DNS",
+            "SSL/TLS",
+            "Domain Management",
+            "Routing Configuration"
+          ],
+          responsibilities: [
+            "Tracking domain management",
+            "SSL certificate management",
+            "DNS routing configuration",
+            "Domain rotation experiments to reduce blacklist risk"
+          ],
+          timeline_order: 5
+        },
+        %{
+          id: "distributed-data-platform",
+          title: "Distributed Data Platform",
+          tagline:
+            "Large-scale data storage and analytics infrastructure supporting event ingestion and reporting",
+          period_label: "Data Infrastructure",
+          phase: 2,
+          icon: "hero-server-stack",
+          card_copy:
+            "Operated a 6-node Cassandra cluster, 3-node Elasticsearch cluster, Spark aggregation jobs, and RabbitMQ pipelines supporting ~600TB of combined data.",
+          summary:
+            "Large-scale data storage and analytics infrastructure supporting event ingestion and reporting across the affiliate network platform.",
+          tech_used: [
+            "Cassandra",
+            "Elasticsearch",
+            "Apache Spark",
+            "RabbitMQ"
+          ],
+          architecture: [
+            "Cassandra cluster (6 nodes) for high-throughput event storage",
+            "Elasticsearch analytics cluster (3 nodes) for search and reporting",
+            "Spark aggregation jobs for batch processing",
+            "RabbitMQ messaging pipeline for event routing"
+          ],
+          responsibilities: [
+            "High-throughput event ingestion",
+            "Long-term traffic storage",
+            "Analytics indexing",
+            "Reporting aggregation"
+          ],
+          scale: [
+            "~600TB Cassandra data footprint",
+            "~600TB Elasticsearch analytics dataset",
+            "6-node Cassandra production cluster",
+            "3-node Elasticsearch cluster"
+          ],
+          timeline_order: 6
+        },
+        %{
+          id: "netadmin-platform",
+          title: "NetAdmin Infrastructure Platform",
+          tagline:
+            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
+          period_label: "Internal Tooling",
+          phase: 2,
+          icon: "hero-cog-6-tooth",
+          card_copy:
+            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
+          summary:
+            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms.",
+          tech_used: [
+            "Elixir",
+            "Phoenix",
+            "LiveView",
+            "Ash Framework",
+            "PostgreSQL",
+            "Ansible"
+          ],
+          architecture: [
+            "Full-stack Elixir application built with Phoenix and Ash Framework",
+            "PostgreSQL for persistent data storage",
+            "Ansible integration for infrastructure automation",
+            "Multi-system management across affiliate network, MTA, data verification, and external platforms"
+          ],
+          responsibilities: [
+            "Infrastructure provisioning",
+            "VPS lifecycle management",
+            "Domain and SSL management",
+            "Payment method tracking",
+            "Service lifecycle automation",
+            "Infrastructure visibility dashboards"
+          ],
+          timeline_order: 7
         }
       ]
     }

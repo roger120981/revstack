@@ -57,6 +57,21 @@ The site is fully functional immediately — forms submit to the database, and y
 - **Check for issues**: `mix precommit` (compile with warnings as errors, format check, test)
 - **Generate migrations**: `mix ash.codegen <name>`
 
+## Continuous Integration
+
+This repository includes a GitHub Actions workflow at `.github/workflows/ci.yml`.
+
+It runs when code is pushed to `main` and when a pull request targets `main`.
+
+The workflow:
+- checks out the latest commit for the branch or pull request
+- starts PostgreSQL 16 for the test environment
+- installs Elixir 1.19.5 and Erlang/OTP 28.1
+- runs `mix compile --warnings-as-errors`
+- runs `mix test`
+
+To require CI to pass before merge, configure GitHub branch protection for `main` and require the `Build and test` status check.
+
 ## Project Structure
 
 ```

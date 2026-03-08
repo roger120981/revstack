@@ -28,12 +28,12 @@ defmodule RevstackWeb.ThanksLive do
             >
               <.icon name="hero-home" class="size-5" /> Back to Home
             </.link>
-            <%!-- <.link
+            <.link
               navigate={~p"/services"}
               class="btn btn-outline btn-lg gap-2 transition-all duration-300 hover:-translate-y-0.5"
             >
               <.icon name="hero-briefcase" class="size-5" /> View Services
-            </.link> --%>
+            </.link>
           </div>
         </div>
       </section>

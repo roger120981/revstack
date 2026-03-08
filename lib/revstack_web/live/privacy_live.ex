@@ -24,7 +24,7 @@ defmodule RevstackWeb.PrivacyLive do
               <div>
                 <h2 class="text-xl font-bold text-base-content mb-3">Data Collection</h2>
                 <p class="text-base-content/80 leading-relaxed">
-                  We collect personal information (name, email, phone, company) only when you
+                  Your personal information (name, email, phone, company) is collected only when you
                   voluntarily submit it through our contact or estimate request forms. This data
                   is collected solely for the purpose of responding to your inquiry.
                 </p>
@@ -46,12 +46,12 @@ defmodule RevstackWeb.PrivacyLive do
               <div>
                 <h2 class="text-xl font-bold text-base-content mb-3">Data Deletion</h2>
                 <p class="text-base-content/80 leading-relaxed">
-                  You may request deletion of your personal data at any time by contacting us
+                  You may request deletion of your personal data at any time by contacting me
                   at <a
-                    href="mailto:nealkyle5@gmail.com"
+                    href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
                     class="text-primary hover:underline"
-                  >nealkyle5@gmail.com</a>.
-                  We will process your request within a reasonable timeframe.
+                  >kyle.neal.lucidsoftwaresolutions@gmail.com</a>.
+                  I will process your request within a reasonable timeframe.
                 </p>
               </div>
 
@@ -60,10 +60,10 @@ defmodule RevstackWeb.PrivacyLive do
               <div>
                 <h2 class="text-xl font-bold text-base-content mb-3">Contact</h2>
                 <p class="text-base-content/80 leading-relaxed">
-                  If you have any questions about this privacy policy, please contact us at <a
-                    href="mailto:nealkyle5@gmail.com"
+                  If you have any questions about this privacy policy, please contact me at <a
+                    href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
                     class="text-primary hover:underline"
-                  >nealkyle5@gmail.com</a>.
+                  >kyle.neal.lucidsoftwaresolutions@gmail.com</a>.
                 </p>
               </div>
             </div>

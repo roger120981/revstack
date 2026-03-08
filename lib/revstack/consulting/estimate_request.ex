@@ -5,6 +5,23 @@ defmodule Revstack.Consulting.EstimateRequest do
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
 
+  @supported_project_types [
+    :phoenix_liveview_app,
+    :api_backend,
+    :erlang_service,
+    :modernization,
+    :devops_reliability,
+    :beam_consulting,
+    :phoenix_liveview_application,
+    :custom_web_application,
+    :distributed_system_architecture,
+    :production_debugging_reliability,
+    :gaming_pc_build,
+    :small_business_network_setup,
+    :technology_consulting,
+    :other
+  ]
+
   postgres do
     table "estimate_requests"
     repo(Revstack.Repo)
@@ -85,14 +102,7 @@ defmodule Revstack.Consulting.EstimateRequest do
       allow_nil? false
       public? true
 
-      constraints one_of: [
-                    :phoenix_liveview_app,
-                    :api_backend,
-                    :erlang_service,
-                    :modernization,
-                    :devops_reliability,
-                    :other
-                  ]
+      constraints one_of: @supported_project_types
     end
 
     attribute :budget_range, :atom do

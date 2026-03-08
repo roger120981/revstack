@@ -45,65 +45,55 @@ defmodule RevstackWeb.Layouts do
       id="top"
       class="sticky top-0 z-40 border-b border-base-300 bg-base-100/80 backdrop-blur-lg"
     >
-      <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-1">
-          <%!-- <a
-            href="/"
-            class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
-          >
-            RevenueLink Technologies
-          </a> --%>
-          <a
+      <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <div class="min-w-0 flex-1">
+          <.link
             id="nav-brand"
-            href="#top"
+            navigate={~p"/"}
             data-scroll-top="true"
-            class="text-xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity"
+            phx-click-capture={JS.dispatch("phx:scroll-top")}
+            class="inline-flex min-w-0 flex-col text-left hover:opacity-80 transition-opacity"
           >
-            Kyle Neal | Distributed Systems Engineer
-          </a>
+            <span class="truncate text-lg font-extrabold tracking-tight text-primary sm:text-xl">
+              Kyle Neal
+            </span>
+            <span class="hidden text-xs font-medium text-base-content/60 sm:block lg:text-sm">
+              Distributed Systems Engineer
+            </span>
+          </.link>
         </div>
 
-        <%!-- Desktop Nav --%>
-        <div class="hidden md:flex items-center gap-1">
+        <div class="hidden items-center gap-1 lg:flex">
           <.link
             id="nav-home"
             data-scroll-top="true"
-            navigate="/"
+            navigate={~p"/whoami"}
             phx-click-capture={JS.dispatch("phx:scroll-top")}
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
+            class="rounded-lg bg-primary/10 px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
           >
-            Home
-          </.link>
-          <%!-- <.link
-            navigate="/about"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            About
+            Profile
           </.link>
           <.link
-            navigate="/services"
+            id="nav-services"
+            navigate={~p"/services"}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Services
-          </.link> --%>
+          </.link>
           <.link
-            navigate="/contact"
+            id="nav-estimate"
+            navigate={~p"/estimate"}
+            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
+          >
+            Estimate
+          </.link>
+          <.link
+            id="nav-contact"
+            navigate={~p"/contact"}
             class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
           >
             Contact
           </.link>
-          <%!-- <.link
-            navigate="/whoami"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            Kyle
-          </.link>
-           <.link
-            navigate="/estimate"
-            class="ml-2 btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all"
-          >
-            Get an Estimate
-          </.link> --%>
           <%= if @current_user do %>
             <details id="desktop-user-menu" class="dropdown dropdown-end ml-2">
               <summary
@@ -143,8 +133,7 @@ defmodule RevstackWeb.Layouts do
           </div>
         </div>
 
-        <%!-- Mobile menu button --%>
-        <div class="flex items-center gap-2 md:hidden">
+        <div class="flex items-center gap-2 lg:hidden">
           <%= if @current_user do %>
             <details id="mobile-user-menu" class="dropdown dropdown-end">
               <summary
@@ -177,54 +166,56 @@ defmodule RevstackWeb.Layouts do
           <% end %>
 
           <.theme_toggle />
-          <label for="mobile-menu-toggle" class="btn btn-ghost btn-sm btn-square cursor-pointer">
-            <.icon name="hero-bars-3" class="size-5" />
-          </label>
+          <details id="mobile-nav-menu" class="dropdown dropdown-end">
+            <summary
+              id="mobile-nav-trigger"
+              class="btn btn-ghost btn-sm btn-square rounded-xl"
+              aria-label="Open navigation"
+            >
+              <.icon name="hero-bars-3" class="size-5" />
+            </summary>
+            <div class="dropdown-content z-50 mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-2xl border border-base-300 bg-base-100 p-3 shadow-xl">
+              <div class="mb-2 px-2">
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/45">
+                  Navigation
+                </p>
+              </div>
+              <div class="flex flex-col gap-1">
+                <.link
+                  id="mobile-nav-home"
+                  data-scroll-top="true"
+                  navigate={~p"/whoami"}
+                  phx-click-capture={JS.dispatch("phx:scroll-top")}
+                  class="flex items-center gap-3 rounded-xl bg-primary/10 px-3 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+                >
+                  <.icon name="hero-user-circle" class="size-5" /> Profile
+                </.link>
+                <.link
+                  id="mobile-nav-services"
+                  navigate={~p"/services"}
+                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                >
+                  <.icon name="hero-briefcase" class="size-5" /> Services
+                </.link>
+                <.link
+                  id="mobile-nav-estimate"
+                  navigate={~p"/estimate"}
+                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                >
+                  <.icon name="hero-document-text" class="size-5" /> Estimate
+                </.link>
+                <.link
+                  id="mobile-nav-contact"
+                  navigate={~p"/contact"}
+                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                >
+                  <.icon name="hero-envelope" class="size-5" /> Contact
+                </.link>
+              </div>
+            </div>
+          </details>
         </div>
       </nav>
-
-      <%!-- Mobile dropdown menu --%>
-      <input type="checkbox" id="mobile-menu-toggle" class="peer hidden" />
-      <div class="hidden peer-checked:block md:hidden border-t border-base-300 bg-base-100 px-4 pb-4 pt-2">
-        <div class="flex flex-col gap-1">
-          <.link
-            id="mobile-nav-home"
-            data-scroll-top="true"
-            navigate="/"
-            phx-click-capture={JS.dispatch("phx:scroll-top")}
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            Home
-          </.link>
-          <%!-- <.link
-            navigate="/about"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            About
-          </.link>
-          <.link
-            navigate="/services"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            Services
-          </.link> --%>
-          <.link
-            navigate="/contact"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            Contact
-          </.link>
-          <%!-- <.link
-            navigate="/whoami"
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
-          >
-            Kyle
-          </.link>
-          <.link navigate="/estimate" class="btn btn-primary btn-sm mt-2 shadow-sm">
-            Get an Estimate
-          </.link> --%>
-        </div>
-      </div>
     </header>
 
     <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -238,35 +229,56 @@ defmodule RevstackWeb.Layouts do
             <p class="text-sm font-semibold text-base-content">Kyle Neal</p>
             <p class="text-xs text-base-content/50 mt-1">RevenueLink Technologies LLC</p>
           </div>
-          <div class="flex items-center gap-4 text-sm text-base-content/60">
-            <.link navigate="/privacy" class="hover:text-base-content transition-colors">
-              Privacy
-            </.link>
-            <span class="text-base-content/20">|</span>
-            <a
-              href="https://github.com/kyle-neal"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:text-base-content transition-colors"
-            >
-              GitHub
-            </a>
-            <span class="text-base-content/20">|</span>
-            <a
-              href="https://www.linkedin.com/in/kyle-n-0bbb52a1/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:text-base-content transition-colors"
-            >
-              LinkedIn
-            </a>
-            <span class="text-base-content/20">|</span>
-            <a
-              href="mailto:nealkyle5@gmail.com"
-              class="hover:text-base-content transition-colors"
-            >
-              nealkyle5@gmail.com
-            </a>
+          <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 text-sm text-base-content/60">
+            <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+              <.link navigate="/privacy" class="hover:text-base-content transition-colors">
+                Privacy
+              </.link>
+              <span class="text-base-content/20">|</span>
+              <a
+                href="https://github.com/kyle-neal"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-base-content transition-colors"
+              >
+                GitHub
+              </a>
+              <span class="text-base-content/20">|</span>
+              <a
+                href="https://www.linkedin.com/in/kyle-n-0bbb52a1/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-base-content transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm">
+              <span class="hidden sm:inline text-base-content/20">|</span>
+              <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+                <a
+                  href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+                  class="hover:text-base-content transition-colors"
+                  title="Business email"
+                >
+                  <span class="text-[10px] sm:text-xs text-base-content/45 uppercase tracking-wider">
+                    Business:
+                  </span>
+                  kyle.neal.lucidsoftwaresolutions@gmail.com
+                </a>
+                <span class="hidden sm:inline text-base-content/20">|</span>
+                <a
+                  href="mailto:nealkyle5@gmail.com"
+                  class="hover:text-base-content transition-colors"
+                  title="Personal email"
+                >
+                  <span class="text-[10px] sm:text-xs text-base-content/45 uppercase tracking-wider">
+                    Personal:
+                  </span>
+                  nealkyle5@gmail.com
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div class="mt-6 text-center text-xs text-base-content/40">

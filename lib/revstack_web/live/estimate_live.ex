@@ -1,6 +1,18 @@
 defmodule RevstackWeb.EstimateLive do
   use RevstackWeb, :live_view
 
+  @project_type_options [
+    {"BEAM Consulting", "beam_consulting"},
+    {"Phoenix / LiveView Application", "phoenix_liveview_application"},
+    {"Custom Web Application", "custom_web_application"},
+    {"Distributed System Architecture", "distributed_system_architecture"},
+    {"Production Debugging / Reliability", "production_debugging_reliability"},
+    {"Gaming PC Build", "gaming_pc_build"},
+    {"Small Business Network Setup", "small_business_network_setup"},
+    {"Technology Consulting", "technology_consulting"},
+    {"Other", "other"}
+  ]
+
   @impl true
   def mount(_params, session, socket) do
     form =
@@ -14,6 +26,7 @@ defmodule RevstackWeb.EstimateLive do
      socket
      |> assign(page_title: "Request an Estimate — Revstack")
      |> assign(form: form)
+     |> assign(project_type_options: @project_type_options)
      |> assign(visitor_ip: session["visitor_ip"])
      |> assign(visitor_user_agent: session["visitor_user_agent"])}
   end
@@ -54,16 +67,35 @@ defmodule RevstackWeb.EstimateLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
-      <section class="py-16 sm:py-24">
+      <section class="pb-16 pt-6 sm:pb-24 sm:pt-10">
         <div class="mx-auto max-w-2xl">
-          <div class="text-center mb-12">
-            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-base-content">
+          <div class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+            <div class="flex justify-center">
+              <img
+                id="estimate-page-logo"
+                src="/images/revenuelink_main.png"
+                alt="RevenueLink Technologies"
+                class="h-auto w-full max-w-[230px] opacity-95 sm:max-w-[290px] lg:max-w-[340px]"
+              />
+            </div>
+            <div class="mt-5 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+              <.icon name="hero-document-text" class="size-4" /> Project Inquiry
+            </div>
+            <h1 class="mt-4 text-4xl font-extrabold tracking-tight text-base-content sm:text-5xl">
               Request an <span class="text-primary">Estimate</span>
             </h1>
             <div class="mt-4 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-            <p class="mt-6 text-lg text-base-content/70 leading-relaxed">
-              Tell me about your project and I'll put together a tailored proposal.
+            <p
+              id="estimate-intro-copy"
+              class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-base-content/70"
+            >
+              Tell me about the consulting, application, or local technology work you are considering and I&apos;ll respond with a tailored next-step recommendation.
             </p>
+            <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-medium text-base-content/60">
+              <span class="rounded-full bg-base-200 px-3 py-1">BEAM consulting</span>
+              <span class="rounded-full bg-base-200 px-3 py-1">Custom applications</span>
+              <span class="rounded-full bg-base-200 px-3 py-1">Local technology projects</span>
+            </div>
           </div>
 
           <div class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm">
@@ -89,14 +121,7 @@ defmodule RevstackWeb.EstimateLive do
                 type="select"
                 label="Project Type"
                 prompt="Select a project type..."
-                options={[
-                  {"Phoenix LiveView App", "phoenix_liveview_app"},
-                  {"API Backend", "api_backend"},
-                  {"Erlang Service", "erlang_service"},
-                  {"Modernization", "modernization"},
-                  {"DevOps & Reliability", "devops_reliability"},
-                  {"Other", "other"}
-                ]}
+                options={@project_type_options}
                 required
               />
 

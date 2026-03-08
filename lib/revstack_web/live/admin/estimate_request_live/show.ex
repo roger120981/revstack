@@ -310,6 +310,19 @@ defmodule RevstackWeb.Admin.EstimateRequestLive.Show do
   defp format_project_type(:erlang_service), do: "Erlang Service"
   defp format_project_type(:modernization), do: "Modernization"
   defp format_project_type(:devops_reliability), do: "DevOps/Reliability"
+  defp format_project_type(:beam_consulting), do: "BEAM Consulting"
+  defp format_project_type(:phoenix_liveview_application), do: "Phoenix / LiveView Application"
+  defp format_project_type(:custom_web_application), do: "Custom Web Application"
+
+  defp format_project_type(:distributed_system_architecture),
+    do: "Distributed System Architecture"
+
+  defp format_project_type(:production_debugging_reliability),
+    do: "Production Debugging / Reliability"
+
+  defp format_project_type(:gaming_pc_build), do: "Gaming PC Build"
+  defp format_project_type(:small_business_network_setup), do: "Small Business Network Setup"
+  defp format_project_type(:technology_consulting), do: "Technology Consulting"
   defp format_project_type(:other), do: "Other"
   defp format_project_type(type) when is_atom(type), do: Phoenix.Naming.humanize(type)
   defp format_project_type(type), do: to_string(type)

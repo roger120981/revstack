@@ -643,7 +643,7 @@ defmodule RevstackWeb.WhoamiLive do
     ~H"""
     <section class="py-20 sm:py-28">
       <div class="mx-auto max-w-3xl">
-        <div class="flex justify-center gap-6">
+        <div class="flex flex-col sm:flex-row justify-center gap-6">
           <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
               <.icon name="hero-briefcase" class="size-7" />
@@ -652,6 +652,16 @@ defmodule RevstackWeb.WhoamiLive do
             <p class="text-sm text-base-content/70 mb-4">I'd love to hear about the opportunity.</p>
             <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
               <.icon name="hero-envelope" class="size-4" /> Contact Me
+            </.link>
+          </div>
+          <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+              <.icon name="hero-wrench-screwdriver" class="size-7" />
+            </div>
+            <h3 class="text-lg font-bold text-base-content mb-2">Need consulting or project work?</h3>
+            <p class="text-sm text-base-content/70 mb-4">Explore services and request an estimate.</p>
+            <.link navigate={~p"/services"} class="btn btn-primary gap-2">
+              <.icon name="hero-briefcase" class="size-4" /> View Services
             </.link>
           </div>
         </div>

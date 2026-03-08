@@ -55,6 +55,7 @@ config :revstack,
   ecto_repos: [Revstack.Repo],
   generators: [timestamp_type: :utc_datetime],
   ash_domains: [Revstack.Accounts, Revstack.Consulting],
+  environment: config_env(),
   # Set to false to allow multiple admin users
   single_admin_mode: true
 

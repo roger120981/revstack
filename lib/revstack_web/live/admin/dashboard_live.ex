@@ -30,7 +30,8 @@ defmodule RevstackWeb.Admin.DashboardLive do
        lead_count: lead_count,
        new_lead_count: new_lead_count,
        estimate_count: estimate_count,
-       new_estimate_count: new_estimate_count
+       new_estimate_count: new_estimate_count,
+       environment: runtime_environment()
      )}
   end
 
@@ -122,7 +123,7 @@ defmodule RevstackWeb.Admin.DashboardLive do
               </div>
               <div class="flex justify-between">
                 <dt class="text-gray-400">Environment</dt>
-                <dd class="text-gray-200">{Mix.env()}</dd>
+                <dd id="dashboard-system-environment" class="text-gray-200">{@environment}</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-gray-400">Phoenix</dt>
@@ -174,5 +175,11 @@ defmodule RevstackWeb.Admin.DashboardLive do
       </div>
     </.link>
     """
+  end
+
+  defp runtime_environment do
+    :revstack
+    |> Application.get_env(:environment, :prod)
+    |> to_string()
   end
 end

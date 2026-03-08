@@ -711,8 +711,10 @@ defmodule RevstackWeb.WhoamiLive do
       class="fixed inset-0 z-50 overflow-y-auto"
       phx-window-keydown="close_career_modal"
       phx-key="Escape"
+      phx-hook="LockBodyScroll"
     >
-      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+      <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_career_modal">
+      </div>
       <div class="relative flex min-h-full items-start justify-center p-4 sm:p-6 lg:p-8">
         <div class="relative w-full max-w-4xl my-8 rounded-2xl border border-base-300 bg-base-100 shadow-2xl">
           <%!-- Header --%>

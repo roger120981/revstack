@@ -93,10 +93,15 @@ defmodule Revstack.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind revstack", "esbuild revstack"],
+      "assets.sync": [
+        "cmd mkdir -p priv/static/images",
+        "cmd cp -R assets/images/. priv/static/images/"
+      ],
+      "assets.build": ["compile", "tailwind revstack", "esbuild revstack", "assets.sync"],
       "assets.deploy": [
         "tailwind revstack --minify",
         "esbuild revstack --minify",
+        "assets.sync",
         "phx.digest"
       ],
       precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]

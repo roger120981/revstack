@@ -31,11 +31,7 @@ defmodule RevstackWeb.AdminLayouts do
     >
       <div class="relative flex h-full grow flex-col gap-y-5 overflow-y-auto bg-indigo-800 px-6 pb-4 ring-1 ring-white/10">
         <div class="flex h-16 shrink-0 items-center justify-between">
-          <img
-            src={~p"/images/revenuelink_main.png"}
-            alt="RevenueLink Technologies"
-            class="h-8 w-auto brightness-0 invert"
-          />
+          <.brand_logo container_id="mobile-brand-logo" image_id="mobile-brand-logo-image" />
           <button
             type="button"
             class="-m-2.5 p-2.5 text-indigo-200 hover:text-white lg:hidden"
@@ -53,11 +49,7 @@ defmodule RevstackWeb.AdminLayouts do
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
       <div class="relative flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-800 px-6 pb-4 after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-white/10">
         <div class="flex h-16 shrink-0 items-center">
-          <img
-            src={~p"/images/revenuelink_main.png"}
-            alt="RevenueLink Technologies"
-            class="h-8 w-auto brightness-0 invert"
-          />
+          <.brand_logo container_id="desktop-brand-logo" image_id="desktop-brand-logo-image" />
         </div>
         <.sidebar_nav current_path={@current_path} />
       </div>
@@ -109,6 +101,22 @@ defmodule RevstackWeb.AdminLayouts do
     </div>
 
     <Layouts.flash_group flash={@flash} />
+    """
+  end
+
+  attr :container_id, :string, default: nil
+  attr :image_id, :string, default: nil
+
+  defp brand_logo(assigns) do
+    ~H"""
+    <div id={@container_id} class="relative h-12 w-56 overflow-hidden">
+      <img
+        id={@image_id}
+        src={~p"/images/revenuelink_main.png"}
+        alt="RevenueLink Technologies"
+        class="absolute left-1/2 top-1/2 w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2"
+      />
+    </div>
     """
   end
 

@@ -35,6 +35,7 @@ defmodule Revstack.Consulting.EstimateRequest do
     end
 
     update :update_status do
+      require_atomic? false
       accept [:status, :internal_size_tag]
     end
   end

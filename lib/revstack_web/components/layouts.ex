@@ -32,6 +32,11 @@ defmodule RevstackWeb.Layouts do
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
   )
 
+  attr(:current_user, :map,
+    default: nil,
+    doc: "the currently signed-in user"
+  )
+
   slot(:inner_block, required: true)
 
   def app(assigns) do
@@ -99,13 +104,78 @@ defmodule RevstackWeb.Layouts do
           >
             Get an Estimate
           </.link> --%>
-          <div class="ml-2">
+          <%= if @current_user do %>
+            <details id="desktop-user-menu" class="dropdown dropdown-end ml-2">
+              <summary
+                id="desktop-user-menu-trigger"
+                class="btn btn-ghost h-auto min-h-0 gap-3 rounded-xl px-3 py-2 normal-case hover:bg-base-200"
+              >
+                <div class="text-right leading-tight">
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-base-content/45">
+                    Signed In
+                  </p>
+                  <p class="text-sm font-medium text-base-content">{@current_user.email}</p>
+                </div>
+                <.icon name="hero-chevron-down" class="size-4 text-base-content/55" />
+              </summary>
+              <ul class="menu dropdown-content z-50 mt-3 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
+                <li>
+                  <.link id="desktop-user-menu-admin-link" navigate="/admin" class="rounded-xl">
+                    <.icon name="hero-squares-2x2" class="size-4" /> Admin Dashboard
+                  </.link>
+                </li>
+                <li>
+                  <.link
+                    id="desktop-user-menu-sign-out-link"
+                    href={~p"/sign-out"}
+                    method="get"
+                    class="rounded-xl text-error"
+                  >
+                    <.icon name="hero-arrow-left-on-rectangle" class="size-4" /> Sign out
+                  </.link>
+                </li>
+              </ul>
+            </details>
+          <% end %>
+
+          <div class={[@current_user && "ml-1", !@current_user && "ml-2"]}>
             <.theme_toggle />
           </div>
         </div>
 
         <%!-- Mobile menu button --%>
         <div class="flex items-center gap-2 md:hidden">
+          <%= if @current_user do %>
+            <details id="mobile-user-menu" class="dropdown dropdown-end">
+              <summary
+                id="mobile-user-menu-trigger"
+                class="btn btn-ghost btn-sm h-auto min-h-0 gap-2 rounded-xl px-3 py-2 normal-case"
+              >
+                <span class="max-w-28 truncate text-sm font-medium text-base-content">
+                  {@current_user.email}
+                </span>
+                <.icon name="hero-chevron-down" class="size-4 text-base-content/55" />
+              </summary>
+              <ul class="menu dropdown-content z-50 mt-3 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
+                <li>
+                  <.link id="mobile-user-menu-admin-link" navigate="/admin" class="rounded-xl">
+                    <.icon name="hero-squares-2x2" class="size-4" /> Admin Dashboard
+                  </.link>
+                </li>
+                <li>
+                  <.link
+                    id="mobile-user-menu-sign-out-link"
+                    href={~p"/sign-out"}
+                    method="get"
+                    class="rounded-xl text-error"
+                  >
+                    <.icon name="hero-arrow-left-on-rectangle" class="size-4" /> Sign out
+                  </.link>
+                </li>
+              </ul>
+            </details>
+          <% end %>
+
           <.theme_toggle />
           <label for="mobile-menu-toggle" class="btn btn-ghost btn-sm btn-square cursor-pointer">
             <.icon name="hero-bars-3" class="size-5" />

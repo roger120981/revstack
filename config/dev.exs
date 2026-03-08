@@ -71,6 +71,11 @@ config :revstack, RevstackWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :revstack, dev_routes: true, token_signing_secret: "MduSjK8bg5vmRM3yRCAErmrftwaxOH8P"
 
+# Dev admin credentials (override via env vars if desired)
+config :revstack,
+  admin_email: System.get_env("ADMIN_EMAIL", "admin@revenuelink.net"),
+  admin_password: System.get_env("ADMIN_PASSWORD", "adminpassword123!")
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 

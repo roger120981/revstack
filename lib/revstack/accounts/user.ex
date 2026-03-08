@@ -22,12 +22,16 @@ defmodule Revstack.Accounts.User do
     end
 
     strategies do
-      magic_link do
+      password :password do
         identity_field(:email)
-        registration_enabled?(true)
-        require_interaction?(true)
 
-        sender(Revstack.Accounts.User.Senders.SendMagicLinkEmail)
+        sign_in_tokens_enabled?(true)
+
+        resettable do
+          sender(Revstack.Accounts.User.Senders.SendPasswordResetEmail)
+          # Token validity in hours
+          token_lifetime({24, :hours})
+        end
       end
 
       remember_me(:remember_me)
@@ -53,42 +57,6 @@ defmodule Revstack.Accounts.User do
       description "Looks up a user by their email"
       get_by :email
     end
-
-    create :sign_in_with_magic_link do
-      description "Sign in or register a user with magic link."
-
-      argument :token, :string do
-        description "The token from the magic link that was sent to the user"
-        allow_nil? false
-      end
-
-      argument :remember_me, :boolean do
-        description "Whether to generate a remember me token"
-        allow_nil? true
-      end
-
-      upsert? true
-      upsert_identity :unique_email
-      upsert_fields [:email]
-
-      # Uses the information from the token to create or sign in the user
-      change AshAuthentication.Strategy.MagicLink.SignInChange
-
-      change {AshAuthentication.Strategy.RememberMe.MaybeGenerateTokenChange,
-              strategy_name: :remember_me}
-
-      metadata :token, :string do
-        allow_nil? false
-      end
-    end
-
-    action :request_magic_link do
-      argument :email, :ci_string do
-        allow_nil? false
-      end
-
-      run AshAuthentication.Strategy.MagicLink.Request
-    end
   end
 
   policies do
@@ -102,6 +70,17 @@ defmodule Revstack.Accounts.User do
 
     attribute :email, :ci_string do
       allow_nil? false
+      public? true
+    end
+
+    attribute :hashed_password, :string do
+      allow_nil? true
+      sensitive? true
+    end
+
+    attribute :admin?, :boolean do
+      allow_nil? false
+      default false
       public? true
     end
   end

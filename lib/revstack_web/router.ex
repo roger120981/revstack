@@ -25,32 +25,32 @@ defmodule RevstackWeb.Router do
   scope "/", RevstackWeb do
     pipe_through :browser
 
-    # live "/", HomeLive
-    live "/", WhoamiLive
-    live "/about", AboutLive
-    live "/services", ServicesLive
-    live "/estimate", EstimateLive
-    live "/contact", ContactLive
-    live "/privacy", PrivacyLive
-    live "/thanks", ThanksLive
-    live "/whoami", WhoamiLive
+    ash_authentication_live_session :public_routes,
+      on_mount: [{RevstackWeb.LiveUserAuth, :live_user_optional}] do
+      live "/", WhoamiLive
+      live "/about", AboutLive
+      live "/services", ServicesLive
+      live "/estimate", EstimateLive
+      live "/contact", ContactLive
+      live "/privacy", PrivacyLive
+      live "/thanks", ThanksLive
+      live "/whoami", WhoamiLive
+    end
   end
 
-  # Authenticated routes
-  scope "/", RevstackWeb do
+  # Admin panel (authenticated)
+  scope "/admin", RevstackWeb.Admin do
     pipe_through :browser
 
-    ash_authentication_live_session :authenticated_routes do
-      # in each liveview, add one of the following at the top of the module:
-      #
-      # If an authenticated user must be present:
-      # on_mount {RevstackWeb.LiveUserAuth, :live_user_required}
-      #
-      # If an authenticated user *may* be present:
-      # on_mount {RevstackWeb.LiveUserAuth, :live_user_optional}
-      #
-      # If an authenticated user must *not* be present:
-      # on_mount {RevstackWeb.LiveUserAuth, :live_no_user}
+    ash_authentication_live_session :admin_routes,
+      on_mount: [{RevstackWeb.LiveUserAuth, :live_admin_required}] do
+      live "/", DashboardLive, :index
+      live "/leads", LeadLive.Index, :index
+      live "/leads/:id", LeadLive.Show, :show
+      live "/leads/:id/edit", LeadLive.Show, :edit
+      live "/estimates", EstimateRequestLive.Index, :index
+      live "/estimates/:id", EstimateRequestLive.Show, :show
+      live "/estimates/:id/edit", EstimateRequestLive.Show, :edit
     end
   end
 
@@ -60,8 +60,7 @@ defmodule RevstackWeb.Router do
     auth_routes AuthController, Revstack.Accounts.User, path: "/auth"
     sign_out_route AuthController
 
-    # Remove these if you'd like to use your own authentication views
-    sign_in_route register_path: "/register",
+    sign_in_route register_path: nil,
                   reset_path: "/reset",
                   auth_routes_prefix: "/auth",
                   on_mount: [{RevstackWeb.LiveUserAuth, :live_no_user}],
@@ -70,23 +69,11 @@ defmodule RevstackWeb.Router do
                     Elixir.AshAuthentication.Phoenix.Overrides.DaisyUI
                   ]
 
-    # Remove this if you do not want to use the reset password feature
     reset_route auth_routes_prefix: "/auth",
                 overrides: [
                   RevstackWeb.AuthOverrides,
                   Elixir.AshAuthentication.Phoenix.Overrides.DaisyUI
                 ]
-
-    # Remove this if you do not use the confirmation strategy
-    confirm_route Revstack.Accounts.User, :confirm_new_user,
-      auth_routes_prefix: "/auth",
-      overrides: [RevstackWeb.AuthOverrides, Elixir.AshAuthentication.Phoenix.Overrides.DaisyUI]
-
-    # Remove this if you do not use the magic link strategy.
-    magic_sign_in_route(Revstack.Accounts.User, :magic_link,
-      auth_routes_prefix: "/auth",
-      overrides: [RevstackWeb.AuthOverrides, Elixir.AshAuthentication.Phoenix.Overrides.DaisyUI]
-    )
   end
 
   # Other scopes may use custom stacks.
@@ -114,10 +101,10 @@ defmodule RevstackWeb.Router do
   if Application.compile_env(:revstack, :dev_routes) do
     import AshAdmin.Router
 
-    scope "/admin" do
+    scope "/dev" do
       pipe_through :browser
 
-      ash_admin("/")
+      ash_admin("/ash-admin")
     end
   end
 end

@@ -3,6 +3,11 @@ config :revstack, token_signing_secret: "WrXiyW72qEbXJDIaXMyk/09pPfVpG5aC"
 config :bcrypt_elixir, log_rounds: 1
 config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true
 
+# Test admin credentials
+config :revstack,
+  admin_email: "admin@test.com",
+  admin_password: "testpassword123!"
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used

@@ -73,6 +73,14 @@ if config_env() == :prod do
       System.get_env("TOKEN_SIGNING_SECRET") ||
         raise("Missing environment variable `TOKEN_SIGNING_SECRET`!")
 
+  config :revstack,
+    admin_email:
+      System.get_env("ADMIN_EMAIL") ||
+        raise("Missing environment variable `ADMIN_EMAIL`!"),
+    admin_password:
+      System.get_env("ADMIN_PASSWORD") ||
+        raise("Missing environment variable `ADMIN_PASSWORD`!")
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key

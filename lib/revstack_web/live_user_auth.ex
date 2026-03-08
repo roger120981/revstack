@@ -6,9 +6,6 @@ defmodule RevstackWeb.LiveUserAuth do
   import Phoenix.Component
   use RevstackWeb, :verified_routes
 
-  # This is used for nested liveviews to fetch the current user.
-  # To use, place the following at the top of that liveview:
-  # on_mount {RevstackWeb.LiveUserAuth, :current_user}
   def on_mount(:current_user, _params, session, socket) do
     {:cont, AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)}
   end
@@ -26,6 +23,21 @@ defmodule RevstackWeb.LiveUserAuth do
       {:cont, socket}
     else
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sign-in")}
+    end
+  end
+
+  def on_mount(:live_admin_required, _params, _session, socket) do
+    user = socket.assigns[:current_user]
+
+    cond do
+      is_nil(user) ->
+        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sign-in")}
+
+      user.admin? ->
+        {:cont, socket}
+
+      true ->
+        {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/")}
     end
   end
 

@@ -85,7 +85,7 @@ defmodule RevstackWeb.WhoamiLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
       <%!-- Hero --%>
       <section class="py-20 sm:py-28">
         <div class="mx-auto max-w-4xl text-center">
@@ -343,6 +343,12 @@ defmodule RevstackWeb.WhoamiLive do
               href="https://revenuelink.net/"
               icon="hero-building-office-2"
               preview_src={Map.get(@project_previews, "https://revenuelink.net/")}
+            />
+            <.project_card
+              title="Admin Panel (Phoenix LiveView)"
+              subtitle="Custom-built admin dashboard for managing leads and estimate requests. Features a dark indigo sidebar UI, real-time data grids with filtering, status management, and password-authenticated single-user access."
+              href="/admin"
+              icon="hero-cog-6-tooth"
             />
           </div>
         </div>

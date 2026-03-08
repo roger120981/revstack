@@ -48,12 +48,14 @@ defmodule RevstackWeb.Admin.DashboardLive do
         <%!-- Stats grid --%>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <.stat_card
+            id="dashboard-total-leads"
             title="Total Leads"
             value={@lead_count}
             icon="hero-inbox"
             href={~p"/admin/leads"}
           />
           <.stat_card
+            id="dashboard-new-leads"
             title="New Leads"
             value={@new_lead_count}
             icon="hero-envelope"
@@ -61,12 +63,14 @@ defmodule RevstackWeb.Admin.DashboardLive do
             href={~p"/admin/leads"}
           />
           <.stat_card
+            id="dashboard-total-estimates"
             title="Total Estimates"
             value={@estimate_count}
             icon="hero-document-text"
             href={~p"/admin/estimates"}
           />
           <.stat_card
+            id="dashboard-new-estimates"
             title="New Estimates"
             value={@new_estimate_count}
             icon="hero-document-plus"
@@ -141,10 +145,12 @@ defmodule RevstackWeb.Admin.DashboardLive do
   attr :icon, :string, required: true
   attr :color, :string, default: "indigo"
   attr :href, :string, default: nil
+  attr :id, :string, default: nil
 
   defp stat_card(assigns) do
     ~H"""
     <.link
+      id={@id}
       navigate={@href}
       class="group rounded-xl border border-white/10 bg-gray-800 p-6 hover:border-indigo-500/50 transition-all"
     >

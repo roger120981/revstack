@@ -24,7 +24,10 @@ defmodule RevstackWeb.Admin.LeadLive.Show do
       :edit ->
         form =
           socket.assigns.lead
-          |> Ash.Changeset.for_update(:update_status, %{}, authorize?: false)
+          |> AshPhoenix.Form.for_update(:update_status,
+            as: "form",
+            authorize?: false
+          )
           |> to_form()
 
         {:noreply, assign(socket, editing?: true, form: form)}
@@ -37,17 +40,15 @@ defmodule RevstackWeb.Admin.LeadLive.Show do
   @impl true
   def handle_event("validate", %{"form" => params}, socket) do
     form =
-      socket.assigns.lead
-      |> Ash.Changeset.for_update(:update_status, params, authorize?: false)
+      socket.assigns.form.source
+      |> AshPhoenix.Form.validate(params)
       |> to_form(action: :validate)
 
     {:noreply, assign(socket, form: form)}
   end
 
   def handle_event("save", %{"form" => params}, socket) do
-    case socket.assigns.lead
-         |> Ash.Changeset.for_update(:update_status, params, authorize?: false)
-         |> Ash.update() do
+    case AshPhoenix.Form.submit(socket.assigns.form.source, params: params) do
       {:ok, lead} ->
         {:noreply,
          socket
@@ -55,8 +56,8 @@ defmodule RevstackWeb.Admin.LeadLive.Show do
          |> put_flash(:info, "Lead updated")
          |> push_patch(to: ~p"/admin/leads/#{lead.id}")}
 
-      {:error, changeset} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+      {:error, form} ->
+        {:noreply, assign(socket, form: to_form(form))}
     end
   end
 

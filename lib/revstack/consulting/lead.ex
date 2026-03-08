@@ -34,6 +34,7 @@ defmodule Revstack.Consulting.Lead do
     end
 
     update :update_status do
+      require_atomic? false
       accept [:status]
     end
   end

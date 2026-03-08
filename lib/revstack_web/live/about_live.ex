@@ -9,7 +9,7 @@ defmodule RevstackWeb.AboutLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
       <section class="py-16 sm:py-24">
         <div class="mx-auto max-w-4xl">
           <%!-- Header --%>

@@ -9,7 +9,7 @@ defmodule RevstackWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
       <%!-- Hero Section --%>
       <section class="relative overflow-hidden py-20 sm:py-32">
         <div class="mx-auto max-w-4xl text-center">

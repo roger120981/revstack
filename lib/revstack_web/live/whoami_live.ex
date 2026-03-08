@@ -85,7 +85,7 @@ defmodule RevstackWeb.WhoamiLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
       <%!-- Hero --%>
       <section class="py-20 sm:py-28">
         <div class="mx-auto max-w-4xl text-center">

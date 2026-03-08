@@ -25,14 +25,17 @@ defmodule RevstackWeb.Router do
   scope "/", RevstackWeb do
     pipe_through :browser
 
-    live "/", WhoamiLive
-    live "/about", AboutLive
-    live "/services", ServicesLive
-    live "/estimate", EstimateLive
-    live "/contact", ContactLive
-    live "/privacy", PrivacyLive
-    live "/thanks", ThanksLive
-    live "/whoami", WhoamiLive
+    ash_authentication_live_session :public_routes,
+      on_mount: [{RevstackWeb.LiveUserAuth, :live_user_optional}] do
+      live "/", WhoamiLive
+      live "/about", AboutLive
+      live "/services", ServicesLive
+      live "/estimate", EstimateLive
+      live "/contact", ContactLive
+      live "/privacy", PrivacyLive
+      live "/thanks", ThanksLive
+      live "/whoami", WhoamiLive
+    end
   end
 
   # Admin panel (authenticated)

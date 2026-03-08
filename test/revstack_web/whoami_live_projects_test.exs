@@ -1,0 +1,296 @@
+defmodule RevstackWeb.WhoamiLiveProjectsTest do
+  use RevstackWeb.ConnCase, async: true
+
+  import Phoenix.LiveViewTest
+
+  describe "live projects section" do
+    test "renders the live projects section with all three cards", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#live-projects")
+      assert has_element?(view, "#project-handyman")
+      assert has_element?(view, "#project-admin")
+      assert has_element?(view, "#project-revenuelink")
+    end
+
+    test "hardcore handyman card uses local preview image", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/")
+
+      document = LazyHTML.from_fragment(html)
+      handyman = LazyHTML.query_by_id(document, "project-handyman")
+      tree = LazyHTML.to_tree(handyman, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_src_containing?(tree, "hardcorehandyman_preview")
+    end
+
+    test "admin panel card uses local dashboard preview image", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/")
+
+      document = LazyHTML.from_fragment(html)
+      admin = LazyHTML.query_by_id(document, "project-admin")
+      tree = LazyHTML.to_tree(admin, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_src_containing?(tree, "admin_dashboard")
+    end
+
+    test "project cards display tech badges", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/")
+
+      assert html =~ "Elixir"
+      assert html =~ "Phoenix"
+      assert html =~ "LiveView"
+    end
+
+    test "hardcore handyman card links to external site", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      document = LazyHTML.from_fragment(render(view))
+      handyman = LazyHTML.query_by_id(document, "project-handyman")
+      tree = LazyHTML.to_tree(handyman, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_href_containing?(tree, "hardcorehandyman.fly.dev")
+    end
+
+    test "admin panel card is a button with on_click event", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "button#project-admin[phx-click='open_admin_gallery']")
+    end
+  end
+
+  describe "admin gallery modal" do
+    test "modal is not rendered on initial page load", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      refute has_element?(view, "#admin-gallery-modal")
+    end
+
+    test "clicking admin card opens the gallery modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button#project-admin")
+      |> render_click()
+
+      assert has_element?(view, "#admin-gallery-modal")
+    end
+
+    test "modal displays the first image (admin dashboard) by default", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      html = render(view)
+      document = LazyHTML.from_fragment(html)
+      modal = LazyHTML.query_by_id(document, "admin-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_src_containing?(tree, "admin_dashboard")
+      assert html =~ "1 of 7"
+      assert html =~ "Admin Dashboard"
+    end
+
+    test "modal has LockBodyScroll phx-hook", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      html = render(view)
+      document = LazyHTML.from_fragment(html)
+      modal = LazyHTML.query_by_id(document, "admin-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_hook_attribute?(tree, "LockBodyScroll")
+    end
+
+    test "next button advances to the next image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      view |> element("#admin-gallery-next") |> render_click()
+
+      html = render(view)
+      assert html =~ "2 of 7"
+      assert html =~ "Lead Listing"
+    end
+
+    test "previous button goes back to prior image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      # Go forward twice
+      view |> element("#admin-gallery-next") |> render_click()
+      view |> element("#admin-gallery-next") |> render_click()
+
+      html = render(view)
+      assert html =~ "3 of 7"
+
+      # Go back
+      view |> element("#admin-gallery-prev") |> render_click()
+
+      html = render(view)
+      assert html =~ "2 of 7"
+    end
+
+    test "thumbnail selection jumps to the selected image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      # Click on thumbnail index 4 (lead_updated)
+      view
+      |> element("button[phx-click='admin_gallery_select'][phx-value-index='4']")
+      |> render_click()
+
+      html = render(view)
+      assert html =~ "5 of 7"
+      assert html =~ "Lead Updated"
+    end
+
+    test "close button dismisses the modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+      assert has_element?(view, "#admin-gallery-modal")
+
+      view |> element("#close-admin-gallery") |> render_click()
+      refute has_element?(view, "#admin-gallery-modal")
+    end
+
+    test "backdrop click closes the modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+      assert has_element?(view, "#admin-gallery-modal")
+
+      html = render(view)
+      document = LazyHTML.from_fragment(html)
+      modal = LazyHTML.query_by_id(document, "admin-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_backdrop_close?(tree)
+    end
+
+    test "modal shows thumbnail strip with all images", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      html = render(view)
+
+      # Count occurrences of the thumbnail select event
+      count =
+        Regex.scan(~r/phx-click="admin_gallery_select"/, html) |> length()
+
+      assert count == 7
+    end
+
+    test "previous button not shown on first image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      refute has_element?(view, "#admin-gallery-prev")
+      assert has_element?(view, "#admin-gallery-next")
+    end
+
+    test "next button not shown on last image", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-admin") |> render_click()
+
+      # Navigate to last image (index 6)
+      for i <- 0..5 do
+        view
+        |> element("button[phx-click='admin_gallery_select'][phx-value-index='#{i + 1}']")
+        |> render_click()
+      end
+
+      html = render(view)
+      assert html =~ "7 of 7"
+      assert has_element?(view, "#admin-gallery-prev")
+      refute has_element?(view, "#admin-gallery-next")
+    end
+  end
+
+  # Helper to check if any element in the tree has a src attribute containing a substring
+  defp has_src_containing?(tree, substring) when is_list(tree) do
+    Enum.any?(tree, &has_src_containing?(&1, substring))
+  end
+
+  defp has_src_containing?({_tag, attrs, children}, substring) do
+    src_match =
+      Enum.any?(attrs, fn
+        {"src", src} -> String.contains?(src, substring)
+        _ -> false
+      end)
+
+    src_match or has_src_containing?(children, substring)
+  end
+
+  defp has_src_containing?(_other, _substring), do: false
+
+  # Helper to check if any element has an href containing a substring
+  defp has_href_containing?(tree, substring) when is_list(tree) do
+    Enum.any?(tree, &has_href_containing?(&1, substring))
+  end
+
+  defp has_href_containing?({_tag, attrs, children}, substring) do
+    href_match =
+      Enum.any?(attrs, fn
+        {"href", href} -> String.contains?(href, substring)
+        _ -> false
+      end)
+
+    href_match or has_href_containing?(children, substring)
+  end
+
+  defp has_href_containing?(_other, _substring), do: false
+
+  defp has_hook_attribute?(tree, hook_name) do
+    case tree do
+      [{_tag, attrs, _children}] ->
+        Enum.any?(attrs, fn
+          {"phx-hook", ^hook_name} -> true
+          _ -> false
+        end)
+
+      _ ->
+        false
+    end
+  end
+
+  defp has_backdrop_close?(tree) do
+    find_in_tree(tree, fn
+      {_tag, attrs, _children} ->
+        has_class =
+          Enum.any?(attrs, fn
+            {"class", class} -> String.contains?(class, "backdrop-blur")
+            _ -> false
+          end)
+
+        has_close =
+          Enum.any?(attrs, fn
+            {"phx-click", "close_admin_gallery"} -> true
+            _ -> false
+          end)
+
+        has_class and has_close
+
+      _ ->
+        false
+    end)
+  end
+
+  defp find_in_tree(nodes, predicate) when is_list(nodes) do
+    Enum.any?(nodes, &find_in_tree(&1, predicate))
+  end
+
+  defp find_in_tree({_tag, _attrs, children} = node, predicate) do
+    predicate.(node) or find_in_tree(children, predicate)
+  end
+
+  defp find_in_tree(_other, _predicate), do: false
+end

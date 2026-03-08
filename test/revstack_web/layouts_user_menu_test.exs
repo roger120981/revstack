@@ -28,6 +28,6 @@ defmodule RevstackWeb.LayoutsUserMenuTest do
   test "whoami page includes the admin panel project card", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/whoami")
 
-    assert has_element?(view, "a[href='/admin']", "Admin Panel (Phoenix LiveView)")
+    assert has_element?(view, "button#project-admin", "Admin Panel")
   end
 end

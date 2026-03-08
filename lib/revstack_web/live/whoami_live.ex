@@ -1,9 +1,49 @@
 defmodule RevstackWeb.WhoamiLive do
   use RevstackWeb, :live_view
 
-  @project_urls [
-    "https://hardcorehandyman.fly.dev/",
-    "https://revenuelink.net/"
+  @admin_gallery_images [
+    %{
+      src: "/images/admin_panel/admin_dashboard.png",
+      title: "Admin Dashboard",
+      description:
+        "The main dashboard with quick-access summary cards and sidebar navigation for the admin panel."
+    },
+    %{
+      src: "/images/admin_panel/lead_listing.png",
+      title: "Lead Listing",
+      description:
+        "Real-time data grid of all leads with status badges, filtering, and pagination."
+    },
+    # %{
+    #   src: "/images/admin_panel/lead_creation.png",
+    #   title: "Lead Creation",
+    #   description:
+    #     "Create new leads through a validated form with fields for contact info, source tracking, and notes."
+    # },
+    %{
+      src: "/images/admin_panel/lead_view.png",
+      title: "Lead Detail View",
+      description:
+        "Detailed view of a single lead with all associated data, status history, and action buttons."
+    },
+    %{
+      src: "/images/admin_panel/lead_updated.png",
+      title: "Lead Updated",
+      description:
+        "Confirmation of a successful lead update showing the flash notification and refreshed data."
+    }
+    # %{
+    #   src: "/images/admin_panel/estimate_creation.png",
+    #   title: "Estimate Creation",
+    #   description:
+    #     "Estimate creation follows the same streamlined workflow as leads — validated forms, status tracking, and instant feedback."
+    # },
+    # %{
+    #   src: "/images/admin_panel/estimate_created.png",
+    #   title: "Estimate Created",
+    #   description:
+    #     "Confirmation of a newly created estimate. The estimates workflow mirrors leads with identical CRUD patterns."
+    # }
   ]
 
   @impl true
@@ -13,41 +53,42 @@ defmodule RevstackWeb.WhoamiLive do
         page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
         page_description:
           "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership.",
-        project_previews: %{},
+        admin_gallery_open?: false,
+        admin_gallery_index: 0,
+        admin_gallery_images: @admin_gallery_images,
         career_modal_open?: false,
         career_selected_project_id: nil,
         career_detail_view?: false,
         career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()]
       )
 
-    socket =
-      if connected?(socket) do
-        send(self(), :load_project_previews)
-        socket
-      else
-        socket
-      end
-
     {:ok, socket}
   end
 
   @impl true
-  def handle_info(:load_project_previews, socket) do
-    previews =
-      Enum.reduce(@project_urls, %{}, fn url, acc ->
-        case fetch_project_preview(url) do
-          preview_url when is_binary(preview_url) and preview_url != "" ->
-            Map.put(acc, url, preview_url)
-
-          _ ->
-            acc
-        end
-      end)
-
-    {:noreply, assign(socket, :project_previews, previews)}
+  def handle_event("open_admin_gallery", _params, socket) do
+    {:noreply, assign(socket, admin_gallery_open?: true, admin_gallery_index: 0)}
   end
 
-  @impl true
+  def handle_event("close_admin_gallery", _params, socket) do
+    {:noreply, assign(socket, admin_gallery_open?: false)}
+  end
+
+  def handle_event("admin_gallery_prev", _params, socket) do
+    index = max(socket.assigns.admin_gallery_index - 1, 0)
+    {:noreply, assign(socket, :admin_gallery_index, index)}
+  end
+
+  def handle_event("admin_gallery_next", _params, socket) do
+    max_index = length(@admin_gallery_images) - 1
+    index = min(socket.assigns.admin_gallery_index + 1, max_index)
+    {:noreply, assign(socket, :admin_gallery_index, index)}
+  end
+
+  def handle_event("admin_gallery_select", %{"index" => index}, socket) do
+    {:noreply, assign(socket, :admin_gallery_index, String.to_integer(index))}
+  end
+
   def handle_event("open_career_modal", %{"project-id" => project_id}, socket) do
     {:noreply,
      assign(socket,
@@ -319,40 +360,62 @@ defmodule RevstackWeb.WhoamiLive do
       />
 
       <%!-- Live Projects --%>
-      <section class="py-16 sm:py-20">
+      <section id="live-projects" class="py-16 sm:py-20">
         <div class="mx-auto max-w-5xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Live Projects</h2>
+          <div class="text-center mb-14">
+            <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
+              <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Live Projects</h2>
             <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
             <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-              A couple of live projects you can check out.
+              Production applications I designed, built, and deployed <br />
+              <.icon
+                name="hero-cursor-arrow-rays"
+                class="size-5 inline-block align-text-bottom"
+              /><b class="text-lg">click to explore.</b>
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <.project_card
-              title="Hardcore Handyman (Elixir / LiveView)"
-              subtitle="Designed and deployed a production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications to support a streamlined quoting workflow."
+              id="project-handyman"
+              title="Hardcore Handyman"
+              subtitle="Production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications for a streamlined quoting workflow."
               href="https://hardcorehandyman.fly.dev/"
               icon="hero-wrench-screwdriver"
-              preview_src={Map.get(@project_previews, "https://hardcorehandyman.fly.dev/")}
+              preview_src={~p"/images/hardcorehandyman_preview.png"}
+              tech={~w(Elixir Phoenix LiveView Ecto Swoosh Fly.io)}
             />
             <.project_card
-              title="RevenueLink (Next.js)"
-              subtitle="My personal business website built with Next.js. Showcases my professional profile and portfolio, and serves as a hub for contacting me for any inquiries or collaborations."
+              id="project-admin"
+              title="Admin Panel (for this site!)"
+              subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
+              href="#"
+              icon="hero-cog-6-tooth"
+              preview_src={~p"/images/admin_panel/admin_dashboard.png"}
+              tech={~w(Elixir Phoenix LiveView Ash Postgres)}
+              on_click="open_admin_gallery"
+            />
+            <.project_card
+              id="project-revenuelink"
+              title="RevenueLink"
+              subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
               href="https://revenuelink.net/"
               icon="hero-building-office-2"
-              preview_src={Map.get(@project_previews, "https://revenuelink.net/")}
-            />
-            <.project_card
-              title="Admin Panel (Elixir / LiveView / Ash Framework)"
-              subtitle="Custom-built admin dashboard for managing leads and estimate requests for this website. Features a sidebar UI and main dashboard, real-time data grids with filtering, status management, and password-authenticated single-user access."
-              href="/admin"
-              icon="hero-cog-6-tooth"
+              preview_src={~p"/images/revenuelink_preview.png"}
+              tech={~w(Next.js React Tailwind Vercel)}
             />
           </div>
         </div>
       </section>
+
+      <%!-- Admin Gallery Modal --%>
+      <.admin_gallery_modal
+        :if={@admin_gallery_open?}
+        images={@admin_gallery_images}
+        current_index={@admin_gallery_index}
+      />
 
       <%!-- Education --%>
       <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
@@ -525,65 +588,230 @@ defmodule RevstackWeb.WhoamiLive do
   defp project_card(assigns) do
     assigns =
       assigns
-      |> assign_new(:preview_src, fn ->
-        nil
-      end)
-      |> assign_new(:preview_alt, fn ->
-        "#{assigns.title} website preview"
-      end)
+      |> assign_new(:preview_src, fn -> nil end)
+      |> assign_new(:preview_alt, fn -> "#{assigns.title} preview" end)
+      |> assign_new(:tech, fn -> [] end)
+      |> assign_new(:on_click, fn -> nil end)
 
     ~H"""
-    <a
-      href={@href}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="group block rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200"
-    >
-      <div class="mb-5 overflow-hidden rounded-xl border border-base-300 bg-base-200/40 aspect-video">
-        <%= if @preview_src do %>
-          <img
-            src={@preview_src}
-            alt={@preview_alt}
-            loading="lazy"
-            class="h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-200"
-          />
-        <% else %>
-          <div class="flex h-full w-full items-center justify-center text-base-content/40">
-            <.icon name="hero-photo" class="size-8" />
+    <%= if @on_click do %>
+      <button
+        id={@id}
+        phx-click={@on_click}
+        class="group block w-full text-left rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+      >
+        <div class="overflow-hidden bg-base-200/40 aspect-video relative">
+          <%= if @preview_src do %>
+            <img
+              src={@preview_src}
+              alt={@preview_alt}
+              loading="lazy"
+              class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+            />
+          <% else %>
+            <div class="flex h-full w-full items-center justify-center text-base-content/40">
+              <.icon name="hero-photo" class="size-8" />
+            </div>
+          <% end %>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+            <span class="text-white text-sm font-medium flex items-center gap-1.5">
+              <.icon name="hero-eye" class="size-4" /> View Screenshots
+            </span>
           </div>
-        <% end %>
-      </div>
-
-      <div class="flex items-start justify-between gap-4">
-        <div class="min-w-0">
-          <h3 class="text-lg font-bold text-base-content group-hover:text-primary transition-colors">
-            {@title}
-          </h3>
-          <p class="mt-1 text-sm text-base-content/70 leading-relaxed">{@subtitle}</p>
-          <p class="mt-4 text-sm text-primary font-medium break-all">{@href}</p>
         </div>
-        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-          <.icon name={@icon} class="size-6" />
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h3 class="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-200">
+                {@title}
+              </h3>
+              <p class="mt-1.5 text-sm text-base-content/70 leading-relaxed line-clamp-3">
+                {@subtitle}
+              </p>
+            </div>
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <.icon name={@icon} class="size-5" />
+            </div>
+          </div>
+          <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
+            <span
+              :for={t <- @tech}
+              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+            >
+              {t}
+            </span>
+          </div>
         </div>
-      </div>
-    </a>
+      </button>
+    <% else %>
+      <a
+        id={@id}
+        href={@href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group block rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+      >
+        <div class="overflow-hidden bg-base-200/40 aspect-video relative">
+          <%= if @preview_src do %>
+            <img
+              src={@preview_src}
+              alt={@preview_alt}
+              loading="lazy"
+              class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+            />
+          <% else %>
+            <div class="flex h-full w-full items-center justify-center text-base-content/40">
+              <.icon name="hero-photo" class="size-8" />
+            </div>
+          <% end %>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+            <span class="text-white text-sm font-medium flex items-center gap-1.5">
+              <.icon name="hero-arrow-top-right-on-square" class="size-4" /> Visit Site
+            </span>
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <h3 class="text-lg font-bold text-base-content group-hover:text-primary transition-colors duration-200">
+                {@title}
+              </h3>
+              <p class="mt-1.5 text-sm text-base-content/70 leading-relaxed line-clamp-3">
+                {@subtitle}
+              </p>
+            </div>
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+              <.icon name={@icon} class="size-5" />
+            </div>
+          </div>
+          <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
+            <span
+              :for={t <- @tech}
+              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+            >
+              {t}
+            </span>
+          </div>
+          <p class="mt-3 text-xs text-primary font-medium truncate">{@href}</p>
+        </div>
+      </a>
+    <% end %>
     """
   end
 
-  defp fetch_project_preview(url) do
-    response =
-      Req.get!("https://api.microlink.io/",
-        params: [
-          url: url,
-          screenshot: true,
-          meta: false,
-          palette: false
-        ]
+  defp admin_gallery_modal(assigns) do
+    images = assigns.images
+    current = Enum.at(images, assigns.current_index)
+    total = length(images)
+
+    assigns =
+      assign(assigns,
+        current_image: current,
+        total: total
       )
 
-    get_in(response.body, ["data", "screenshot", "url"])
-  rescue
-    _ -> nil
+    ~H"""
+    <div
+      id="admin-gallery-modal"
+      class="fixed inset-0 z-50 overflow-y-auto"
+      phx-window-keydown="close_admin_gallery"
+      phx-key="Escape"
+      phx-hook="LockBodyScroll"
+    >
+      <div
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm"
+        phx-click="close_admin_gallery"
+      >
+      </div>
+      <div class="relative flex min-h-full items-start justify-center p-4 sm:p-6 lg:p-8">
+        <div class="relative w-full max-w-5xl my-8 rounded-2xl border border-base-300 bg-base-100 shadow-2xl">
+          <%!-- Header --%>
+          <div class="sticky top-0 z-10 flex items-center justify-between gap-4 rounded-t-2xl border-b border-base-300 bg-base-100/95 backdrop-blur px-6 py-4">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <.icon name="hero-cog-6-tooth" class="size-5" />
+              </div>
+              <div class="min-w-0">
+                <h3 class="font-bold text-base-content truncate">Admin Panel Screenshots</h3>
+                <p class="text-xs text-base-content/50">
+                  {@current_index + 1} of {@total} — {@current_image.title}
+                </p>
+              </div>
+            </div>
+            <button
+              id="close-admin-gallery"
+              phx-click="close_admin_gallery"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg hover:bg-base-200 transition-colors"
+              aria-label="Close gallery"
+            >
+              <.icon name="hero-x-mark" class="size-5" />
+            </button>
+          </div>
+
+          <%!-- Main Image --%>
+          <div class="p-6">
+            <div class="relative rounded-xl overflow-hidden admin-screenshot-glow">
+              <img
+                src={@current_image.src}
+                alt={@current_image.title}
+                class="w-full rounded-xl"
+              />
+              <%!-- Navigation arrows --%>
+              <button
+                :if={@current_index > 0}
+                id="admin-gallery-prev"
+                phx-click="admin_gallery_prev"
+                class="absolute left-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm"
+                aria-label="Previous screenshot"
+              >
+                <.icon name="hero-chevron-left" class="size-5" />
+              </button>
+              <button
+                :if={@current_index < @total - 1}
+                id="admin-gallery-next"
+                phx-click="admin_gallery_next"
+                class="absolute right-3 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm"
+                aria-label="Next screenshot"
+              >
+                <.icon name="hero-chevron-right" class="size-5" />
+              </button>
+            </div>
+
+            <%!-- Description --%>
+            <div class="mt-5 text-center">
+              <h4 class="text-lg font-bold text-base-content">{@current_image.title}</h4>
+              <p class="mt-1.5 text-sm text-base-content/70 max-w-2xl mx-auto">
+                {@current_image.description}
+              </p>
+            </div>
+
+            <%!-- Thumbnail strip --%>
+            <div class="mt-6 flex justify-center gap-2 overflow-x-auto pb-2">
+              <%= for {img, idx} <- Enum.with_index(@images) do %>
+                <button
+                  phx-click="admin_gallery_select"
+                  phx-value-index={idx}
+                  class={[
+                    "shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:opacity-100",
+                    if(idx == @current_index,
+                      do: "border-primary ring-2 ring-primary/30 opacity-100",
+                      else: "border-transparent opacity-60 hover:border-base-300"
+                    )
+                  ]}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.title}
+                    class="h-full w-full object-cover object-top"
+                  />
+                </button>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
   end
 
   defp stat_card(assigns) do

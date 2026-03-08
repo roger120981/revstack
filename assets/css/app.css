@@ -103,4 +103,13 @@
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
+/* Admin gallery screenshot glow effect */
+.admin-screenshot-glow {
+  box-shadow:
+    0 0 15px 2px oklch(63.16% 0.1474 243.41 / 0.35),
+    0 0 40px 5px oklch(63.16% 0.1474 243.41 / 0.15),
+    0 0 80px 10px oklch(63.16% 0.1474 243.41 / 0.05);
+  border: 1px solid oklch(63.16% 0.1474 243.41 / 0.3);
+}
+
 /* This file is for your main application CSS */

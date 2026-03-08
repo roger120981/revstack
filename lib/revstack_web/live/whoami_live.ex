@@ -127,461 +127,454 @@ defmodule RevstackWeb.WhoamiLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
-      <%!-- Hero --%>
-      <section class="py-20 sm:py-28">
-        <div class="mx-auto max-w-4xl text-center">
-          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
-            <.icon name="hero-user" class="size-4" /> Technical Profile
-          </div>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
-            Kyle Neal
-          </h1>
-          <p class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
-            Lead Distributed Systems Engineer
-          </p>
-          <p class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed">
-            10+ years building revenue-critical distributed systems on the BEAM.
-            Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
-          </p>
-          <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <.link
-              navigate={~p"/contact"}
-              class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <.icon name="hero-envelope" class="size-5" /> Contact Me
-            </.link>
-            <%!-- <.link
-              navigate={~p"/"}
-              class="btn btn-outline btn-lg gap-2 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <.icon name="hero-building-office-2" class="size-5" /> Visit RevenueLink Tech
-            </.link> --%>
-          </div>
-          <%!-- Quick links --%>
-          <div class="mt-6 flex items-center justify-center gap-6 text-sm text-base-content/50">
-            <a
-              href="https://github.com/kyle-neal"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-            >
-              <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-              </svg>
-              GitHub
-            </a>
-            <a
-              href="mailto:nealkyle5@gmail.com"
-              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-            >
-              <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <%!-- At a Glance --%>
-      <section class="py-12">
-        <div class="mx-auto max-w-5xl">
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <.stat_card value="10+" label="Years on the BEAM" />
-            <.stat_card value="1.5M+" label="Events processed / day" />
-            <.stat_card value="$2.5M+" label="Monthly revenue supported" />
-            <.stat_card value="4" label="Engineers managed" />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Professional Summary --%>
-      <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-4xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Professional Summary</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <.summary_item
-              icon="hero-cpu-chip"
-              text="Lead Distributed Systems Engineer focused on long-lived, production BEAM systems (Erlang/OTP + Elixir)"
-            />
-            <.summary_item
-              icon="hero-server-stack"
-              text="Builds and operates high-throughput, revenue-critical platforms with a strong performance and operability mindset"
-            />
-            <.summary_item
-              icon="hero-circle-stack"
-              text="Designs distributed data + messaging architectures across Cassandra/PostgreSQL, RabbitMQ, and search/analytics"
-            />
-            <.summary_item
-              icon="hero-magnifying-glass"
-              text="Owns data modeling and query tuning across OLTP and time-series workloads, with deep comfort debugging production paths"
-            />
-            <.summary_item
-              icon="hero-cog-6-tooth"
-              text="Reliability-first engineering: OTP fault tolerance, BEAM VM tuning, release strategy, CI/CD automation, and incident response"
-            />
-            <.summary_item
-              icon="hero-computer-desktop"
-              text="Full-stack builder with Phoenix/LiveView and Ash; ships internal platforms and tooling from concept to production"
-            />
-            <.summary_item
-              icon="hero-user-group"
-              text="Hands-on technical leader: mentors engineers, aligns cross-team delivery, and stays deep in the code"
-            />
-            <.summary_item
-              icon="hero-cloud"
-              text="Infrastructure-aware across AWS and Linux, with pragmatic automation experience (Jenkins/Ansible)"
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Technical Expertise --%>
-      <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
-        <div class="mx-auto max-w-5xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Technical Expertise</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <.expertise_group
-              title="BEAM & Languages"
-              items={[
-                "Erlang/OTP (GenServers, Supervisors, clustering)",
-                "Elixir",
-                "Phoenix + LiveView",
-                "Ash Framework",
-                "BEAM VM tuning & relup zero-downtime upgrades",
-                "REST API design & third-party integrations"
-              ]}
-            />
-            <.expertise_group
-              title="Data & Messaging"
-              items={[
-                "Cassandra (6-node production cluster)",
-                "PostgreSQL",
-                "Elasticsearch / OpenSearch analytics",
-                "Apache Spark (AWS EMR)",
-                "RabbitMQ distributed messaging pipelines",
-                "Time-series data modeling (1.5M+ events/day)"
-              ]}
-            />
-            <.expertise_group
-              title="Infrastructure & DevOps"
-              items={[
-                "AWS (EC2, RDS, S3)",
-                "Linux operations & administration",
-                "Ansible automation",
-                "CI/CD (Jenkins, Ansible)",
-                "Observability & reliability engineering"
-              ]}
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Professional Experience --%>
-      <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-4xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="space-y-8">
-            <%!-- VeriAS / Ionik --%>
-            <.experience_card
-              title="Lead Distributed Systems Engineer"
-              company="VeriAS / Ionik"
-              period="October 2014 — Present"
-              current?={true}
-              items={[
-                "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
-                "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
-                "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
-                "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-                "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
-                "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery."
-              ]}
-            />
-
-            <%!-- CGI Federal --%>
-            <.experience_card
-              title="Application Programmer"
-              company="CGI Federal"
-              period="December 2013 — October 2014"
-              current?={false}
-              items={[
-                "Performed detailed source code analysis for enterprise Java/ADA systems.",
-                "Developed tooling and assisted with build/release workflows for multi-million SLOC applications.",
-                "Created smoke and sanity testing processes supporting production releases."
-              ]}
-            />
-
-            <%!-- Wichita Online --%>
-            <.experience_card
-              title="In-House Technician"
-              company="Wichita Online"
-              period="April 2013 — December 2013"
-              current?={false}
-              items={[
-                "Provided in-field network troubleshooting and wireless equipment deployment (MikroTik, Canopy routers)."
-              ]}
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Career Portfolio --%>
-      <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-5xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-              Selected professional systems from across my career. 💰 <br />
-              <b class="text-xl"><.icon
-                  name="hero-cursor-arrow-rays"
-                  class="size-5 inline-block align-text-bottom"
-                /> click any project for the full story</b>.
-            </p>
-          </div>
-          <%= for phase <- @career_phases do %>
-            <.career_phase_section phase={phase} />
-          <% end %>
-        </div>
-      </section>
-
-      <%!-- Career Portfolio Modal --%>
+      <.hero_section />
+      <.at_a_glance_section />
+      <.professional_summary_section />
+      <.technical_expertise_section />
+      <.professional_experience_section />
+      <.career_portfolio_section career_phases={@career_phases} />
       <.career_portfolio_modal
         :if={@career_modal_open?}
         phases={@career_phases}
         selected_project_id={@career_selected_project_id}
         detail_view?={@career_detail_view?}
       />
-
-      <%!-- Live Projects --%>
-      <section id="live-projects" class="py-16 sm:py-20">
-        <div class="mx-auto max-w-5xl">
-          <div class="text-center mb-14">
-            <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
-              <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Live Projects</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-              Production applications I designed, built, and deployed <br />
-              <.icon
-                name="hero-cursor-arrow-rays"
-                class="size-5 inline-block align-text-bottom"
-              /><b class="text-lg">click to explore.</b>
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <.project_card
-              id="project-handyman"
-              title="Hardcore Handyman"
-              subtitle="Production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications for a streamlined quoting workflow."
-              href="https://hardcorehandyman.fly.dev/"
-              icon="hero-wrench-screwdriver"
-              preview_src={~p"/images/hardcorehandyman_preview.png"}
-              tech={~w(Elixir Phoenix LiveView Ecto Swoosh Fly.io)}
-            />
-            <.project_card
-              id="project-admin"
-              title="Admin Panel (for this site!)"
-              subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
-              href="#"
-              icon="hero-cog-6-tooth"
-              preview_src={~p"/images/admin_panel/admin_dashboard.png"}
-              tech={~w(Elixir Phoenix LiveView Ash Postgres)}
-              on_click="open_admin_gallery"
-            />
-            <.project_card
-              id="project-revenuelink"
-              title="RevenueLink"
-              subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
-              href="https://revenuelink.net/"
-              icon="hero-building-office-2"
-              preview_src={~p"/images/revenuelink_preview.png"}
-              tech={~w(Next.js React Tailwind Vercel)}
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Admin Gallery Modal --%>
+      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
       <.admin_gallery_modal
         :if={@admin_gallery_open?}
         images={@admin_gallery_images}
         current_index={@admin_gallery_index}
       />
-
-      <%!-- Education --%>
-      <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
-        <div class="mx-auto max-w-4xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Education</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <.education_card
-              degree="B.S. Computer Science"
-              school="Cameron University"
-              period="2010 — 2014"
-              honors="Magna Cum Laude"
-            />
-            <.education_card
-              degree="A.S. Information Technology"
-              school="Cameron University"
-              period="2014 — 2016"
-              honors="Magna Cum Laude"
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Photos (placeholders) --%>
-      <%!-- <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-5xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Photos</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-            <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-              Empty slots you can wire up to images of your choice.
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <.image_placeholder
-              id="photo-professional"
-              title="Professional photo"
-              hint="Replace with a headshot (e.g. /images/me.jpg)"
-            />
-            <.image_placeholder
-              id="photo-hobby"
-              title="Hobby photo"
-              hint="Replace with something personal (guitar, biking, etc.)"
-            />
-            <.image_placeholder
-              id="photo-extra"
-              title="Extra photo"
-              hint="Optional: another shot (talk, meetup, outdoors)"
-            />
-          </div>
-        </div>
-      </section> --%>
-
-      <%!-- Leadership --%>
-      <section class="py-16 sm:py-20">
-        <div class="mx-auto max-w-4xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">Leadership</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <.leadership_item
-              icon="hero-building-office"
-              text="Architecture ownership across all production systems"
-            />
-            <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 4 engineers" />
-            <.leadership_item
-              icon="hero-arrows-right-left"
-              text="Coordinating frontend & infrastructure teams"
-            />
-            <.leadership_item
-              icon="hero-arrow-trending-up"
-              text="Scaling platforms to $2.5M+ monthly revenue"
-            />
-            <.leadership_item icon="hero-calendar" text="Managing delivery timelines and releases" />
-            <.leadership_item
-              icon="hero-wrench-screwdriver"
-              text="Hands-on across backend and full-stack delivery"
-            />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Personal Interests --%>
-      <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
-        <div class="mx-auto max-w-4xl">
-          <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-base-content">When I'm Not Coding</h2>
-            <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          </div>
-          <div class="flex flex-wrap justify-center gap-4">
-            <.interest_badge icon="hero-musical-note" label="Playing Guitar" />
-            <.interest_badge icon="hero-fire" label="Mountain Biking" />
-            <.interest_badge icon="hero-map" label="Hiking" />
-            <.interest_badge icon="hero-globe-americas" label="Going on Adventures" />
-          </div>
-        </div>
-      </section>
-
-      <%!-- Closing CTA --%>
-      <section class="py-20 sm:py-28">
-        <div class="mx-auto max-w-3xl">
-          <%!-- RE ENABLE THIS DIV WHEN ADVERTISING REVENUE LINK --%>
-          <%!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6"> --%>
-          <div class="flex justify-center gap-6">
-            <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                <.icon name="hero-briefcase" class="size-7" />
-              </div>
-              <h3 class="text-lg font-bold text-base-content mb-2">Hiring for a role?</h3>
-              <p class="text-sm text-base-content/70 mb-4">I'd love to hear about the opportunity.</p>
-              <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
-                <.icon name="hero-envelope" class="size-4" /> Contact Me
-              </.link>
-            </div>
-            <%!-- <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-              <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                <.icon name="hero-rocket-launch" class="size-7" />
-              </div>
-              <h3 class="text-lg font-bold text-base-content mb-2">Need consulting?</h3>
-              <p class="text-sm text-base-content/70 mb-4">
-                Let's build something reliable together.
-              </p>
-              <.link navigate={~p"/"} class="btn btn-primary gap-2">
-                <.icon name="hero-building-office-2" class="size-4" /> Visit RevenueLink Tech
-              </.link>
-            </div> --%>
-          </div>
-        </div>
-      </section>
-
-      <%!-- GitHub Repository --%>
-      <section class="pb-20">
-        <div class="mx-auto max-w-3xl">
-          <div class="rounded-2xl border border-base-300 bg-base-200/50 p-8 text-center">
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-content/10 mx-auto mb-4">
-              <svg
-                viewBox="0 0 16 16"
-                class="size-7 fill-current text-base-content"
-                aria-hidden="true"
-              >
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-base-content mb-2">View the Source Code</h3>
-            <p class="text-sm text-base-content/70 mb-4 max-w-md mx-auto">
-              This portfolio site is open source. Check out the code on GitHub to see how it's built with Phoenix LiveView.
-            </p>
-            <a
-              href="https://github.com/kyle-neal/revstack"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline gap-2 transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-              </svg>
-              View on GitHub
-            </a>
-          </div>
-        </div>
-      </section>
+      <.education_section />
+      <.leadership_section />
+      <.personal_interests_section />
+      <.closing_cta_section />
+      <.github_repository_section />
     </Layouts.app>
+    """
+  end
+
+  # ---------------------------------------------------------------------------
+  # Page Sections
+  # ---------------------------------------------------------------------------
+
+  defp hero_section(assigns) do
+    ~H"""
+    <section class="py-20 sm:py-28">
+      <div class="mx-auto max-w-4xl text-center">
+        <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
+          <.icon name="hero-user" class="size-4" /> Technical Profile
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
+          Kyle Neal
+        </h1>
+        <p class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
+          Lead Distributed Systems Engineer
+        </p>
+        <p class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed">
+          10+ years building revenue-critical distributed systems on the BEAM.
+          Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <.link
+            navigate={~p"/contact"}
+            class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <.icon name="hero-envelope" class="size-5" /> Contact Me
+          </.link>
+        </div>
+        <%!-- Quick links --%>
+        <div class="mt-6 flex items-center justify-center gap-6 text-sm text-base-content/50">
+          <a
+            href="https://github.com/kyle-neal"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+          >
+            <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+            GitHub
+          </a>
+          <a
+            href="mailto:nealkyle5@gmail.com"
+            class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+          >
+            <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
+          </a>
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp at_a_glance_section(assigns) do
+    ~H"""
+    <section class="py-12">
+      <div class="mx-auto max-w-5xl">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <.stat_card value="10+" label="Years on the BEAM" />
+          <.stat_card value="1.5M+" label="Events processed / day" />
+          <.stat_card value="$2.5M+" label="Monthly revenue supported" />
+          <.stat_card value="4" label="Engineers managed" />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp professional_summary_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20">
+      <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Professional Summary</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <.summary_item
+            icon="hero-cpu-chip"
+            text="Lead Distributed Systems Engineer focused on long-lived, production BEAM systems (Erlang/OTP + Elixir)"
+          />
+          <.summary_item
+            icon="hero-server-stack"
+            text="Builds and operates high-throughput, revenue-critical platforms with a strong performance and operability mindset"
+          />
+          <.summary_item
+            icon="hero-circle-stack"
+            text="Designs distributed data + messaging architectures across Cassandra/PostgreSQL, RabbitMQ, and search/analytics"
+          />
+          <.summary_item
+            icon="hero-magnifying-glass"
+            text="Owns data modeling and query tuning across OLTP and time-series workloads, with deep comfort debugging production paths"
+          />
+          <.summary_item
+            icon="hero-cog-6-tooth"
+            text="Reliability-first engineering: OTP fault tolerance, BEAM VM tuning, release strategy, CI/CD automation, and incident response"
+          />
+          <.summary_item
+            icon="hero-computer-desktop"
+            text="Full-stack builder with Phoenix/LiveView and Ash; ships internal platforms and tooling from concept to production"
+          />
+          <.summary_item
+            icon="hero-user-group"
+            text="Hands-on technical leader: mentors engineers, aligns cross-team delivery, and stays deep in the code"
+          />
+          <.summary_item
+            icon="hero-cloud"
+            text="Infrastructure-aware across AWS and Linux, with pragmatic automation experience (Jenkins/Ansible)"
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp technical_expertise_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Technical Expertise</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <.expertise_group
+            title="BEAM & Languages"
+            items={[
+              "Erlang/OTP (GenServers, Supervisors, clustering)",
+              "Elixir",
+              "Phoenix + LiveView",
+              "Ash Framework",
+              "BEAM VM tuning & relup zero-downtime upgrades",
+              "REST API design & third-party integrations"
+            ]}
+          />
+          <.expertise_group
+            title="Data & Messaging"
+            items={[
+              "Cassandra (6-node production cluster)",
+              "PostgreSQL",
+              "Elasticsearch / OpenSearch analytics",
+              "Apache Spark (AWS EMR)",
+              "RabbitMQ distributed messaging pipelines",
+              "Time-series data modeling (1.5M+ events/day)"
+            ]}
+          />
+          <.expertise_group
+            title="Infrastructure & DevOps"
+            items={[
+              "AWS (EC2, RDS, S3)",
+              "Linux operations & administration",
+              "Ansible automation",
+              "CI/CD (Jenkins, Ansible)",
+              "Observability & reliability engineering"
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp professional_experience_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20">
+      <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="space-y-8">
+          <.experience_card
+            title="Lead Distributed Systems Engineer"
+            company="VeriAS / Ionik"
+            period="October 2014 — Present"
+            current?={true}
+            items={[
+              "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
+              "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
+              "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
+              "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
+              "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+              "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery."
+            ]}
+          />
+          <.experience_card
+            title="Application Programmer"
+            company="CGI Federal"
+            period="December 2013 — October 2014"
+            current?={false}
+            items={[
+              "Performed detailed source code analysis for enterprise Java/ADA systems.",
+              "Developed tooling and assisted with build/release workflows for multi-million SLOC applications.",
+              "Created smoke and sanity testing processes supporting production releases."
+            ]}
+          />
+          <.experience_card
+            title="In-House Technician"
+            company="Wichita Online"
+            period="April 2013 — December 2013"
+            current?={false}
+            items={[
+              "Provided in-field network troubleshooting and wireless equipment deployment (MikroTik, Canopy routers)."
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp career_portfolio_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+          <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
+            Selected professional systems from across my career. 💰 <br />
+            <b class="text-xl"><.icon
+                name="hero-cursor-arrow-rays"
+                class="size-5 inline-block align-text-bottom"
+              /> click any project for the full story</b>.
+          </p>
+        </div>
+        <%= for phase <- @career_phases do %>
+          <.career_phase_section phase={phase} />
+        <% end %>
+      </div>
+    </section>
+    """
+  end
+
+  defp live_projects_section(assigns) do
+    ~H"""
+    <section id="live-projects" class="py-16 sm:py-20">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center mb-14">
+          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
+            <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Live Projects</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+          <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
+            Production applications I designed, built, and deployed <br />
+            <.icon
+              name="hero-cursor-arrow-rays"
+              class="size-5 inline-block align-text-bottom"
+            /><b class="text-lg">click to explore.</b>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <.project_card
+            id="project-handyman"
+            title="Hardcore Handyman"
+            subtitle="Production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications for a streamlined quoting workflow."
+            href="https://hardcorehandyman.fly.dev/"
+            icon="hero-wrench-screwdriver"
+            preview_src={~p"/images/hardcorehandyman_preview.png"}
+            tech={~w(Elixir Phoenix LiveView Ecto Swoosh Fly.io)}
+          />
+          <.project_card
+            id="project-admin"
+            title="Admin Panel (for this site!)"
+            subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
+            href="#"
+            icon="hero-cog-6-tooth"
+            preview_src={~p"/images/admin_panel/admin_dashboard.png"}
+            tech={~w(Elixir Phoenix LiveView Ash Postgres)}
+            on_click="open_admin_gallery"
+          />
+          <.project_card
+            id="project-revenuelink"
+            title="RevenueLink"
+            subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
+            href="https://revenuelink.net/"
+            icon="hero-building-office-2"
+            preview_src={~p"/images/revenuelink_preview.png"}
+            tech={~w(Next.js React Tailwind Vercel)}
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp education_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+      <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Education</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <.education_card
+            degree="B.S. Computer Science"
+            school="Cameron University"
+            period="2010 — 2014"
+            honors="Magna Cum Laude"
+          />
+          <.education_card
+            degree="A.S. Information Technology"
+            school="Cameron University"
+            period="2014 — 2016"
+            honors="Magna Cum Laude"
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp leadership_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20">
+      <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Leadership</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <.leadership_item
+            icon="hero-building-office"
+            text="Architecture ownership across all production systems"
+          />
+          <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 4 engineers" />
+          <.leadership_item
+            icon="hero-arrows-right-left"
+            text="Coordinating frontend & infrastructure teams"
+          />
+          <.leadership_item
+            icon="hero-arrow-trending-up"
+            text="Scaling platforms to $2.5M+ monthly revenue"
+          />
+          <.leadership_item icon="hero-calendar" text="Managing delivery timelines and releases" />
+          <.leadership_item
+            icon="hero-wrench-screwdriver"
+            text="Hands-on across backend and full-stack delivery"
+          />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp personal_interests_section(assigns) do
+    ~H"""
+    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+      <div class="mx-auto max-w-4xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">When I'm Not Coding</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-4">
+          <.interest_badge icon="hero-musical-note" label="Playing Guitar" />
+          <.interest_badge icon="hero-fire" label="Mountain Biking" />
+          <.interest_badge icon="hero-map" label="Hiking" />
+          <.interest_badge icon="hero-globe-americas" label="Going on Adventures" />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp closing_cta_section(assigns) do
+    ~H"""
+    <section class="py-20 sm:py-28">
+      <div class="mx-auto max-w-3xl">
+        <div class="flex justify-center gap-6">
+          <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+              <.icon name="hero-briefcase" class="size-7" />
+            </div>
+            <h3 class="text-lg font-bold text-base-content mb-2">Hiring for a role?</h3>
+            <p class="text-sm text-base-content/70 mb-4">I'd love to hear about the opportunity.</p>
+            <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
+              <.icon name="hero-envelope" class="size-4" /> Contact Me
+            </.link>
+          </div>
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp github_repository_section(assigns) do
+    ~H"""
+    <section class="pb-20">
+      <div class="mx-auto max-w-3xl">
+        <div class="rounded-2xl border border-base-300 bg-base-200/50 p-8 text-center">
+          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-content/10 mx-auto mb-4">
+            <svg
+              viewBox="0 0 16 16"
+              class="size-7 fill-current text-base-content"
+              aria-hidden="true"
+            >
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-base-content mb-2">View the Source Code</h3>
+          <p class="text-sm text-base-content/70 mb-4 max-w-md mx-auto">
+            This portfolio site is open source. Check out the code on GitHub to see how it's built with Phoenix LiveView.
+          </p>
+          <a
+            href="https://github.com/kyle-neal/revstack"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline gap-2 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
     """
   end
 

@@ -3,6 +3,8 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
   import Phoenix.LiveViewTest
 
+  @active_gallery_image_count 4
+
   describe "live projects section" do
     test "renders the live projects section with all three cards", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
@@ -86,7 +88,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
 
       assert has_src_containing?(tree, "admin_dashboard")
-      assert html =~ "1 of 7"
+      assert html =~ "1 of #{@active_gallery_image_count}"
       assert html =~ "Admin Dashboard"
     end
 
@@ -111,7 +113,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       view |> element("#admin-gallery-next") |> render_click()
 
       html = render(view)
-      assert html =~ "2 of 7"
+      assert html =~ "2 of #{@active_gallery_image_count}"
       assert html =~ "Lead Listing"
     end
 
@@ -125,13 +127,13 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       view |> element("#admin-gallery-next") |> render_click()
 
       html = render(view)
-      assert html =~ "3 of 7"
+      assert html =~ "3 of #{@active_gallery_image_count}"
 
       # Go back
       view |> element("#admin-gallery-prev") |> render_click()
 
       html = render(view)
-      assert html =~ "2 of 7"
+      assert html =~ "2 of #{@active_gallery_image_count}"
     end
 
     test "thumbnail selection jumps to the selected image", %{conn: conn} do
@@ -139,13 +141,13 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       view |> element("button#project-admin") |> render_click()
 
-      # Click on thumbnail index 4 (lead_updated)
+      # Click on thumbnail index 3 (lead_updated)
       view
-      |> element("button[phx-click='admin_gallery_select'][phx-value-index='4']")
+      |> element("button[phx-click='admin_gallery_select'][phx-value-index='3']")
       |> render_click()
 
       html = render(view)
-      assert html =~ "5 of 7"
+      assert html =~ "4 of #{@active_gallery_image_count}"
       assert html =~ "Lead Updated"
     end
 
@@ -184,7 +186,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       count =
         Regex.scan(~r/phx-click="admin_gallery_select"/, html) |> length()
 
-      assert count == 7
+      assert count == @active_gallery_image_count
     end
 
     test "previous button not shown on first image", %{conn: conn} do
@@ -201,15 +203,12 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       view |> element("button#project-admin") |> render_click()
 
-      # Navigate to last image (index 6)
-      for i <- 0..5 do
-        view
-        |> element("button[phx-click='admin_gallery_select'][phx-value-index='#{i + 1}']")
-        |> render_click()
-      end
+      view
+      |> element("button[phx-click='admin_gallery_select'][phx-value-index='3']")
+      |> render_click()
 
       html = render(view)
-      assert html =~ "7 of 7"
+      assert html =~ "4 of #{@active_gallery_image_count}"
       assert has_element?(view, "#admin-gallery-prev")
       refute has_element?(view, "#admin-gallery-next")
     end

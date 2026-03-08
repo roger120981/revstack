@@ -89,7 +89,7 @@ defmodule RevstackWeb.AdminAuthAccessTest do
     assert has_class?(desktop_logo_image, "absolute")
     assert has_class?(desktop_logo_image, "left-1/2")
     assert has_class?(desktop_logo_image, "top-1/2")
-    assert has_class?(desktop_logo_image, "w-[210%]")
+    assert has_class?(desktop_logo_image, "w-[150%]")
     assert has_class?(desktop_logo_image, "-translate-x-1/2")
     assert has_class?(desktop_logo_image, "-translate-y-1/2")
   end

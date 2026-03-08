@@ -35,6 +35,19 @@ const Hooks = {
     destroyed() {
       document.body.style.overflow = this._prev || ""
     }
+  },
+  AdminSidebar: {
+    mounted() {
+      // Close sidebar when clicking backdrop
+      const backdrop = document.getElementById("mobile-sidebar-backdrop")
+      if (backdrop) {
+        backdrop.addEventListener("click", () => {
+          this.el.classList.add("-translate-x-full")
+          this.el.classList.remove("translate-x-0")
+          backdrop.style.display = "none"
+        })
+      }
+    }
   }
 }
 

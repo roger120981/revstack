@@ -55,7 +55,8 @@ config :revstack,
   ecto_repos: [Revstack.Repo],
   generators: [timestamp_type: :utc_datetime],
   ash_domains: [Revstack.Accounts, Revstack.Consulting],
-  ash_authentication: [return_error_on_invalid_magic_link_token?: true]
+  # Set to false to allow multiple admin users
+  single_admin_mode: true
 
 # Configure the endpoint
 config :revstack, RevstackWeb.Endpoint,

@@ -90,6 +90,7 @@ defmodule RevstackWeb do
       # Common modules used in templates
       alias Phoenix.LiveView.JS
       alias RevstackWeb.Layouts
+      alias RevstackWeb.AdminLayouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

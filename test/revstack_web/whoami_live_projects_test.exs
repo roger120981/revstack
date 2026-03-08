@@ -60,6 +60,23 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
+  describe "team work section" do
+    test "renders the team work collaboration narrative", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(view, "#teamwork")
+      assert has_element?(view, "#teamwork-poland")
+      assert has_element?(view, "#teamwork-ph-infra")
+
+      html = render(view)
+
+      assert html =~ "5 backend engineers"
+      assert html =~ "3 DevOps engineers"
+      assert html =~ "solo engineer"
+      assert html =~ "black box"
+    end
+  end
+
   describe "admin gallery modal" do
     test "modal is not rendered on initial page load", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")

@@ -132,6 +132,7 @@ defmodule RevstackWeb.WhoamiLive do
       <.professional_summary_section />
       <.technical_expertise_section />
       <.professional_experience_section />
+      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
       <.career_portfolio_section career_phases={@career_phases} />
       <.career_portfolio_modal
         :if={@career_modal_open?}
@@ -139,7 +140,6 @@ defmodule RevstackWeb.WhoamiLive do
         selected_project_id={@career_selected_project_id}
         detail_view?={@career_detail_view?}
       />
-      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
       <.admin_gallery_modal
         :if={@admin_gallery_open?}
         images={@admin_gallery_images}
@@ -147,6 +147,7 @@ defmodule RevstackWeb.WhoamiLive do
       />
       <.education_section />
       <.leadership_section />
+      <.team_work_section />
       <.personal_interests_section />
       <.closing_cta_section />
       <.github_repository_section />
@@ -214,9 +215,9 @@ defmodule RevstackWeb.WhoamiLive do
       <div class="mx-auto max-w-5xl">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <.stat_card value="10+" label="Years on the BEAM" />
-          <.stat_card value="1.5M+" label="Events processed / day" />
-          <.stat_card value="$2.5M+" label="Monthly revenue supported" />
-          <.stat_card value="4" label="Engineers managed" />
+          <.stat_card value="1.5M+" label="Daily events processed by systems I built" />
+          <.stat_card value="$2.5M+" label="Monthly revenue supported by systems I built" />
+          <.stat_card value="5" label="Engineers managed" />
         </div>
       </div>
     </section>
@@ -397,10 +398,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
             <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
           </div>
-          <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Live Projects</h2>
+          <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Personal Live Projects</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Production applications I designed, built, and deployed <br />
+            Production applications I designed, built, and deployed on my spare time <br />
             <.icon
               name="hero-cursor-arrow-rays"
               class="size-5 inline-block align-text-bottom"
@@ -483,7 +484,7 @@ defmodule RevstackWeb.WhoamiLive do
             icon="hero-building-office"
             text="Architecture ownership across all production systems"
           />
-          <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 4 engineers" />
+          <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 5 engineers" />
           <.leadership_item
             icon="hero-arrows-right-left"
             text="Coordinating frontend & infrastructure teams"
@@ -497,6 +498,122 @@ defmodule RevstackWeb.WhoamiLive do
             icon="hero-wrench-screwdriver"
             text="Hands-on across backend and full-stack delivery"
           />
+        </div>
+      </div>
+    </section>
+    """
+  end
+
+  defp team_work_section(assigns) do
+    ~H"""
+    <section
+      id="teamwork"
+      class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl"
+    >
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-base-content">Team Work</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+          <p class="mt-4 max-w-3xl mx-auto text-base text-base-content/70 leading-relaxed">
+            I have led, collaborated with, and supported distributed engineering teams while building
+            a multi-million-dollar affiliate network platform and the infrastructure around it.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div
+            id="teamwork-poland"
+            class="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200"
+          >
+            <div class="flex items-center gap-3 mb-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <.icon name="hero-user-group" class="size-5" />
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-base-content">Affiliate Platform Build Team</h3>
+                <p class="text-sm text-base-content/60">
+                  Poland-based backend and DevOps collaboration
+                </p>
+              </div>
+            </div>
+
+            <ul class="space-y-3">
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Worked closely with <b>5 backend engineers</b>
+                  in Poland and <b>3 DevOps engineers</b>
+                  in Poland while actively building the affiliate network platform, a
+                  multi-million-dollar production system.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Initially partnered with the <b>2 lead backend engineers</b>
+                  who started the platform,
+                  collaborating on architecture, implementation, and getting the system into a
+                  production-ready state.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Later became the <b>solo engineer</b> responsible for new features, maintenance,
+                  long-term ownership, and major rewrites across the affiliate network platform.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Spent more years evolving the platform independently than were spent building the
+                  original larger-team release, and ultimately rewrote more of the system than the first
+                  production-ready version contained.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            id="teamwork-ph-infra"
+            class="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200"
+          >
+            <div class="flex items-center gap-3 mb-4">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <.icon name="hero-wrench-screwdriver" class="size-5" />
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-base-content">Infrastructure Team Support</h3>
+                <p class="text-sm text-base-content/60">
+                  Operational leadership with hands-on support
+                </p>
+              </div>
+            </div>
+
+            <ul class="space-y-3">
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Regularly stepped in to help the Philippines-based infrastructure team during heavy
+                  operational grinds and high-pressure delivery periods.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Built that team to operate as a mostly self-managed <b>black box</b>, giving it the
+                  structure and autonomy to run effectively without constant oversight.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>
+                  Balanced delegation with direct technical involvement, stepping into difficult work when
+                  needed while keeping the team sustainable and operationally independent.
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -1679,10 +1796,10 @@ defmodule RevstackWeb.WhoamiLive do
         description:
           "Kyle served as the lead backend engineer for the affiliate platform, responsible for architecture, development, and production operations.",
         members: [
-          "CTO worked on a separate SMS platform",
-          "Kyle owned the entire affiliate network backend stack",
-          "Led 1 UI engineer",
-          "Collaborated with 3 infrastructure engineers"
+          "Worked closely with the CTO on business issues and core technology",
+          "Kyle owned the entire affiliate network platform backend stack",
+          "Led 2 UI engineers building customer-facing tools on top of the platform",
+          "Led 3 infrastructure engineers that managed the underlying VPS, DNS, and monitoring infrastructure supporting the platform"
         ]
       },
       projects: [

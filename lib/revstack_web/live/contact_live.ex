@@ -31,7 +31,7 @@ defmodule RevstackWeb.ContactLive do
       {:ok, _lead} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Thank you! We'll be in touch soon.")
+         |> put_flash(:info, "Thank you! I'll be in touch soon.")
          |> push_navigate(to: ~p"/thanks")}
 
       {:error, form} ->

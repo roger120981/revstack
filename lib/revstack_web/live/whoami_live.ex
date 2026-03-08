@@ -345,8 +345,8 @@ defmodule RevstackWeb.WhoamiLive do
               preview_src={Map.get(@project_previews, "https://revenuelink.net/")}
             />
             <.project_card
-              title="Admin Panel (Phoenix LiveView)"
-              subtitle="Custom-built admin dashboard for managing leads and estimate requests. Features a dark indigo sidebar UI, real-time data grids with filtering, status management, and password-authenticated single-user access."
+              title="Admin Panel (Elixir / LiveView / Ash Framework)"
+              subtitle="Custom-built admin dashboard for managing leads and estimate requests for this website. Features a sidebar UI and main dashboard, real-time data grids with filtering, status management, and password-authenticated single-user access."
               href="/admin"
               icon="hero-cog-6-tooth"
             />

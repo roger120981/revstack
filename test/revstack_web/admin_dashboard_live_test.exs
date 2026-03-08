@@ -17,18 +17,19 @@ defmodule RevstackWeb.AdminDashboardLiveTest do
 
     conn = log_in_user(conn, admin)
     {:ok, view, _html} = live(conn, ~p"/admin")
-    html = render(view)
 
-    assert html =~ ~r/id="dashboard-total-leads"[\s\S]*?>4<[
-\s\S]*?Total Leads/
-    assert html =~ ~r/id="dashboard-new-leads"[\s\S]*?>2<[
-\s\S]*?New Leads/
-    assert html =~ ~r/id="dashboard-total-estimates"[\s\S]*?>2<[
-\s\S]*?Total Estimates/
-    assert html =~ ~r/id="dashboard-new-estimates"[\s\S]*?>1<[
-\s\S]*?New Estimates/
-    assert html =~ "Single Admin Mode"
-    assert html =~ "View all leads"
-    assert html =~ "View all estimate requests"
+    assert has_element?(view, "#dashboard-total-leads", "4")
+    assert has_element?(view, "#dashboard-new-leads", "2")
+    assert has_element?(view, "#dashboard-total-estimates", "2")
+    assert has_element?(view, "#dashboard-new-estimates", "1")
+
+    assert has_element?(
+             view,
+             "#dashboard-system-environment",
+             to_string(Application.fetch_env!(:revstack, :environment))
+           )
+
+    assert has_element?(view, "a[href='/admin/leads']", "View all leads")
+    assert has_element?(view, "a[href='/admin/estimates']", "View all estimate requests")
   end
 end

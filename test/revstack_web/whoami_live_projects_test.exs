@@ -60,6 +60,16 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       assert has_element?(view, "button#project-admin[phx-click='open_admin_gallery']")
     end
+
+    test "admin panel card shows the GitHub URL in the card preview", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(
+               view,
+               "button#project-admin p",
+               "https://github.com/kyle-neal/revstack"
+             )
+    end
   end
 
   describe "team work section" do

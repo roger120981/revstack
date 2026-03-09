@@ -339,7 +339,7 @@ defmodule RevstackWeb.WhoamiLive do
               "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
               "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
               "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
-              "Lead and manage 4 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery."
+              "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
             ]}
           />
           <.experience_card
@@ -422,7 +422,7 @@ defmodule RevstackWeb.WhoamiLive do
           />
           <.project_card
             id="project-admin"
-            title="Admin Panel (for this site!)"
+            title="Admin Dashboard (for this site!)"
             subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
             href="https://github.com/kyle-neal/revstack"
             icon="hero-cog-6-tooth"
@@ -437,7 +437,7 @@ defmodule RevstackWeb.WhoamiLive do
             href="https://revenuelink.net/"
             icon="hero-building-office-2"
             preview_src={~p"/images/revenuelink_preview.png"}
-            tech={~w(Next.js React Tailwind Vercel)}
+            tech={~w(Next.js ReactJS TailwindCSS Vercel)}
           />
         </div>
       </div>
@@ -762,6 +762,7 @@ defmodule RevstackWeb.WhoamiLive do
               {t}
             </span>
           </div>
+          <p :if={@href} class="mt-3 text-xs text-primary font-medium truncate">{@href}</p>
         </div>
       </button>
     <% else %>

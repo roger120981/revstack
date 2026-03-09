@@ -6,6 +6,8 @@ defmodule RevstackWeb.LiveUserAuth do
   import Phoenix.Component
   use RevstackWeb, :verified_routes
 
+  require Logger
+
   alias Revstack.Tracking.Service
 
   def on_mount(:current_user, _params, session, socket) do
@@ -89,7 +91,7 @@ defmodule RevstackWeb.LiveUserAuth do
     parsed_uri = URI.parse(uri)
     path = parsed_uri.path || "/"
 
-    Service.track_page_visit(%{
+    attrs = %{
       ip_address: socket.assigns.visitor_ip,
       user_agent: socket.assigns.visitor_user_agent,
       referrer: referrer,
@@ -97,6 +99,28 @@ defmodule RevstackWeb.LiveUserAuth do
       full_url: uri,
       query_string: parsed_uri.query,
       method: "GET"
-    })
+    }
+
+    safe_track_page_visit(attrs)
+  end
+
+  defp safe_track_page_visit(attrs) do
+    tracking_service().track_page_visit(attrs)
+  rescue
+    exception ->
+      Logger.warning(
+        "Visitor tracking failed without interrupting LiveView: #{Exception.message(exception)}"
+      )
+
+      :ok
+  catch
+    :exit, reason ->
+      Logger.warning("Visitor tracking exited without interrupting LiveView: #{inspect(reason)}")
+
+      :ok
+  end
+
+  defp tracking_service do
+    Application.get_env(:revstack, :tracking_service, Service)
   end
 end

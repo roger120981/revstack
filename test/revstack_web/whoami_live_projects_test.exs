@@ -3,6 +3,8 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
   import Phoenix.LiveViewTest
 
+  @moduletag capture_log: true
+
   @active_gallery_image_count 4
 
   describe "live projects section" do

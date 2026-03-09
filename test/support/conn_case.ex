@@ -19,6 +19,8 @@ defmodule RevstackWeb.ConnCase do
 
   using do
     quote do
+      @moduletag capture_log: true
+
       # The default endpoint for testing
       @endpoint RevstackWeb.Endpoint
 

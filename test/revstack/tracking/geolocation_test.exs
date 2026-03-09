@@ -1,6 +1,8 @@
 defmodule Revstack.Tracking.GeolocationTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureLog
+
   alias Revstack.Tracking.Geolocation
 
   describe "lookup/1" do
@@ -49,7 +51,13 @@ defmodule Revstack.Tracking.GeolocationTest do
         Application.put_env(:revstack, :geolocation_provider, :maxmind)
         Application.delete_env(:revstack, :maxmind_account_id)
         Application.delete_env(:revstack, :maxmind_license_key)
-        assert {:error, :not_configured} = Geolocation.lookup("8.8.8.8")
+
+        log =
+          capture_log(fn ->
+            assert {:error, :not_configured} = Geolocation.lookup("8.8.8.8")
+          end)
+
+        assert log =~ "MaxMind credentials not configured, skipping geolocation"
       after
         if original_provider do
           Application.put_env(:revstack, :geolocation_provider, original_provider)

@@ -1,6 +1,7 @@
 defmodule RevstackWeb.LiveVisitorTrackingTest do
   use RevstackWeb.ConnCase, async: true
 
+  import ExUnit.CaptureLog
   import Phoenix.LiveViewTest
 
   alias Revstack.Tracking.{Visitor, VisitorPageVisit}
@@ -51,5 +52,47 @@ defmodule RevstackWeb.LiveVisitorTrackingTest do
 
     assert "/thanks" in paths
     assert "/" in paths
+  end
+
+  test "keeps the LiveView connected when visitor tracking fails", %{conn: conn} do
+    original_service = Application.get_env(:revstack, :tracking_service)
+    Application.put_env(:revstack, :tracking_service, RevstackWeb.FailingTrackingService)
+    Application.put_env(:revstack, :tracking_test_pid, self())
+
+    on_exit(fn ->
+      if original_service do
+        Application.put_env(:revstack, :tracking_service, original_service)
+      else
+        Application.delete_env(:revstack, :tracking_service)
+      end
+
+      Application.delete_env(:revstack, :tracking_test_pid)
+    end)
+
+    log =
+      capture_log(fn ->
+        {:ok, view, _html} = live(conn, ~p"/services")
+        view_pid = view.pid
+        ref = Process.monitor(view_pid)
+
+        assert_receive {:tracking_called, %{path: "/services", method: "GET"}}
+
+        _ = :sys.get_state(view_pid)
+
+        refute_received {:DOWN, ^ref, :process, ^view_pid, _reason}
+        assert has_element?(view, "#services-page-logo")
+      end)
+
+    assert log =~ "Visitor tracking failed without interrupting LiveView"
+  end
+end
+
+defmodule RevstackWeb.FailingTrackingService do
+  def track_page_visit(attrs) do
+    if pid = Application.get_env(:revstack, :tracking_test_pid) do
+      send(pid, {:tracking_called, attrs})
+    end
+
+    raise RuntimeError, "tcp recv (idle): closed"
   end
 end

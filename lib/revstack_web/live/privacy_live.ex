@@ -3,7 +3,11 @@ defmodule RevstackWeb.PrivacyLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Privacy Policy — RevenueLink Technologies", current_path: "/privacy")}
+    {:ok,
+     assign(socket,
+       page_title: "Privacy Policy — RevenueLink Technologies",
+       current_path: "/privacy"
+     )}
   end
 
   @impl true

@@ -48,6 +48,71 @@ const Hooks = {
         })
       }
     }
+  },
+  AdminUtcClock: {
+    mounted() {
+      this.timeValue = this.el.querySelector("[data-role='utc-time-value']")
+      this.current = this.parseTime(this.el.dataset.utcTime) || this.currentUtcTime()
+      this.render()
+
+      this.interval = window.setInterval(() => {
+        this.current = this.increment(this.current)
+        this.render()
+      }, 1000)
+    },
+
+    destroyed() {
+      if (this.interval) {
+        window.clearInterval(this.interval)
+      }
+    },
+
+    parseTime(value) {
+      if (!value) return null
+
+      const match = value.match(/^(\d{2}):(\d{2}):(\d{2})$/)
+      if (!match) return null
+
+      return {
+        hours: Number(match[1]),
+        minutes: Number(match[2]),
+        seconds: Number(match[3])
+      }
+    },
+
+    currentUtcTime() {
+      const now = new Date()
+
+      return {
+        hours: now.getUTCHours(),
+        minutes: now.getUTCMinutes(),
+        seconds: now.getUTCSeconds()
+      }
+    },
+
+    increment(time) {
+      const totalSeconds = (time.hours * 3600 + time.minutes * 60 + time.seconds + 1) % 86400
+
+      return {
+        hours: Math.floor(totalSeconds / 3600),
+        minutes: Math.floor((totalSeconds % 3600) / 60),
+        seconds: totalSeconds % 60
+      }
+    },
+
+    formatPart(value) {
+      return String(value).padStart(2, "0")
+    },
+
+    render() {
+      if (!this.timeValue || !this.current) return
+
+      this.timeValue.textContent = [
+        this.formatPart(this.current.hours),
+        this.formatPart(this.current.minutes),
+        this.formatPart(this.current.seconds)
+      ].join(":")
+    }
   }
 }
 

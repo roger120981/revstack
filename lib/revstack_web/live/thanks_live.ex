@@ -3,7 +3,8 @@ defmodule RevstackWeb.ThanksLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Thank You — RevenueLink Technologies", current_path: "/thanks")}
+    {:ok,
+     assign(socket, page_title: "Thank You — RevenueLink Technologies", current_path: "/thanks")}
   end
 
   @impl true

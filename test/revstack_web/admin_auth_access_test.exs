@@ -94,6 +94,47 @@ defmodule RevstackWeb.AdminAuthAccessTest do
     assert has_class?(desktop_logo_image, "-translate-y-1/2")
   end
 
+  test "admin layout renders the top bar search, UTC clock, notification bell, user menu, and theme toggle",
+       %{
+         conn: conn
+       } do
+    admin = create_and_sign_in_user(%{admin?: true})
+    conn = log_in_user(conn, admin)
+
+    {:ok, view, _html} = live(conn, ~p"/admin")
+
+    assert has_element?(view, "#admin-topbar-search")
+
+    assert has_element?(
+             view,
+             "#admin-topbar-search-input[placeholder='Search...'][disabled]"
+           )
+
+    assert has_element?(view, "#admin-topbar-utc-clock", "UTC")
+
+    assert has_element?(
+             view,
+             "#admin-topbar-utc-clock[phx-hook='AdminUtcClock'][phx-update='ignore'][data-utc-time]"
+           )
+
+    assert has_element?(view, "#admin-topbar-utc-clock [data-role='utc-time-value']")
+    assert has_element?(view, "#admin-topbar-notification-bell")
+    assert has_element?(view, "#admin-topbar-user-menu-button", to_string(admin.email))
+    assert has_element?(view, "#admin-topbar-user-menu", "Signed in")
+    assert has_element?(view, "#admin-topbar-user-menu a[href='/sign-out']", "Sign out")
+    assert has_element?(view, "#admin-topbar-theme-toggle")
+    assert has_element?(view, "#admin-topbar-theme-toggle [data-phx-theme='system']")
+    assert has_element?(view, "#admin-topbar-theme-toggle [data-phx-theme='light']")
+    assert has_element?(view, "#admin-topbar-theme-toggle [data-phx-theme='dark']")
+    assert has_element?(view, "#admin-page-title", "Dashboard")
+
+    html = render(view)
+    document = LazyHTML.from_fragment(html)
+    user_menu = LazyHTML.query_by_id(document, "admin-topbar-user-menu")
+
+    assert has_class?(user_menu, "hidden")
+  end
+
   defp has_class?(lazy_html, class_name) do
     tree = LazyHTML.to_tree(lazy_html, sort_attributes: true, skip_whitespace_nodes: true)
 

@@ -3,13 +3,13 @@ defmodule RevstackWeb.ThanksLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Thank You — Revstack")}
+    {:ok, assign(socket, page_title: "Thank You — RevenueLink Technologies", current_path: "/thanks")}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <section class="py-24 sm:py-36">
         <div class="mx-auto max-w-2xl text-center">
           <div class="flex h-20 w-20 items-center justify-center rounded-full bg-success/10 text-success mx-auto mb-8">

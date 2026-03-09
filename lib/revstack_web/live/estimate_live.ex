@@ -25,6 +25,7 @@ defmodule RevstackWeb.EstimateLive do
     {:ok,
      socket
      |> assign(page_title: "Request an Estimate — Revstack")
+     |> assign(current_path: "/estimate")
      |> assign(form: form)
      |> assign(project_type_options: @project_type_options)
      |> assign(visitor_ip: session["visitor_ip"])
@@ -66,7 +67,7 @@ defmodule RevstackWeb.EstimateLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <section class="pb-16 pt-6 sm:pb-24 sm:pt-10">
         <div class="mx-auto max-w-2xl">
           <div class="mx-auto mb-10 max-w-3xl text-center sm:mb-12">

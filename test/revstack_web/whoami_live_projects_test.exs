@@ -5,7 +5,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
   @moduletag capture_log: true
 
-  @active_gallery_image_count 4
+  @active_gallery_image_count 7
 
   describe "live projects section" do
     test "renders the live projects section with all three cards", %{conn: conn} do
@@ -147,12 +147,14 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       html = render(view)
       assert html =~ "3 of #{@active_gallery_image_count}"
+      assert html =~ "Lead Detail View"
 
       # Go back
       view |> element("#admin-gallery-prev") |> render_click()
 
       html = render(view)
       assert html =~ "2 of #{@active_gallery_image_count}"
+      assert html =~ "Lead Listing"
     end
 
     test "thumbnail selection jumps to the selected image", %{conn: conn} do
@@ -160,14 +162,14 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       view |> element("button#project-admin") |> render_click()
 
-      # Click on thumbnail index 3 (lead_updated)
+      # Click on thumbnail index 6 (Visitor Detail View - the last image)
       view
-      |> element("button[phx-click='admin_gallery_select'][phx-value-index='3']")
+      |> element("button[phx-click='admin_gallery_select'][phx-value-index='6']")
       |> render_click()
 
       html = render(view)
-      assert html =~ "4 of #{@active_gallery_image_count}"
-      assert html =~ "Lead Updated"
+      assert html =~ "7 of #{@active_gallery_image_count}"
+      assert html =~ "Visitor Detail View"
     end
 
     test "close button dismisses the modal", %{conn: conn} do
@@ -223,11 +225,11 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       view |> element("button#project-admin") |> render_click()
 
       view
-      |> element("button[phx-click='admin_gallery_select'][phx-value-index='3']")
+      |> element("button[phx-click='admin_gallery_select'][phx-value-index='6']")
       |> render_click()
 
       html = render(view)
-      assert html =~ "4 of #{@active_gallery_image_count}"
+      assert html =~ "7 of #{@active_gallery_image_count}"
       assert has_element?(view, "#admin-gallery-prev")
       refute has_element?(view, "#admin-gallery-next")
     end

@@ -13,6 +13,7 @@ defmodule RevstackWeb.ContactLive do
     {:ok,
      socket
      |> assign(page_title: "Contact — Revstack")
+     |> assign(current_path: "/contact")
      |> assign(form: form)
      |> assign(visitor_ip: session["visitor_ip"])
      |> assign(visitor_user_agent: session["visitor_user_agent"])}
@@ -50,7 +51,7 @@ defmodule RevstackWeb.ContactLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <section class="py-16 sm:py-24">
         <div class="mx-auto max-w-2xl">
           <div class="text-center mb-12">
@@ -72,14 +73,6 @@ defmodule RevstackWeb.ContactLive do
               class="space-y-1"
             >
               <.input field={@form[:name]} label="Name" placeholder="Your full name" required />
-              <.input
-                field={@form[:email]}
-                type="email"
-                label="Email"
-                placeholder="you@example.com"
-                required
-              />
-              <.input field={@form[:company]} label="Company" placeholder="Optional" />
 
               <.input
                 field={@form[:preferred_contact_method]}
@@ -92,6 +85,16 @@ defmodule RevstackWeb.ContactLive do
                 ]}
               />
 
+              <%= if to_string(@form[:preferred_contact_method].value) in ["email", "either"] do %>
+                <.input
+                  field={@form[:email]}
+                  type="email"
+                  label="Email"
+                  placeholder="you@example.com"
+                  required
+                />
+              <% end %>
+
               <%= if to_string(@form[:preferred_contact_method].value) in ["phone", "either"] do %>
                 <.input
                   field={@form[:phone]}
@@ -101,6 +104,7 @@ defmodule RevstackWeb.ContactLive do
                 />
               <% end %>
 
+              <.input field={@form[:company]} label="Company" placeholder="Optional" />
               <.input
                 field={@form[:message]}
                 type="textarea"

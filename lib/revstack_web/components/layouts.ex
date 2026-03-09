@@ -37,6 +37,11 @@ defmodule RevstackWeb.Layouts do
     doc: "the currently signed-in user"
   )
 
+  attr(:current_path, :string,
+    default: "/",
+    doc: "the current request path for active nav highlighting"
+  )
+
   slot(:inner_block, required: true)
 
   def app(assigns) do
@@ -69,28 +74,52 @@ defmodule RevstackWeb.Layouts do
             data-scroll-top="true"
             navigate={~p"/whoami"}
             phx-click-capture={JS.dispatch("phx:scroll-top")}
-            class="rounded-lg bg-primary/10 px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+            class={[
+              "rounded-lg px-3 py-2 text-sm transition-colors",
+              if(@current_path == "/whoami",
+                do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                else: "font-medium text-base-content/70 hover:text-base-content hover:bg-base-200"
+              )
+            ]}
           >
             Profile
           </.link>
           <.link
             id="nav-services"
             navigate={~p"/services"}
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
+            class={[
+              "rounded-lg px-3 py-2 text-sm transition-colors",
+              if(@current_path == "/services",
+                do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                else: "font-medium text-base-content/70 hover:text-base-content hover:bg-base-200"
+              )
+            ]}
           >
             Services
           </.link>
           <.link
             id="nav-estimate"
             navigate={~p"/estimate"}
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
+            class={[
+              "rounded-lg px-3 py-2 text-sm transition-colors",
+              if(@current_path == "/estimate",
+                do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                else: "font-medium text-base-content/70 hover:text-base-content hover:bg-base-200"
+              )
+            ]}
           >
             Estimate
           </.link>
           <.link
             id="nav-contact"
             navigate={~p"/contact"}
-            class="px-3 py-2 text-sm font-medium text-base-content/70 hover:text-base-content rounded-lg hover:bg-base-200 transition-colors"
+            class={[
+              "rounded-lg px-3 py-2 text-sm transition-colors",
+              if(@current_path == "/contact",
+                do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                else: "font-medium text-base-content/70 hover:text-base-content hover:bg-base-200"
+              )
+            ]}
           >
             Contact
           </.link>
@@ -186,28 +215,56 @@ defmodule RevstackWeb.Layouts do
                   data-scroll-top="true"
                   navigate={~p"/whoami"}
                   phx-click-capture={JS.dispatch("phx:scroll-top")}
-                  class="flex items-center gap-3 rounded-xl bg-primary/10 px-3 py-3 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+                  class={[
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
+                    if(@current_path == "/whoami",
+                      do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                      else:
+                        "font-medium text-base-content/75 hover:bg-base-200 hover:text-base-content"
+                    )
+                  ]}
                 >
                   <.icon name="hero-user-circle" class="size-5" /> Profile
                 </.link>
                 <.link
                   id="mobile-nav-services"
                   navigate={~p"/services"}
-                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                  class={[
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
+                    if(@current_path == "/services",
+                      do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                      else:
+                        "font-medium text-base-content/75 hover:bg-base-200 hover:text-base-content"
+                    )
+                  ]}
                 >
                   <.icon name="hero-briefcase" class="size-5" /> Services
                 </.link>
                 <.link
                   id="mobile-nav-estimate"
                   navigate={~p"/estimate"}
-                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                  class={[
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
+                    if(@current_path == "/estimate",
+                      do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                      else:
+                        "font-medium text-base-content/75 hover:bg-base-200 hover:text-base-content"
+                    )
+                  ]}
                 >
                   <.icon name="hero-document-text" class="size-5" /> Estimate
                 </.link>
                 <.link
                   id="mobile-nav-contact"
                   navigate={~p"/contact"}
-                  class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                  class={[
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors",
+                    if(@current_path == "/contact",
+                      do: "bg-primary/10 font-semibold text-primary hover:bg-primary/15",
+                      else:
+                        "font-medium text-base-content/75 hover:bg-base-200 hover:text-base-content"
+                    )
+                  ]}
                 >
                   <.icon name="hero-envelope" class="size-5" /> Contact
                 </.link>

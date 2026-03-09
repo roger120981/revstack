@@ -3,13 +3,13 @@ defmodule RevstackWeb.PrivacyLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Privacy Policy — Revstack")}
+    {:ok, assign(socket, page_title: "Privacy Policy — RevenueLink Technologies", current_path: "/privacy")}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <section class="py-16 sm:py-24">
         <div class="mx-auto max-w-3xl">
           <div class="text-center mb-12">

@@ -5,7 +5,8 @@ defmodule RevstackWeb.ServicesLive do
   def mount(_params, _session, socket) do
     {:ok,
      assign(socket,
-       page_title: "Services — Revstack",
+       page_title: "Services — RevenueLink Technologies",
+       current_path: "/services",
        beam_consulting_cards: beam_consulting_cards(),
        web_application_cards: web_application_cards(),
        local_technology_cards: local_technology_cards(),
@@ -17,7 +18,7 @@ defmodule RevstackWeb.ServicesLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <section class="pb-16 pt-6 sm:pb-24 sm:pt-10">
         <div class="mx-auto max-w-5xl">
           <div class="mx-auto mb-14 max-w-4xl text-center sm:mb-16">

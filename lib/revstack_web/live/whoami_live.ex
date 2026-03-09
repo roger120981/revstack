@@ -14,12 +14,6 @@ defmodule RevstackWeb.WhoamiLive do
       description:
         "Real-time data grid of all leads with status badges, filtering, and pagination."
     },
-    # %{
-    #   src: "/images/admin_panel/lead_creation.png",
-    #   title: "Lead Creation",
-    #   description:
-    #     "Create new leads through a validated form with fields for contact info, source tracking, and notes."
-    # },
     %{
       src: "/images/admin_panel/lead_view.png",
       title: "Lead Detail View",
@@ -27,23 +21,29 @@ defmodule RevstackWeb.WhoamiLive do
         "Detailed view of a single lead with all associated data, status history, and action buttons."
     },
     %{
-      src: "/images/admin_panel/lead_updated.png",
-      title: "Lead Updated",
+      src: "/images/admin_panel/estimate_listing.png",
+      title: "Estimate Listing",
       description:
-        "Confirmation of a successful lead update showing the flash notification and refreshed data."
+        "Data grid of all estimates with filtering by status, date, and associated lead."
+    },
+    %{
+      src: "/images/admin_panel/estimate_view.png",
+      title: "Estimate Detail View",
+      description:
+        "Detailed view of a single estimate with line items, total calculation, and status management."
+    },
+    %{
+      src: "/images/admin_panel/visitors_listing.png",
+      title: "Visitor Tracking",
+      description:
+        "Real-time listing of website visitors with IP, user agent, and page visit (count) for lead qualification."
+    },
+    %{
+      src: "/images/admin_panel/visitors_view.png",
+      title: "Visitor Detail View",
+      description:
+        "Detailed view of a single visitor with timeline of interactions, submitted forms, and lead conversion status."
     }
-    # %{
-    #   src: "/images/admin_panel/estimate_creation.png",
-    #   title: "Estimate Creation",
-    #   description:
-    #     "Estimate creation follows the same streamlined workflow as leads — validated forms, status tracking, and instant feedback."
-    # },
-    # %{
-    #   src: "/images/admin_panel/estimate_created.png",
-    #   title: "Estimate Created",
-    #   description:
-    #     "Confirmation of a newly created estimate. The estimates workflow mirrors leads with identical CRUD patterns."
-    # }
   ]
 
   @impl true
@@ -53,6 +53,7 @@ defmodule RevstackWeb.WhoamiLive do
         page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
         page_description:
           "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership.",
+        current_path: "/whoami",
         admin_gallery_open?: false,
         admin_gallery_index: 0,
         admin_gallery_images: @admin_gallery_images,
@@ -126,7 +127,7 @@ defmodule RevstackWeb.WhoamiLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <.hero_section />
       <.at_a_glance_section />
       <.professional_summary_section />
@@ -423,7 +424,7 @@ defmodule RevstackWeb.WhoamiLive do
             id="project-admin"
             title="Admin Panel (for this site!)"
             subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
-            href="#"
+            href="https://github.com/kyle-neal/revstack"
             icon="hero-cog-6-tooth"
             preview_src={~p"/images/admin_panel/admin_dashboard.png"}
             tech={~w(Elixir Phoenix LiveView Ash Postgres)}

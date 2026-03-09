@@ -3,13 +3,17 @@ defmodule RevstackWeb.HomeLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "RevenueLink Technologies | Elixir & Erlang Consulting")}
+    {:ok,
+     assign(socket,
+       page_title: "RevenueLink Technologies | Elixir & Erlang Consulting",
+       current_path: "/"
+     )}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_user={assigns[:current_user]}>
+    <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
       <%!-- Hero Section --%>
       <section class="relative overflow-hidden py-20 sm:py-32">
         <div class="mx-auto max-w-4xl text-center">

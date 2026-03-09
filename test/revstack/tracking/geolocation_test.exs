@@ -5,6 +5,10 @@ defmodule Revstack.Tracking.GeolocationTest do
 
   alias Revstack.Tracking.Geolocation
 
+  defp req_started? do
+    Enum.any?(Application.started_applications(), fn {app, _, _} -> app == :req end)
+  end
+
   describe "lookup/1" do
     test "returns error for localhost IPs" do
       assert {:error, :private_ip} = Geolocation.lookup("127.0.0.1")
@@ -75,6 +79,63 @@ defmodule Revstack.Tracking.GeolocationTest do
           Application.put_env(:revstack, :maxmind_license_key, original_key)
         else
           Application.delete_env(:revstack, :maxmind_license_key)
+        end
+      end
+    end
+
+    test "starts req before maxmind lookups when it is not running" do
+      original_provider = Application.get_env(:revstack, :geolocation_provider)
+      original_account = Application.get_env(:revstack, :maxmind_account_id)
+      original_key = Application.get_env(:revstack, :maxmind_license_key)
+      original_base_url = Application.get_env(:revstack, :maxmind_base_url)
+      req_was_started = req_started?()
+
+      if req_was_started do
+        :ok = Application.stop(:req)
+      end
+
+      refute req_started?()
+
+      try do
+        Application.put_env(:revstack, :geolocation_provider, :maxmind)
+        Application.put_env(:revstack, :maxmind_account_id, "test-account")
+        Application.put_env(:revstack, :maxmind_license_key, "test-license")
+        Application.put_env(:revstack, :maxmind_base_url, "http://127.0.0.1:1/geoip/v2.1/city")
+
+        capture_log(fn ->
+          assert {:error, :request_failed} = Geolocation.lookup("8.8.8.8")
+        end)
+
+        assert req_started?()
+      after
+        if original_provider do
+          Application.put_env(:revstack, :geolocation_provider, original_provider)
+        else
+          Application.delete_env(:revstack, :geolocation_provider)
+        end
+
+        if original_account do
+          Application.put_env(:revstack, :maxmind_account_id, original_account)
+        else
+          Application.delete_env(:revstack, :maxmind_account_id)
+        end
+
+        if original_key do
+          Application.put_env(:revstack, :maxmind_license_key, original_key)
+        else
+          Application.delete_env(:revstack, :maxmind_license_key)
+        end
+
+        if original_base_url do
+          Application.put_env(:revstack, :maxmind_base_url, original_base_url)
+        else
+          Application.delete_env(:revstack, :maxmind_base_url)
+        end
+
+        if req_was_started do
+          {:ok, _} = Application.ensure_all_started(:req)
+        else
+          _ = Application.stop(:req)
         end
       end
     end

@@ -42,25 +42,32 @@ defmodule Revstack.Tracking.Geolocation do
       Logger.warning("MaxMind credentials not configured, skipping geolocation")
       {:error, :not_configured}
     else
-      url = "https://geolite.info/geoip/v2.1/city/#{URI.encode(ip_address)}"
+      case ensure_req_started() do
+        :ok ->
+          url = "#{maxmind_base_url()}/#{URI.encode(ip_address)}"
 
-      case Req.get(url,
-             auth: {:basic, "#{account_id}:#{license_key}"},
-             receive_timeout: 5_000,
-             connect_options: [timeout: 5_000]
-           ) do
-        {:ok, %Req.Response{status: 200, body: body}} ->
-          {:ok, parse_maxmind_response(body)}
+          case Req.get(url,
+                 auth: {:basic, "#{account_id}:#{license_key}"},
+                 receive_timeout: 5_000,
+                 connect_options: [timeout: 5_000]
+               ) do
+            {:ok, %Req.Response{status: 200, body: body}} ->
+              {:ok, parse_maxmind_response(body)}
 
-        {:ok, %Req.Response{status: status, body: body}} ->
-          Logger.debug(
-            "MaxMind lookup failed for #{ip_address}: status=#{status} body=#{inspect(body)}"
-          )
+            {:ok, %Req.Response{status: status, body: body}} ->
+              Logger.error(
+                "MaxMind lookup failed for #{ip_address}: status=#{status} body=#{inspect(body)}"
+              )
 
-          {:error, :lookup_failed}
+              {:error, :lookup_failed}
+
+            {:error, reason} ->
+              Logger.error("MaxMind request failed for #{ip_address}: #{inspect(reason)}")
+              {:error, :request_failed}
+          end
 
         {:error, reason} ->
-          Logger.debug("MaxMind request failed for #{ip_address}: #{inspect(reason)}")
+          Logger.error("Req could not be started, skipping geolocation: #{inspect(reason)}")
           {:error, :request_failed}
       end
     end
@@ -106,4 +113,15 @@ defmodule Revstack.Tracking.Geolocation do
   end
 
   defp private_ip?(_), do: false
+
+  defp ensure_req_started do
+    case Application.ensure_all_started(:req) do
+      {:ok, _started_apps} -> :ok
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  defp maxmind_base_url do
+    Application.get_env(:revstack, :maxmind_base_url, "https://geolite.info/geoip/v2.1/city")
+  end
 end

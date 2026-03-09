@@ -3,6 +3,8 @@ defmodule RevstackWeb.EstimateLiveTest do
 
   import Phoenix.LiveViewTest
 
+  @moduletag capture_log: true
+
   require Ash.Query
 
   alias Revstack.Consulting.EstimateRequest

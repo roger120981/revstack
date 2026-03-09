@@ -1,5 +1,5 @@
 defmodule Revstack.Tracking.GeolocationTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias Revstack.Tracking.Geolocation
 
@@ -41,16 +41,32 @@ defmodule Revstack.Tracking.GeolocationTest do
     end
 
     test "returns error for maxmind without credentials" do
-      original = Application.get_env(:revstack, :geolocation_provider)
+      original_provider = Application.get_env(:revstack, :geolocation_provider)
+      original_account = Application.get_env(:revstack, :maxmind_account_id)
+      original_key = Application.get_env(:revstack, :maxmind_license_key)
 
       try do
         Application.put_env(:revstack, :geolocation_provider, :maxmind)
+        Application.delete_env(:revstack, :maxmind_account_id)
+        Application.delete_env(:revstack, :maxmind_license_key)
         assert {:error, :not_configured} = Geolocation.lookup("8.8.8.8")
       after
-        if original do
-          Application.put_env(:revstack, :geolocation_provider, original)
+        if original_provider do
+          Application.put_env(:revstack, :geolocation_provider, original_provider)
         else
           Application.delete_env(:revstack, :geolocation_provider)
+        end
+
+        if original_account do
+          Application.put_env(:revstack, :maxmind_account_id, original_account)
+        else
+          Application.delete_env(:revstack, :maxmind_account_id)
+        end
+
+        if original_key do
+          Application.put_env(:revstack, :maxmind_license_key, original_key)
+        else
+          Application.delete_env(:revstack, :maxmind_license_key)
         end
       end
     end

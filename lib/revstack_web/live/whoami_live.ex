@@ -1829,10 +1829,10 @@ defmodule RevstackWeb.WhoamiLive do
             "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations. Built in Erlang/OTP with Cassandra, Elasticsearch, RabbitMQ, and PostgreSQL as the primary data and messaging layer.",
           tech_used: [
             "Erlang/OTP",
+            "PostgreSQL",
+            "RabbitMQ",
             "Cassandra",
             "Elasticsearch",
-            "RabbitMQ",
-            "PostgreSQL",
             "Apache Spark"
           ],
           responsibilities: [
@@ -1854,6 +1854,44 @@ defmodule RevstackWeb.WhoamiLive do
             "Revenue-critical production system supporting $2.5M+ monthly revenue"
           ],
           timeline_order: 1
+        },
+        %{
+          id: "netadmin-platform",
+          title: "NetAdmin Infrastructure Platform",
+          tagline:
+            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
+          period_label: "Internal Tooling",
+          phase: 2,
+          icon: "hero-cog-6-tooth",
+          card_copy:
+            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
+          summary:
+            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms.",
+          tech_used: [
+            "Elixir",
+            "Phoenix",
+            "LiveView",
+            "Ash Framework",
+            "PostgreSQL",
+            "Ansible"
+          ],
+          architecture: [
+            "Full-stack Elixir application built with Phoenix and Ash Framework",
+            "PostgreSQL for persistent data storage",
+            "Ansible integration for infrastructure automation",
+            "Multi-system management across affiliate network, MTA, data verification, and external platforms",
+            "Real-time monitoring and dashboards for infrastructure visibility",
+            "Log streaming and alerting for operational awareness"
+          ],
+          responsibilities: [
+            "Infrastructure provisioning",
+            "VPS lifecycle management",
+            "Domain and SSL management",
+            "Payment method tracking",
+            "Service lifecycle automation",
+            "Infrastructure visibility dashboards"
+          ],
+          timeline_order: 2
         },
         %{
           id: "edge-redirect-service",
@@ -1886,7 +1924,7 @@ defmodule RevstackWeb.WhoamiLive do
             "Redirect decision logic",
             "Campaign cap enforcement"
           ],
-          timeline_order: 2
+          timeline_order: 3
         },
         %{
           id: "traffic-analytics-pipeline",
@@ -1917,7 +1955,7 @@ defmodule RevstackWeb.WhoamiLive do
             "~150\u2013250 peak events per second",
             "Multi-terabyte traffic datasets"
           ],
-          timeline_order: 3
+          timeline_order: 4
         },
         %{
           id: "conversion-callback-engine",
@@ -1942,7 +1980,7 @@ defmodule RevstackWeb.WhoamiLive do
             "Delivery tracking",
             "Failure handling"
           ],
-          timeline_order: 4
+          timeline_order: 5
         },
         %{
           id: "tracking-domain-infra",
@@ -1956,10 +1994,9 @@ defmodule RevstackWeb.WhoamiLive do
           summary:
             "Infrastructure responsible for managing tracking domains and routing configuration. Handled domain lifecycle, SSL certificates, and DNS routing across the affiliate network.",
           tech_used: [
-            "DNS",
-            "SSL/TLS",
-            "Domain Management",
-            "Routing Configuration"
+            "Routing Configuration + DNS",
+            "SSL/TLS + letsencrypt",
+            "Domain Management"
           ],
           responsibilities: [
             "Tracking domain management",
@@ -1967,7 +2004,7 @@ defmodule RevstackWeb.WhoamiLive do
             "DNS routing configuration",
             "Domain rotation experiments to reduce blacklist risk"
           ],
-          timeline_order: 5
+          timeline_order: 6
         },
         %{
           id: "distributed-data-platform",
@@ -1984,14 +2021,14 @@ defmodule RevstackWeb.WhoamiLive do
           tech_used: [
             "Cassandra",
             "Elasticsearch",
-            "Apache Spark",
+            "Apache Spark (Scala)",
             "RabbitMQ"
           ],
           architecture: [
             "Cassandra cluster (6 nodes) for high-throughput event storage",
             "Elasticsearch analytics cluster (3 nodes) for search and reporting",
             "Spark aggregation jobs for batch processing",
-            "RabbitMQ messaging pipeline for event routing"
+            "Ingested RabbitMQ messages via Erlang worker services for real-time processing"
           ],
           responsibilities: [
             "High-throughput event ingestion",
@@ -2004,42 +2041,6 @@ defmodule RevstackWeb.WhoamiLive do
             "~600TB Elasticsearch analytics dataset",
             "6-node Cassandra production cluster",
             "3-node Elasticsearch cluster"
-          ],
-          timeline_order: 6
-        },
-        %{
-          id: "netadmin-platform",
-          title: "NetAdmin Infrastructure Platform",
-          tagline:
-            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
-          period_label: "Internal Tooling",
-          phase: 2,
-          icon: "hero-cog-6-tooth",
-          card_copy:
-            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
-          summary:
-            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms.",
-          tech_used: [
-            "Elixir",
-            "Phoenix",
-            "LiveView",
-            "Ash Framework",
-            "PostgreSQL",
-            "Ansible"
-          ],
-          architecture: [
-            "Full-stack Elixir application built with Phoenix and Ash Framework",
-            "PostgreSQL for persistent data storage",
-            "Ansible integration for infrastructure automation",
-            "Multi-system management across affiliate network, MTA, data verification, and external platforms"
-          ],
-          responsibilities: [
-            "Infrastructure provisioning",
-            "VPS lifecycle management",
-            "Domain and SSL management",
-            "Payment method tracking",
-            "Service lifecycle automation",
-            "Infrastructure visibility dashboards"
           ],
           timeline_order: 7
         }

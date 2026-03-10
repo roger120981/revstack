@@ -89,6 +89,53 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
+  describe "hero contact links" do
+    test "renders personal and business email links plus the resume download link", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(
+               view,
+               "#whoami-github-link[href='https://github.com/kyle-neal']",
+               "GitHub"
+             )
+
+      assert has_element?(
+               view,
+               "#personal-email-link[href='mailto:nealkyle5@gmail.com']",
+               "Personal: nealkyle5@gmail.com"
+             )
+
+      assert has_element?(
+               view,
+               "#business-email-link[href='mailto:kyle.neal.lucidsoftwaresolutions@gmail.com']",
+               "Business: kyle.neal.lucidsoftwaresolutions@gmail.com"
+             )
+
+      assert has_element?(
+               view,
+               "#download-resume-link[href='/resume/kyle-neal-resume.pdf'][download]",
+               "Download Resume / CV"
+             )
+    end
+
+    test "resume static path is enabled for serving", %{conn: _conn} do
+      assert "resume" in RevstackWeb.static_paths()
+    end
+
+    test "whoami page keeps recruiter-facing badge emphasis on live project tech tags", %{
+      conn: conn
+    } do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      refute has_element?(view, "#whoami-role-title span.skill-emphasis-primary")
+      refute has_element?(view, "#whoami-skill-signature span.skill-emphasis-primary")
+      refute has_element?(view, "#whoami-skill-signature span.skill-emphasis-subtle")
+
+      assert has_element?(view, "#project-admin span.skill-badge-primary", "Elixir")
+      assert has_element?(view, "#project-admin span.skill-badge-subtle", "Postgres")
+    end
+  end
+
   describe "admin gallery modal" do
     test "modal is not rendered on initial page load", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")

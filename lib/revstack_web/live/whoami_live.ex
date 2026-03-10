@@ -170,10 +170,13 @@ defmodule RevstackWeb.WhoamiLive do
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
           Kyle Neal
         </h1>
-        <p class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
-          Lead Distributed Systems Engineer
+        <p id="whoami-role-title" class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
+          Lead Elixir &amp; Erlang Engineer
         </p>
-        <p class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed">
+        <p
+          id="whoami-skill-signature"
+          class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
+        >
           10+ years building revenue-critical distributed systems on the BEAM.
           Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
         </p>
@@ -184,10 +187,19 @@ defmodule RevstackWeb.WhoamiLive do
           >
             <.icon name="hero-envelope" class="size-5" /> Contact Me
           </.link>
+          <a
+            id="download-resume-link"
+            href="/resume/kyle-neal-resume.pdf"
+            download
+            class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <.icon name="hero-arrow-down-tray" class="size-5" /> Download Resume / CV
+          </a>
         </div>
         <%!-- Quick links --%>
-        <div class="mt-6 flex items-center justify-center gap-6 text-sm text-base-content/50">
+        <div class="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/50">
           <a
+            id="whoami-github-link"
             href="https://github.com/kyle-neal"
             target="_blank"
             rel="noopener noreferrer"
@@ -198,12 +210,23 @@ defmodule RevstackWeb.WhoamiLive do
             </svg>
             GitHub
           </a>
-          <a
-            href="mailto:nealkyle5@gmail.com"
-            class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-          >
-            <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
-          </a>
+          <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <a
+              id="personal-email-link"
+              href="mailto:nealkyle5@gmail.com"
+              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+            >
+              <.icon name="hero-envelope" class="size-4" /> Personal: nealkyle5@gmail.com
+            </a>
+            <a
+              id="business-email-link"
+              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+            >
+              <.icon name="hero-briefcase" class="size-4" /> Business:
+              kyle.neal.lucidsoftwaresolutions@gmail.com
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -330,7 +353,7 @@ defmodule RevstackWeb.WhoamiLive do
         <div class="space-y-8">
           <.experience_card
             title="Lead Distributed Systems Engineer"
-            company="VeriAS / Ionik"
+            company="Ubiquity Agency an Ionik company"
             period="October 2014 — Present"
             current?={true}
             items={[
@@ -338,7 +361,7 @@ defmodule RevstackWeb.WhoamiLive do
               "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
               "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
               "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-              "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
               "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
             ]}
           />
@@ -757,7 +780,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
             <span
               :for={t <- @tech}
-              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+              class={[
+                "inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70",
+                tech_badge_modifier_classes(t)
+              ]}
             >
               {t}
             </span>
@@ -809,7 +835,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
             <span
               :for={t <- @tech}
-              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+              class={[
+                "inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70",
+                tech_badge_modifier_classes(t)
+              ]}
             >
               {t}
             </span>
@@ -1133,7 +1162,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp tech_badge(assigns) do
     ~H"""
-    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+    <span class={[
+      "inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary",
+      tech_badge_modifier_classes(@label)
+    ]}>
       {@label}
     </span>
     """
@@ -1829,10 +1861,10 @@ defmodule RevstackWeb.WhoamiLive do
             "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations. Built in Erlang/OTP with Cassandra, Elasticsearch, RabbitMQ, and PostgreSQL as the primary data and messaging layer.",
           tech_used: [
             "Erlang/OTP",
+            "PostgreSQL",
+            "RabbitMQ",
             "Cassandra",
             "Elasticsearch",
-            "RabbitMQ",
-            "PostgreSQL",
             "Apache Spark"
           ],
           responsibilities: [
@@ -1854,6 +1886,44 @@ defmodule RevstackWeb.WhoamiLive do
             "Revenue-critical production system supporting $2.5M+ monthly revenue"
           ],
           timeline_order: 1
+        },
+        %{
+          id: "netadmin-platform",
+          title: "NetAdmin/Infra Platform",
+          tagline:
+            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
+          period_label: "Internal Tooling",
+          phase: 2,
+          icon: "hero-cog-6-tooth",
+          card_copy:
+            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
+          summary:
+            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms. Served as a DevOps dashboard for provisioniong and monitoring all company infrastructure.",
+          tech_used: [
+            "Elixir",
+            "Phoenix",
+            "LiveView",
+            "Ash Framework",
+            "PostgreSQL",
+            "Ansible"
+          ],
+          architecture: [
+            "Full-stack Elixir application built with Phoenix and Ash Framework",
+            "PostgreSQL for persistent data storage",
+            "Ansible integration for infrastructure automation",
+            "Multi-system management across affiliate network, MTA, data verification, and external platforms",
+            "Real-time monitoring and dashboards for infrastructure visibility",
+            "Log streaming and alerting for operational awareness"
+          ],
+          responsibilities: [
+            "Infrastructure provisioning",
+            "VPS lifecycle management",
+            "Domain and SSL management",
+            "Payment method tracking",
+            "Service lifecycle automation",
+            "Infrastructure visibility dashboards"
+          ],
+          timeline_order: 2
         },
         %{
           id: "edge-redirect-service",
@@ -1886,7 +1956,7 @@ defmodule RevstackWeb.WhoamiLive do
             "Redirect decision logic",
             "Campaign cap enforcement"
           ],
-          timeline_order: 2
+          timeline_order: 3
         },
         %{
           id: "traffic-analytics-pipeline",
@@ -1917,7 +1987,7 @@ defmodule RevstackWeb.WhoamiLive do
             "~150\u2013250 peak events per second",
             "Multi-terabyte traffic datasets"
           ],
-          timeline_order: 3
+          timeline_order: 4
         },
         %{
           id: "conversion-callback-engine",
@@ -1942,7 +2012,7 @@ defmodule RevstackWeb.WhoamiLive do
             "Delivery tracking",
             "Failure handling"
           ],
-          timeline_order: 4
+          timeline_order: 5
         },
         %{
           id: "tracking-domain-infra",
@@ -1956,10 +2026,9 @@ defmodule RevstackWeb.WhoamiLive do
           summary:
             "Infrastructure responsible for managing tracking domains and routing configuration. Handled domain lifecycle, SSL certificates, and DNS routing across the affiliate network.",
           tech_used: [
-            "DNS",
-            "SSL/TLS",
-            "Domain Management",
-            "Routing Configuration"
+            "Routing Configuration + DNS",
+            "SSL/TLS + letsencrypt",
+            "Domain Management"
           ],
           responsibilities: [
             "Tracking domain management",
@@ -1967,7 +2036,7 @@ defmodule RevstackWeb.WhoamiLive do
             "DNS routing configuration",
             "Domain rotation experiments to reduce blacklist risk"
           ],
-          timeline_order: 5
+          timeline_order: 6
         },
         %{
           id: "distributed-data-platform",
@@ -1984,14 +2053,14 @@ defmodule RevstackWeb.WhoamiLive do
           tech_used: [
             "Cassandra",
             "Elasticsearch",
-            "Apache Spark",
+            "Apache Spark (Scala)",
             "RabbitMQ"
           ],
           architecture: [
             "Cassandra cluster (6 nodes) for high-throughput event storage",
             "Elasticsearch analytics cluster (3 nodes) for search and reporting",
             "Spark aggregation jobs for batch processing",
-            "RabbitMQ messaging pipeline for event routing"
+            "Ingested RabbitMQ messages via Erlang worker services for real-time processing"
           ],
           responsibilities: [
             "High-throughput event ingestion",
@@ -2005,45 +2074,36 @@ defmodule RevstackWeb.WhoamiLive do
             "6-node Cassandra production cluster",
             "3-node Elasticsearch cluster"
           ],
-          timeline_order: 6
-        },
-        %{
-          id: "netadmin-platform",
-          title: "NetAdmin Infrastructure Platform",
-          tagline:
-            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
-          period_label: "Internal Tooling",
-          phase: 2,
-          icon: "hero-cog-6-tooth",
-          card_copy:
-            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
-          summary:
-            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms.",
-          tech_used: [
-            "Elixir",
-            "Phoenix",
-            "LiveView",
-            "Ash Framework",
-            "PostgreSQL",
-            "Ansible"
-          ],
-          architecture: [
-            "Full-stack Elixir application built with Phoenix and Ash Framework",
-            "PostgreSQL for persistent data storage",
-            "Ansible integration for infrastructure automation",
-            "Multi-system management across affiliate network, MTA, data verification, and external platforms"
-          ],
-          responsibilities: [
-            "Infrastructure provisioning",
-            "VPS lifecycle management",
-            "Domain and SSL management",
-            "Payment method tracking",
-            "Service lifecycle automation",
-            "Infrastructure visibility dashboards"
-          ],
           timeline_order: 7
         }
       ]
     }
+  end
+
+  defp tech_badge_modifier_classes(label) do
+    cond do
+      label in ["Elixir", "Erlang/OTP", "Phoenix", "LiveView", "Ash", "Ash Framework"] ->
+        "skill-badge skill-badge-primary"
+
+      label in [
+        "Cassandra",
+        "PostgreSQL",
+        "Postgres",
+        "RabbitMQ",
+        "Elasticsearch",
+        "OpenSearch",
+        "Apache Spark",
+        "AWS",
+        "Linux",
+        "Ansible",
+        "Ecto",
+        "Swoosh",
+        "Fly.io"
+      ] ->
+        "skill-badge skill-badge-subtle"
+
+      true ->
+        nil
+    end
   end
 end

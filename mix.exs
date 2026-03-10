@@ -95,7 +95,9 @@ defmodule Revstack.MixProject do
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.sync": [
         "cmd mkdir -p priv/static/images",
-        "cmd cp -R assets/images/. priv/static/images/"
+        "cmd cp -R assets/images/. priv/static/images/",
+        "cmd mkdir -p priv/static/resume",
+        "cmd cp assets/resume/kyle-neal-resume.pdf priv/static/resume/kyle-neal-resume.pdf"
       ],
       "assets.build": ["compile", "tailwind revstack", "esbuild revstack", "assets.sync"],
       "assets.deploy": [

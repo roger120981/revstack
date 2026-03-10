@@ -1889,7 +1889,7 @@ defmodule RevstackWeb.WhoamiLive do
         },
         %{
           id: "netadmin-platform",
-          title: "NetAdmin Infrastructure Platform",
+          title: "NetAdmin/Infra Platform",
           tagline:
             "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
           period_label: "Internal Tooling",
@@ -1898,7 +1898,7 @@ defmodule RevstackWeb.WhoamiLive do
           card_copy:
             "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
           summary:
-            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms.",
+            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms. Served as a DevOps dashboard for provisioniong and monitoring all company infrastructure.",
           tech_used: [
             "Elixir",
             "Phoenix",

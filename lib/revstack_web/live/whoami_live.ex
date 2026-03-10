@@ -170,10 +170,13 @@ defmodule RevstackWeb.WhoamiLive do
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
           Kyle Neal
         </h1>
-        <p class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
-          Lead Distributed Systems Engineer
+        <p id="whoami-role-title" class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
+          Lead Elixir &amp; Erlang Engineer
         </p>
-        <p class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed">
+        <p
+          id="whoami-skill-signature"
+          class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
+        >
           10+ years building revenue-critical distributed systems on the BEAM.
           Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
         </p>
@@ -358,7 +361,7 @@ defmodule RevstackWeb.WhoamiLive do
               "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
               "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
               "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-              "Architected and built an internal infrastructure management platform from inception,  a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
               "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
             ]}
           />
@@ -777,7 +780,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
             <span
               :for={t <- @tech}
-              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+              class={[
+                "inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70",
+                tech_badge_modifier_classes(t)
+              ]}
             >
               {t}
             </span>
@@ -829,7 +835,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div :if={@tech != []} class="mt-4 flex flex-wrap gap-1.5">
             <span
               :for={t <- @tech}
-              class="inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70"
+              class={[
+                "inline-block rounded-md bg-base-200 px-2 py-0.5 text-xs font-medium text-base-content/70",
+                tech_badge_modifier_classes(t)
+              ]}
             >
               {t}
             </span>
@@ -1153,7 +1162,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp tech_badge(assigns) do
     ~H"""
-    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+    <span class={[
+      "inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary",
+      tech_badge_modifier_classes(@label)
+    ]}>
       {@label}
     </span>
     """
@@ -2066,5 +2078,32 @@ defmodule RevstackWeb.WhoamiLive do
         }
       ]
     }
+  end
+
+  defp tech_badge_modifier_classes(label) do
+    cond do
+      label in ["Elixir", "Erlang/OTP", "Phoenix", "LiveView", "Ash", "Ash Framework"] ->
+        "skill-badge skill-badge-primary"
+
+      label in [
+        "Cassandra",
+        "PostgreSQL",
+        "Postgres",
+        "RabbitMQ",
+        "Elasticsearch",
+        "OpenSearch",
+        "Apache Spark",
+        "AWS",
+        "Linux",
+        "Ansible",
+        "Ecto",
+        "Swoosh",
+        "Fly.io"
+      ] ->
+        "skill-badge skill-badge-subtle"
+
+      true ->
+        nil
+    end
   end
 end

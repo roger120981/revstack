@@ -121,6 +121,19 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     test "resume static path is enabled for serving", %{conn: _conn} do
       assert "resume" in RevstackWeb.static_paths()
     end
+
+    test "whoami page keeps recruiter-facing badge emphasis on live project tech tags", %{
+      conn: conn
+    } do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      refute has_element?(view, "#whoami-role-title span.skill-emphasis-primary")
+      refute has_element?(view, "#whoami-skill-signature span.skill-emphasis-primary")
+      refute has_element?(view, "#whoami-skill-signature span.skill-emphasis-subtle")
+
+      assert has_element?(view, "#project-admin span.skill-badge-primary", "Elixir")
+      assert has_element?(view, "#project-admin span.skill-badge-subtle", "Postgres")
+    end
   end
 
   describe "admin gallery modal" do

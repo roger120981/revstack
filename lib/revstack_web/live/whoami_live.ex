@@ -330,7 +330,7 @@ defmodule RevstackWeb.WhoamiLive do
         <div class="space-y-8">
           <.experience_card
             title="Lead Distributed Systems Engineer"
-            company="VeriAS / Ionik"
+            company="Ubiquity Agency an Ionik company"
             period="October 2014 — Present"
             current?={true}
             items={[

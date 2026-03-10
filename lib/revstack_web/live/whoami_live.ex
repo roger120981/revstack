@@ -184,10 +184,19 @@ defmodule RevstackWeb.WhoamiLive do
           >
             <.icon name="hero-envelope" class="size-5" /> Contact Me
           </.link>
+          <a
+            id="download-resume-link"
+            href="/resume/kyle-neal-resume.pdf"
+            download
+            class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <.icon name="hero-arrow-down-tray" class="size-5" /> Download Resume / CV
+          </a>
         </div>
         <%!-- Quick links --%>
-        <div class="mt-6 flex items-center justify-center gap-6 text-sm text-base-content/50">
+        <div class="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/50">
           <a
+            id="whoami-github-link"
             href="https://github.com/kyle-neal"
             target="_blank"
             rel="noopener noreferrer"
@@ -198,12 +207,23 @@ defmodule RevstackWeb.WhoamiLive do
             </svg>
             GitHub
           </a>
-          <a
-            href="mailto:nealkyle5@gmail.com"
-            class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-          >
-            <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
-          </a>
+          <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <a
+              id="personal-email-link"
+              href="mailto:nealkyle5@gmail.com"
+              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+            >
+              <.icon name="hero-envelope" class="size-4" /> Personal: nealkyle5@gmail.com
+            </a>
+            <a
+              id="business-email-link"
+              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
+              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+            >
+              <.icon name="hero-briefcase" class="size-4" /> Business:
+              kyle.neal.lucidsoftwaresolutions@gmail.com
+            </a>
+          </div>
         </div>
       </div>
     </section>

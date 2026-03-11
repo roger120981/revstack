@@ -60,6 +60,7 @@ defmodule RevstackWeb.WhoamiLive do
         career_modal_open?: false,
         career_selected_project_id: nil,
         career_detail_view?: false,
+        career_expanded_phase_id: nil,
         career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()]
       )
 
@@ -88,6 +89,14 @@ defmodule RevstackWeb.WhoamiLive do
 
   def handle_event("admin_gallery_select", %{"index" => index}, socket) do
     {:noreply, assign(socket, :admin_gallery_index, String.to_integer(index))}
+  end
+
+  def handle_event("expand_career_phase", %{"phase-id" => phase_id}, socket) do
+    {:noreply, assign(socket, career_expanded_phase_id: phase_id)}
+  end
+
+  def handle_event("collapse_career_phase", _params, socket) do
+    {:noreply, assign(socket, career_expanded_phase_id: nil)}
   end
 
   def handle_event("open_career_modal", %{"project-id" => project_id}, socket) do
@@ -134,7 +143,10 @@ defmodule RevstackWeb.WhoamiLive do
       <.technical_expertise_section />
       <.professional_experience_section />
       <.live_projects_section admin_gallery_images={@admin_gallery_images} />
-      <.career_portfolio_section career_phases={@career_phases} />
+      <.career_portfolio_section
+        career_phases={@career_phases}
+        expanded_phase_id={@career_expanded_phase_id}
+      />
       <.career_portfolio_modal
         :if={@career_modal_open?}
         phases={@career_phases}
@@ -146,9 +158,9 @@ defmodule RevstackWeb.WhoamiLive do
         images={@admin_gallery_images}
         current_index={@admin_gallery_index}
       />
-      <.education_section />
       <.leadership_section />
       <.team_work_section />
+      <.education_section />
       <.personal_interests_section />
       <.closing_cta_section />
       <.github_repository_section />
@@ -365,10 +377,35 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
         <div class="space-y-8">
           <.experience_card
+            title="Founder & Software Engineer"
+            company="RevenueLink Technologies LLC"
+            period="2023 — Present"
+            current?={true}
+            items={[
+              "Founded a personal consulting and technology services company used for independent software projects, consulting engagements, and local technology services.",
+              {:parts,
+               [
+                 {:text, "Developed "},
+                 {:link, "https://hardcorehandyman.fly.dev/", "hardcorehandyman.fly.dev"},
+                 {:text,
+                  " (formerly hardcorehandymanoflawton.com), a custom lead-generation website for a local handyman business including SEO strategy, service promotion pages, and conversion-focused design. Built an internal admin system for managing customer quote requests with photo uploads of project details. The platform ultimately generated more inbound demand than the business could operationally support."}
+               ]},
+              {:parts,
+               [
+                 {:text, "Built and operate "},
+                 {:link, "https://revstack.fly.dev/", "revstack.fly.dev"},
+                 {:text,
+                  ", a Phoenix LiveView application used as a professional portfolio, lead generation platform, and development sandbox for new ideas."}
+               ]},
+              "Provide consulting and technical services including custom web application development, systems architecture guidance, and local technology support for individuals and small businesses.",
+              "Use the company as a vehicle for experimentation with Elixir, distributed systems, infrastructure tooling, and small SaaS-style projects."
+            ]}
+          />
+          <.experience_card
             title="Lead Distributed Systems Engineer"
             company="Ubiquity Agency an Ionik company"
-            period="October 2014 — Present"
-            current?={true}
+            period="October 2014 — 2026"
+            current?={false}
             items={[
               "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
               "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
@@ -412,16 +449,18 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Selected professional systems from across my career. 💰 <br />
-            <b class="text-xl"><.icon
-                name="hero-cursor-arrow-rays"
-                class="size-5 inline-block align-text-bottom"
-              /> click any project for the full story</b>.
+            Two major chapters of production systems engineering on the BEAM. <br />
+            <span class="text-sm">Click a phase to explore the projects within.</span>
           </p>
         </div>
-        <%= for phase <- @career_phases do %>
-          <.career_phase_section phase={phase} />
-        <% end %>
+        <div class="space-y-6">
+          <%= for phase <- @career_phases do %>
+            <.career_standout_phase_card
+              phase={phase}
+              expanded?={@expanded_phase_id == phase.id}
+            />
+          <% end %>
+        </div>
       </div>
     </section>
     """
@@ -670,6 +709,7 @@ defmodule RevstackWeb.WhoamiLive do
           <.interest_badge icon="hero-fire" label="Mountain Biking" />
           <.interest_badge icon="hero-map" label="Hiking" />
           <.interest_badge icon="hero-globe-americas" label="Going on Adventures" />
+          <.interest_badge icon="hero-light-bulb" label="Learning New Things" />
         </div>
       </div>
     </section>
@@ -1036,10 +1076,37 @@ defmodule RevstackWeb.WhoamiLive do
           class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
         >
           <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-          <span>{item}</span>
+          <.experience_item item={item} />
         </li>
       </ul>
     </div>
+    """
+  end
+
+  defp experience_item(%{item: item} = assigns) when is_binary(item) do
+    ~H"<span>{@item}</span>"
+  end
+
+  defp experience_item(%{item: {:parts, parts}} = assigns) do
+    assigns = assign(assigns, :parts, parts)
+
+    ~H"""
+    <span>
+      <%= for part <- @parts do %>
+        <%= case part do %>
+          <% {:text, text} -> %>{text}
+          <% {:link, url, label} -> %>
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-primary hover:underline font-medium inline-flex items-center gap-0.5"
+            >
+              {label}<.icon name="hero-arrow-top-right-on-square" class="size-3 ml-0.5 shrink-0" />
+            </a>
+        <% end %>
+      <% end %>
+    </span>
     """
   end
 
@@ -1083,26 +1150,123 @@ defmodule RevstackWeb.WhoamiLive do
   # Career Portfolio Components
   # ---------------------------------------------------------------------------
 
-  defp career_phase_section(assigns) do
+  defp career_standout_phase_card(assigns) do
     ~H"""
-    <div class="mb-12 last:mb-0">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-          <.icon name="hero-folder-open" class="size-4" />
-        </div>
-        <h3 class="text-base font-bold text-primary">{@phase.title}</h3>
-      </div>
-      <p
-        :if={Map.get(@phase, :overview)}
-        class="text-sm text-base-content/70 leading-relaxed mb-6 max-w-3xl"
+    <div id={"career-phase-#{@phase.id}"} class="group/phase">
+      <%!-- Phase Card (Layer 1) --%>
+      <button
+        phx-click={if @expanded?, do: "collapse_career_phase", else: "expand_career_phase"}
+        phx-value-phase-id={@phase.id}
+        class={[
+          "w-full text-left rounded-2xl border-2 p-6 sm:p-8 transition-all duration-300 cursor-pointer",
+          if(@expanded?,
+            do: "border-primary bg-primary/5 shadow-lg",
+            else:
+              "border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 hover:-translate-y-0.5"
+          )
+        ]}
       >
-        {@phase.overview}
-      </p>
-      <.phase_scale_metrics :if={Map.get(@phase, :metrics)} metrics={@phase.metrics} />
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <.career_project_card :for={project <- @phase.projects} project={project} />
+        <div class="flex items-start gap-5">
+          <%!-- Phase Icon --%>
+          <div class={[
+            "flex h-14 w-14 sm:h-16 sm:w-16 shrink-0 items-center justify-center rounded-2xl transition-colors duration-300",
+            if(@expanded?,
+              do: "bg-primary text-white",
+              else: "bg-primary/10 text-primary group-hover/phase:bg-primary/20"
+            )
+          ]}>
+            <.icon name={@phase.card_icon} class="size-7 sm:size-8" />
+          </div>
+
+          <%!-- Phase Content --%>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-base-content leading-tight">
+                  {@phase.card_title}
+                </h3>
+                <p class="mt-1 text-sm text-base-content/50 font-medium">{@phase.card_era}</p>
+              </div>
+              <div class={[
+                "flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300",
+                if(@expanded?,
+                  do: "bg-primary text-white rotate-180",
+                  else:
+                    "bg-base-200 text-base-content/40 group-hover/phase:bg-primary/10 group-hover/phase:text-primary"
+                )
+              ]}>
+                <.icon name="hero-chevron-down" class="size-5" />
+              </div>
+            </div>
+
+            <p class="mt-3 text-sm sm:text-base text-base-content/70 leading-relaxed max-w-3xl">
+              {@phase.card_summary}
+            </p>
+
+            <%!-- Skill Badges --%>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span
+                :for={badge <- @phase.card_badges}
+                class={[
+                  "skill-badge inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors",
+                  career_phase_badge_modifier_classes(badge),
+                  if(@expanded?,
+                    do: "ring-1 ring-primary/15",
+                    else: "group-hover/phase:-translate-y-0.5"
+                  )
+                ]}
+              >
+                {badge}
+              </span>
+            </div>
+
+            <%!-- Key Bullets --%>
+            <ul class="mt-4 space-y-1.5">
+              <li
+                :for={bullet <- @phase.card_bullets}
+                class="flex items-start gap-2 text-sm text-base-content/70"
+              >
+                <.icon name="hero-check" class="size-4 text-primary shrink-0 mt-0.5" />
+                <span>{bullet}</span>
+              </li>
+            </ul>
+
+            <%!-- CTA hint --%>
+            <div
+              :if={!@expanded?}
+              class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+            >
+              <.icon name="hero-cursor-arrow-rays" class="size-4" />
+              Explore {length(@phase.projects)} projects
+              <.icon name="hero-chevron-right" class="size-4" />
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <%!-- Expanded Phase Content (Layer 2) --%>
+      <div
+        :if={@expanded?}
+        class="mt-4 ml-2 pl-6 border-l-2 border-primary/20 space-y-8 animate-fade-in"
+      >
+        <p
+          :if={Map.get(@phase, :overview)}
+          class="text-sm text-base-content/70 leading-relaxed max-w-3xl"
+        >
+          {@phase.overview}
+        </p>
+        <.phase_scale_metrics :if={Map.get(@phase, :metrics)} metrics={@phase.metrics} />
+        <div>
+          <p class="text-sm font-bold text-primary uppercase tracking-wide mb-4">
+            <.icon name="hero-cursor-arrow-rays" class="size-4 inline-block align-text-bottom" />
+            Click any project for the full story
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <.career_project_card :for={project <- @phase.projects} project={project} />
+          </div>
+        </div>
+        <.phase_team_section :if={Map.get(@phase, :team)} team={@phase.team} />
       </div>
-      <.phase_team_section :if={Map.get(@phase, :team)} team={@phase.team} />
     </div>
     """
   end
@@ -1182,6 +1346,28 @@ defmodule RevstackWeb.WhoamiLive do
       {@label}
     </span>
     """
+  end
+
+  defp career_phase_badge_modifier_classes(label) do
+    cond do
+      label in ["Erlang/OTP", "Elixir", "Phoenix LiveView", "Ash Framework"] ->
+        "skill-badge-primary"
+
+      label in [
+        "Cassandra",
+        "Elasticsearch",
+        "PostgreSQL",
+        "RabbitMQ",
+        "Distributed Systems",
+        "Infrastructure Reliability",
+        "Platform Ownership",
+        "Leadership"
+      ] ->
+        "skill-badge-subtle"
+
+      true ->
+        "bg-base-200 text-base-content/60"
+    end
   end
 
   defp career_portfolio_modal(assigns) do
@@ -1480,6 +1666,34 @@ defmodule RevstackWeb.WhoamiLive do
     %{
       id: "phase-1",
       title: "Data Verification & Email Infrastructure Foundations",
+      card_title: "MTA & Verification Systems",
+      card_icon: "hero-signal",
+      card_era: "2014 — Early Career",
+      card_summary:
+        "Built distributed Erlang systems powering large-scale email verification and sending infrastructure, including DNS/SMTP services, operational tooling, and backend automation for high-volume deliverability systems.",
+      card_badges: [
+        "Erlang/OTP",
+        "PostgreSQL",
+        "RabbitMQ",
+        "Distributed Systems",
+        "Infrastructure Reliability",
+        "Online Advertising",
+        "Email Deliverability",
+        "REST APIs",
+        "Web Protocols",
+        "DNS",
+        "SMTP",
+        "HTTP/HTTPS",
+        "Email Deliverability",
+        "IP Reputation Management",
+        "Infrastructure Team Leadership"
+      ],
+      card_bullets: [
+        "Designed and built custom authoritative DNS servers and proxy infrastructure in Erlang",
+        "Developed distributed monitoring, IP provisioning, and fleet management systems",
+        "Built customer-facing utility software and internal operational control systems",
+        "Established deep BEAM/infrastructure/systems-thinking foundations"
+      ],
       overview:
         "Building customer-facing tooling, custom DNS services, distributed proxy infrastructure, monitoring systems, and operational automation for large-scale email verification and sending infrastructure.",
       projects: [
@@ -1675,10 +1889,10 @@ defmodule RevstackWeb.WhoamiLive do
           card_copy:
             "Built a distributed Erlang monitoring system that ran thousands of scheduled health and reputation checks across a large VPS fleet to preserve uptime and IP quality.",
           summary:
-            "A master/slave Erlang monitoring system that continuously ran health and reputation checks across the proxy fleet, collected results through AMQP, and alerted admins when nodes should be replaced or removed from rotation.",
+            "A master/slave Erlang monitoring system that continuously ran health and reputation checks across the proxy fleet, collected results from monitoring checks, broadcasted notifications to core systems via RabbitMQ, and alerted admins when nodes should be replaced or removed from rotation.",
           tech_used: [
             "Erlang/OTP",
-            "AMQP",
+            "RabbitMQ",
             "Mnesia",
             "Poolboy",
             "HTTP Workers",
@@ -1837,6 +2051,35 @@ defmodule RevstackWeb.WhoamiLive do
     %{
       id: "phase-2",
       title: "Affiliate Network Platform & Infrastructure Leadership",
+      card_title: "Affiliate Network Platform",
+      card_icon: "hero-chart-bar",
+      card_era: "2018–2026 — Mid to Senior Career",
+      card_summary:
+        "Built and owned a revenue-critical affiliate network platform end-to-end, spanning high-throughput Erlang services, internal Elixir/Phoenix tooling, and large-scale Cassandra, Elasticsearch, and PostgreSQL data systems.",
+      card_badges: [
+        "Erlang/OTP",
+        "Elixir",
+        "Phoenix LiveView",
+        "Ash Framework",
+        "Cassandra",
+        "Elasticsearch",
+        "RabbitMQ",
+        "PostgreSQL",
+        "Apache Spark (scala)",
+        "REST APIs",
+        "High-Throughput Backends",
+        "Leadership over UI and Infrastructure Engineers",
+        "Event Driven Architecture and Pipelines",
+        "Big Data Processing",
+        "Reporting and Analytics",
+        "Affiliate Marketing Technology"
+      ],
+      card_bullets: [
+        "Owned the entire backend stack of a $2.5M+/month affiliate network platform",
+        "Designed event-driven click tracking, redirect, and conversion systems at scale",
+        "Operated Cassandra, Elasticsearch, and Spark across ~1.2PB of combined data",
+        "Led supporting engineers while remaining hands-on across all backend systems"
+      ],
       overview:
         "Architected and operated backend systems powering a large affiliate marketing platform processing millions of daily events. Later built internal infrastructure management tooling used across multiple company systems.",
       metrics: [

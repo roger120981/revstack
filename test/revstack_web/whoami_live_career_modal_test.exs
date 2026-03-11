@@ -3,6 +3,61 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
   import Phoenix.LiveViewTest
 
+  describe "career portfolio phase cards" do
+    test "phase cards are visible on initial page load", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#career-phase-phase-1")
+      assert has_element?(view, "#career-phase-phase-2")
+    end
+
+    test "both phase cards emphasize the shared core stack", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      for skill <- [
+            "Erlang/OTP",
+            "PostgreSQL",
+            "RabbitMQ",
+            "REST APIs"
+          ] do
+        assert has_element?(view, "#career-phase-phase-1 span.skill-badge", skill)
+        assert has_element?(view, "#career-phase-phase-2 span.skill-badge", skill)
+      end
+    end
+
+    test "project cards are not visible until phase is expanded", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      refute has_element?(view, "button[phx-click='open_career_modal']")
+    end
+
+    test "expanding a phase reveals project cards", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='open_career_modal']")
+    end
+
+    test "collapsing a phase hides project cards", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
+
+      assert has_element?(view, "button[phx-click='open_career_modal']")
+
+      view
+      |> element("button[phx-click='collapse_career_phase']")
+      |> render_click()
+
+      refute has_element?(view, "button[phx-click='open_career_modal']")
+    end
+  end
+
   describe "career portfolio modal" do
     test "modal is not rendered on initial page load", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
@@ -13,6 +68,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
     test "clicking a project card opens the modal", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
+
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")
       |> render_click()
@@ -22,6 +82,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
     test "modal has phx-hook LockBodyScroll for scroll locking", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
+
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
 
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")
@@ -37,6 +102,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
     test "closing modal removes it from the DOM", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
+
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
 
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")
@@ -54,6 +124,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
     test "modal shows timeline with all phase projects", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
+
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")
       |> render_click()
@@ -70,6 +145,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
     test "selecting a project and viewing details works", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
+
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
 
       view
       |> element("button[phx-click='open_career_modal']", "Edge Proxy")
@@ -90,6 +170,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
     test "back button returns from detail to timeline view", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
+
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
 
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")
@@ -113,6 +198,11 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
 
     test "backdrop click closes the modal", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
+
+      # First expand phase-1
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-1']")
+      |> render_click()
 
       view
       |> element("button[phx-click='open_career_modal']", "CSV Repair")

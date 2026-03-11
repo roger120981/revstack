@@ -5,11 +5,6 @@ defmodule RevstackWeb.Admin.LeadLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    leads =
-      Revstack.Consulting.Lead
-      |> Ash.Query.sort(inserted_at: :desc)
-      |> Ash.read!(authorize?: false)
-
     {:ok,
      socket
      |> assign(
@@ -17,12 +12,23 @@ defmodule RevstackWeb.Admin.LeadLive.Index do
        current_path: "/admin/leads",
        status_filter: "all"
      )
-     |> stream(:leads, leads)}
+     |> stream(:leads, [])}
   end
 
   @impl true
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(params, _uri, socket) do
+    status = params["status"] || "all"
+
+    leads =
+      Revstack.Consulting.Lead
+      |> maybe_filter_status(status)
+      |> Ash.Query.sort(inserted_at: :desc)
+      |> Ash.read!(authorize?: false)
+
+    {:noreply,
+     socket
+     |> assign(:status_filter, status)
+     |> stream(:leads, leads, reset: true)}
   end
 
   @impl true

@@ -90,7 +90,9 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
   end
 
   describe "hero contact links" do
-    test "renders personal and business email links plus the resume download link", %{conn: conn} do
+    test "renders personal and business email links plus the resume view and download links", %{
+      conn: conn
+    } do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
       assert has_element?(
@@ -113,13 +115,26 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       assert has_element?(
                view,
-               "#download-resume-link[href='/resume/kyle-neal-resume.pdf'][download]",
-               "Download Resume / CV"
+               "#view-resume-link[href='/resume/kyle-neal-resume.pdf'][target='_blank']",
+               "View Resume"
+             )
+
+      assert has_element?(
+               view,
+               "#download-resume-link[href='/resume/download/kyle-neal-resume.pdf'][download][title=\"Download Kyle's Resume\"]"
              )
     end
 
-    test "resume static path is enabled for serving", %{conn: _conn} do
-      assert "resume" in RevstackWeb.static_paths()
+    test "view resume is served through a tracked controller route", %{conn: conn} do
+      conn = get(conn, "/resume/kyle-neal-resume.pdf")
+      assert conn.status == 200
+      assert {"content-type", "application/pdf"} in conn.resp_headers
+    end
+
+    test "download resume is served through a tracked controller route", %{conn: conn} do
+      conn = get(conn, "/resume/download/kyle-neal-resume.pdf")
+      assert conn.status == 200
+      assert {"content-type", "application/pdf"} in conn.resp_headers
     end
 
     test "whoami page keeps recruiter-facing badge emphasis on live project tech tags", %{

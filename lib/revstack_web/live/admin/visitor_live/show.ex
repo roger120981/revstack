@@ -9,7 +9,15 @@ defmodule RevstackWeb.Admin.VisitorLive.Show do
       Revstack.Tracking.Visitor
       |> Ash.get!(id,
         authorize?: false,
-        load: [:lead_count, :estimate_count, :page_visits, :leads, :estimate_requests]
+        load: [
+          :lead_count,
+          :estimate_count,
+          :resume_view_count,
+          :resume_download_count,
+          :page_visits,
+          :leads,
+          :estimate_requests
+        ]
       )
 
     page_visits =
@@ -76,11 +84,13 @@ defmodule RevstackWeb.Admin.VisitorLive.Show do
             <.detail_item label="Total Visits" value={to_string(@visitor.visit_count)} />
             <.detail_item label="Leads Submitted" value={to_string(@visitor.lead_count)} />
             <.detail_item label="Estimates Submitted" value={to_string(@visitor.estimate_count)} />
+            <.detail_item label="Resume Views" value={to_string(@visitor.resume_view_count)} />
+            <.detail_item label="Resume Downloads" value={to_string(@visitor.resume_download_count)} />
           </dl>
         </div>
 
         <%!-- Conversion status --%>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-5">
           <div
             id="visitor-conversion-visits"
             class={[
@@ -127,6 +137,42 @@ defmodule RevstackWeb.Admin.VisitorLive.Show do
             </p>
             <p class="text-sm text-gray-400 mt-1">Estimate Requests</p>
           </div>
+          <div
+            id="visitor-conversion-resume-views"
+            class={[
+              "rounded-xl border p-5 text-center",
+              if(@visitor.resume_view_count > 0,
+                do: "border-amber-500/30 bg-amber-900/20",
+                else: "border-white/10 bg-gray-800"
+              )
+            ]}
+          >
+            <p class={[
+              "text-3xl font-bold",
+              if(@visitor.resume_view_count > 0, do: "text-amber-400", else: "text-white")
+            ]}>
+              {@visitor.resume_view_count}
+            </p>
+            <p class="text-sm text-gray-400 mt-1">Resume Views</p>
+          </div>
+          <div
+            id="visitor-conversion-resume-downloads"
+            class={[
+              "rounded-xl border p-5 text-center",
+              if(@visitor.resume_download_count > 0,
+                do: "border-teal-500/30 bg-teal-900/20",
+                else: "border-white/10 bg-gray-800"
+              )
+            ]}
+          >
+            <p class={[
+              "text-3xl font-bold",
+              if(@visitor.resume_download_count > 0, do: "text-teal-400", else: "text-white")
+            ]}>
+              {@visitor.resume_download_count}
+            </p>
+            <p class="text-sm text-gray-400 mt-1">Resume Downloads</p>
+          </div>
         </div>
 
         <%!-- Page visit history --%>
@@ -158,10 +204,25 @@ defmodule RevstackWeb.Admin.VisitorLive.Show do
                 <tr
                   :for={{id, visit} <- @streams.page_visits}
                   id={id}
-                  class="hover:bg-white/5 transition-colors"
+                  class={[
+                    "transition-colors",
+                    if(resume_download?(visit),
+                      do: "bg-amber-900/10 hover:bg-amber-900/20",
+                      else: "hover:bg-white/5"
+                    )
+                  ]}
                 >
-                  <td class="whitespace-nowrap px-6 py-4 text-sm font-mono text-indigo-300">
-                    {visit.path}
+                  <td class="whitespace-nowrap px-6 py-4 text-sm font-mono">
+                    <span
+                      :if={resume_download?(visit)}
+                      class="inline-flex items-center gap-1.5 text-amber-400"
+                    >
+                      <.icon name="hero-arrow-down-tray" class="size-3.5" />
+                      {visit.path}
+                    </span>
+                    <span :if={!resume_download?(visit)} class="text-indigo-300">
+                      {visit.path}
+                    </span>
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                     {format_datetime(visit.visited_at)}
@@ -397,5 +458,9 @@ defmodule RevstackWeb.Admin.VisitorLive.Show do
 
   defp format_datetime(dt) do
     Calendar.strftime(dt, "%b %d, %Y %H:%M:%S")
+  end
+
+  defp resume_download?(visit) do
+    visit.path in ["/resume/view", "/resume/download"]
   end
 end

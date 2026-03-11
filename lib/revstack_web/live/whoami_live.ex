@@ -187,14 +187,27 @@ defmodule RevstackWeb.WhoamiLive do
           >
             <.icon name="hero-envelope" class="size-5" /> Contact Me
           </.link>
-          <a
-            id="download-resume-link"
-            href="/resume/kyle-neal-resume.pdf"
-            download
-            class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <.icon name="hero-arrow-down-tray" class="size-5" /> Download Resume / CV
-          </a>
+          <div class="flex items-center gap-2">
+            <a
+              id="view-resume-link"
+              href="/resume/kyle-neal-resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <.icon name="hero-eye" class="size-5" /> View Resume
+            </a>
+            <a
+              id="download-resume-link"
+              href="/resume/download/kyle-neal-resume.pdf"
+              download
+              title="Download Kyle's Resume"
+              aria-label="Download Kyle's Resume"
+              class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <.icon name="hero-arrow-down-tray" class="size-5" /> Download Resume
+            </a>
+          </div>
         </div>
         <%!-- Quick links --%>
         <div class="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/50">
@@ -223,8 +236,8 @@ defmodule RevstackWeb.WhoamiLive do
               href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
               class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
             >
-              <.icon name="hero-briefcase" class="size-4" /> Business:
-              kyle.neal.lucidsoftwaresolutions@gmail.com
+              <.icon name="hero-briefcase" class="size-4" />
+              Business: kyle.neal.lucidsoftwaresolutions@gmail.com
             </a>
           </div>
         </div>

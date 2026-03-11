@@ -96,8 +96,8 @@ defmodule Revstack.MixProject do
       "assets.sync": [
         "cmd mkdir -p priv/static/images",
         "cmd cp -R assets/images/. priv/static/images/",
-        "cmd mkdir -p priv/static/resume",
-        "cmd cp assets/resume/kyle-neal-resume.pdf priv/static/resume/kyle-neal-resume.pdf"
+        "cmd mkdir -p priv/resume",
+        "cmd cp assets/resume/kyle-neal-resume.pdf priv/resume/kyle-neal-resume.pdf"
       ],
       "assets.build": ["compile", "tailwind revstack", "esbuild revstack", "assets.sync"],
       "assets.deploy": [

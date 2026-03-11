@@ -79,6 +79,14 @@ defmodule Revstack.Tracking.Visitor do
   aggregates do
     count :lead_count, :leads
     count :estimate_count, :estimate_requests
+
+    count :resume_view_count, :page_visits do
+      filter expr(path == "/resume/view")
+    end
+
+    count :resume_download_count, :page_visits do
+      filter expr(path == "/resume/download")
+    end
   end
 
   relationships do

@@ -5,22 +5,27 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    visitors = list_visitors("all")
-
     {:ok,
      socket
      |> assign(
        page_title: "Visitors",
        current_path: "/admin/visitors",
        filter: "all",
-       visitors_empty?: visitors == []
+       visitors_empty?: true
      )
-     |> stream(:visitors, visitors)}
+     |> stream(:visitors, [])}
   end
 
   @impl true
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
+  def handle_params(params, _uri, socket) do
+    filter = params["filter"] || "all"
+    visitors = list_visitors(filter)
+
+    {:noreply,
+     socket
+     |> assign(:filter, filter)
+     |> assign(:visitors_empty?, visitors == [])
+     |> stream(:visitors, visitors, reset: true)}
   end
 
   @impl true
@@ -37,7 +42,7 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
   defp list_visitors(filter) do
     Revstack.Tracking.Visitor
     |> Ash.Query.sort(last_visited_at: :desc)
-    |> Ash.Query.load([:lead_count, :estimate_count])
+    |> Ash.Query.load([:lead_count, :estimate_count, :resume_view_count, :resume_download_count])
     |> maybe_apply_filter(filter)
     |> Ash.read!(authorize?: false)
   end
@@ -55,6 +60,14 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
   defp maybe_apply_filter(query, "recent") do
     cutoff = DateTime.add(DateTime.utc_now(), -7, :day)
     Ash.Query.filter(query, last_visited_at > ^cutoff)
+  end
+
+  defp maybe_apply_filter(query, "has_resume_views") do
+    Ash.Query.filter(query, resume_view_count > 0)
+  end
+
+  defp maybe_apply_filter(query, "has_resume_downloads") do
+    Ash.Query.filter(query, resume_download_count > 0)
   end
 
   defp maybe_apply_filter(query, _), do: query
@@ -82,6 +95,16 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
               active={@filter == "has_estimates"}
             />
             <.filter_button label="Last 7 Days" value="recent" active={@filter == "recent"} />
+            <.filter_button
+              label="Viewed Resume"
+              value="has_resume_views"
+              active={@filter == "has_resume_views"}
+            />
+            <.filter_button
+              label="Downloaded Resume"
+              value="has_resume_downloads"
+              active={@filter == "has_resume_downloads"}
+            />
           </div>
         </div>
 
@@ -114,6 +137,12 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
                   </th>
                   <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-400">
                     Estimates
+                  </th>
+                  <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-400">
+                    Views
+                  </th>
+                  <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-400">
+                    DL
                   </th>
                   <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-400">
                     Actions
@@ -164,6 +193,30 @@ defmodule RevstackWeb.Admin.VisitorLive.Index do
                       {visitor.estimate_count}
                     </span>
                     <span :if={visitor.estimate_count == 0} class="text-gray-600">0</span>
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-center text-sm">
+                    <span
+                      :if={visitor.resume_view_count > 0}
+                      class="inline-flex items-center gap-1 rounded-full bg-amber-400/10 px-2 py-0.5 text-xs font-medium text-amber-400"
+                    >
+                      <.icon name="hero-document-magnifying-glass" class="size-3" />
+                      {visitor.resume_view_count}
+                    </span>
+                    <span :if={visitor.resume_view_count == 0} class="text-gray-600">
+                      0
+                    </span>
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-center text-sm">
+                    <span
+                      :if={visitor.resume_download_count > 0}
+                      class="inline-flex items-center gap-1 rounded-full bg-amber-400/10 px-2 py-0.5 text-xs font-medium text-amber-400"
+                    >
+                      <.icon name="hero-arrow-down-tray" class="size-3" />
+                      {visitor.resume_download_count}
+                    </span>
+                    <span :if={visitor.resume_download_count == 0} class="text-gray-600">
+                      0
+                    </span>
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-right text-sm">
                     <.link

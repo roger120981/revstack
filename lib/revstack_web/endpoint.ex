@@ -25,7 +25,7 @@ defmodule RevstackWeb.Endpoint do
     from: :revstack,
     gzip: not code_reloading?,
     only: RevstackWeb.static_paths(),
-    raise_on_missing_only: code_reloading?
+    raise_on_missing_only: false
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

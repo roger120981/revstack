@@ -26,6 +26,22 @@ defmodule RevstackWeb.Plugs.VisitorTracking do
     |> Plug.Conn.put_session(:visitor_ip, ip)
     |> Plug.Conn.put_session(:visitor_user_agent, user_agent)
     |> Plug.Conn.put_session(:visitor_referrer, referrer)
+  rescue
+    exception ->
+      Revstack.Tracking.ErrorLogger.log_tracking_error(
+        %{plug: __MODULE__, request_path: conn.request_path, method: conn.method},
+        exception
+      )
+
+      conn
+  catch
+    kind, reason ->
+      Revstack.Tracking.ErrorLogger.log_tracking_error(
+        %{plug: __MODULE__, request_path: conn.request_path, catch_kind: kind},
+        reason
+      )
+
+      conn
   end
 
   defp get_user_agent(conn) do

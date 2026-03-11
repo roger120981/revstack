@@ -5,6 +5,10 @@ defmodule RevstackWeb.Admin.DashboardLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    visitor_count =
+      Revstack.Tracking.Visitor
+      |> Ash.count!(authorize?: false)
+
     lead_count =
       Revstack.Consulting.Lead
       |> Ash.count!(authorize?: false)
@@ -12,6 +16,16 @@ defmodule RevstackWeb.Admin.DashboardLive do
     new_lead_count =
       Revstack.Consulting.Lead
       |> Ash.Query.filter(status == :new)
+      |> Ash.count!(authorize?: false)
+
+    resume_view_count =
+      Revstack.Tracking.VisitorPageVisit
+      |> Ash.Query.filter(path == "/resume/view")
+      |> Ash.count!(authorize?: false)
+
+    resume_download_count =
+      Revstack.Tracking.VisitorPageVisit
+      |> Ash.Query.filter(path == "/resume/download")
       |> Ash.count!(authorize?: false)
 
     estimate_count =
@@ -23,19 +37,17 @@ defmodule RevstackWeb.Admin.DashboardLive do
       |> Ash.Query.filter(status == :new)
       |> Ash.count!(authorize?: false)
 
-    visitor_count =
-      Revstack.Tracking.Visitor
-      |> Ash.count!(authorize?: false)
-
     {:ok,
      assign(socket,
        page_title: "Admin Dashboard",
        current_path: "/admin",
+       visitor_count: visitor_count,
        lead_count: lead_count,
        new_lead_count: new_lead_count,
+       resume_view_count: resume_view_count,
+       resume_download_count: resume_download_count,
        estimate_count: estimate_count,
        new_estimate_count: new_estimate_count,
-       visitor_count: visitor_count,
        environment: runtime_environment(),
        app_version: current_app_version()
      )}
@@ -53,7 +65,14 @@ defmodule RevstackWeb.Admin.DashboardLive do
 
       <div class="space-y-8">
         <%!-- Stats grid --%>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-7">
+          <.stat_card
+            id="dashboard-total-visitors"
+            title="Total Visitors"
+            value={@visitor_count}
+            icon="hero-eye"
+            href={~p"/admin/visitors"}
+          />
           <.stat_card
             id="dashboard-total-leads"
             title="Total Leads"
@@ -67,7 +86,23 @@ defmodule RevstackWeb.Admin.DashboardLive do
             value={@new_lead_count}
             icon="hero-envelope"
             color="yellow"
-            href={~p"/admin/leads"}
+            href={~p"/admin/leads?status=new"}
+          />
+          <.stat_card
+            id="dashboard-resume-views"
+            title="Resume Views"
+            value={@resume_view_count}
+            icon="hero-document-magnifying-glass"
+            color="amber"
+            href={~p"/admin/visitors?filter=has_resume_views"}
+          />
+          <.stat_card
+            id="dashboard-resume-downloads"
+            title="Resume Downloads"
+            value={@resume_download_count}
+            icon="hero-arrow-down-tray"
+            color="amber"
+            href={~p"/admin/visitors?filter=has_resume_downloads"}
           />
           <.stat_card
             id="dashboard-total-estimates"
@@ -82,14 +117,7 @@ defmodule RevstackWeb.Admin.DashboardLive do
             value={@new_estimate_count}
             icon="hero-document-plus"
             color="yellow"
-            href={~p"/admin/estimates"}
-          />
-          <.stat_card
-            id="dashboard-total-visitors"
-            title="Total Visitors"
-            value={@visitor_count}
-            icon="hero-eye"
-            href={~p"/admin/visitors"}
+            href={~p"/admin/estimates?status=new"}
           />
         </div>
 
@@ -182,13 +210,13 @@ defmodule RevstackWeb.Admin.DashboardLive do
       <div class="flex items-center gap-4">
         <div class={[
           "flex h-12 w-12 items-center justify-center rounded-lg",
-          if(@color == "yellow", do: "bg-yellow-500/10", else: "bg-indigo-500/10")
+          stat_card_bg(@color)
         ]}>
           <.icon
             name={@icon}
             class={[
               "size-6",
-              if(@color == "yellow", do: "text-yellow-400", else: "text-indigo-400")
+              stat_card_text(@color)
             ]}
           />
         </div>
@@ -212,4 +240,12 @@ defmodule RevstackWeb.Admin.DashboardLive do
     |> Application.spec(:vsn)
     |> to_string()
   end
+
+  defp stat_card_bg("yellow"), do: "bg-yellow-500/10"
+  defp stat_card_bg("amber"), do: "bg-amber-500/10"
+  defp stat_card_bg(_), do: "bg-indigo-500/10"
+
+  defp stat_card_text("yellow"), do: "text-yellow-400"
+  defp stat_card_text("amber"), do: "text-amber-400"
+  defp stat_card_text(_), do: "text-indigo-400"
 end

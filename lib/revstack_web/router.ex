@@ -26,6 +26,9 @@ defmodule RevstackWeb.Router do
   scope "/", RevstackWeb do
     pipe_through :browser
 
+    get "/resume/kyle-neal-resume.pdf", ResumeController, :view
+    get "/resume/download/kyle-neal-resume.pdf", ResumeController, :download
+
     ash_authentication_live_session :public_routes,
       on_mount: [
         {RevstackWeb.LiveUserAuth, :live_user_optional},

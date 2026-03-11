@@ -163,5 +163,108 @@ defmodule Revstack.Tracking.VisitorResourceTest do
       loaded = Ash.load!(visitor, [:estimate_count], authorize?: false)
       assert loaded.estimate_count == 1
     end
+
+    test "resume_view_count counts page visits to the resume view path" do
+      {:ok, visitor} =
+        Visitor.create(%{ip_address: "203.0.113.160"}, authorize?: false)
+
+      # Create a resume view page visit
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{
+          visitor_id: visitor.id,
+          path: "/resume/view"
+        },
+        authorize?: false
+      )
+
+      # Create a regular page visit (should not count)
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{
+          visitor_id: visitor.id,
+          path: "/about"
+        },
+        authorize?: false
+      )
+
+      # Create a resume download (should not count as view)
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{
+          visitor_id: visitor.id,
+          path: "/resume/download"
+        },
+        authorize?: false
+      )
+
+      loaded = Ash.load!(visitor, [:resume_view_count], authorize?: false)
+      assert loaded.resume_view_count == 1
+    end
+
+    test "resume_view_count is zero when no resume views exist" do
+      {:ok, visitor} =
+        Visitor.create(%{ip_address: "203.0.113.161"}, authorize?: false)
+
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{
+          visitor_id: visitor.id,
+          path: "/contact"
+        },
+        authorize?: false
+      )
+
+      loaded = Ash.load!(visitor, [:resume_view_count], authorize?: false)
+      assert loaded.resume_view_count == 0
+    end
+
+    test "resume_view_count increments with multiple resume views" do
+      {:ok, visitor} =
+        Visitor.create(%{ip_address: "203.0.113.162"}, authorize?: false)
+
+      for _ <- 1..3 do
+        Revstack.Tracking.VisitorPageVisit.create(
+          %{visitor_id: visitor.id, path: "/resume/view"},
+          authorize?: false
+        )
+      end
+
+      loaded = Ash.load!(visitor, [:resume_view_count], authorize?: false)
+      assert loaded.resume_view_count == 3
+    end
+
+    test "resume_download_count counts page visits to the resume download path" do
+      {:ok, visitor} =
+        Visitor.create(%{ip_address: "203.0.113.163"}, authorize?: false)
+
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{visitor_id: visitor.id, path: "/resume/download"},
+        authorize?: false
+      )
+
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{visitor_id: visitor.id, path: "/resume/download"},
+        authorize?: false
+      )
+
+      # Regular page visit should not count
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{visitor_id: visitor.id, path: "/about"},
+        authorize?: false
+      )
+
+      loaded = Ash.load!(visitor, [:resume_download_count], authorize?: false)
+      assert loaded.resume_download_count == 2
+    end
+
+    test "resume_download_count is zero when no downloads exist" do
+      {:ok, visitor} =
+        Visitor.create(%{ip_address: "203.0.113.164"}, authorize?: false)
+
+      Revstack.Tracking.VisitorPageVisit.create(
+        %{visitor_id: visitor.id, path: "/resume/view"},
+        authorize?: false
+      )
+
+      loaded = Ash.load!(visitor, [:resume_download_count], authorize?: false)
+      assert loaded.resume_download_count == 0
+    end
   end
 end

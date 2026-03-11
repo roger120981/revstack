@@ -450,7 +450,10 @@ defmodule RevstackWeb.WhoamiLive do
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
             Two major chapters of production systems engineering on the BEAM. <br />
-            <span class="text-sm">Click a phase to explore the projects within.</span>
+            <.icon
+              name="hero-cursor-arrow-rays"
+              class="size-7 inline-block align-text-bottom"
+            /><b class="text-lg">click a phase to explore the systems and projects behind it.</b>
           </p>
         </div>
         <div class="space-y-6">
@@ -481,7 +484,7 @@ defmodule RevstackWeb.WhoamiLive do
             <.icon
               name="hero-cursor-arrow-rays"
               class="size-5 inline-block align-text-bottom"
-            /><b class="text-lg">click to explore.</b>
+            /><b class="text-lg">click a project to explore.</b>
           </p>
         </div>
 
@@ -1094,7 +1097,8 @@ defmodule RevstackWeb.WhoamiLive do
     <span>
       <%= for part <- @parts do %>
         <%= case part do %>
-          <% {:text, text} -> %>{text}
+          <% {:text, text} -> %>
+            {text}
           <% {:link, url, label} -> %>
             <a
               href={url}

@@ -89,6 +89,36 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
+  describe "professional experience emphasis" do
+    test "renders the demand outcome sentence in bold", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(
+               view,
+               "strong.experience-emphasis",
+               "The platform ultimately generated more inbound demand than the business could operationally support."
+             )
+    end
+
+    test "renders handyman SEO and implementation details in founder experience", %{
+      conn: conn
+    } do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(
+               view,
+               "li",
+               "the system included SEO-driven service pages, conversion-focused design"
+             )
+
+      assert has_element?(
+               view,
+               "li",
+               "Built with Elixir, Phoenix LiveView, and Ecto"
+             )
+    end
+  end
+
   describe "hero contact links" do
     test "renders personal and business email links plus the resume view and download links", %{
       conn: conn

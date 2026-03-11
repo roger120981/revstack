@@ -217,7 +217,7 @@ defmodule RevstackWeb.WhoamiLive do
               aria-label="Download Kyle's Resume"
               class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
             >
-              <.icon name="hero-arrow-down-tray" class="size-5" /> Download Resume
+              <.icon name="hero-arrow-down-tray" class="size-5" />
             </a>
           </div>
         </div>
@@ -382,20 +382,22 @@ defmodule RevstackWeb.WhoamiLive do
             period="2023 — Present"
             current?={true}
             items={[
-              "Founded a personal consulting and technology services company used for independent software projects, consulting engagements, and local technology services.",
+              "Founded a consulting and technology services company used for independent software projects, consulting engagements, and local technology services.",
               {:parts,
                [
-                 {:text, "Developed "},
+                 {:text, "Designed and built "},
                  {:link, "https://hardcorehandyman.fly.dev/", "hardcorehandyman.fly.dev"},
                  {:text,
-                  " (formerly hardcorehandymanoflawton.com), a custom lead-generation website for a local handyman business including SEO strategy, service promotion pages, and conversion-focused design. Built an internal admin system for managing customer quote requests with photo uploads of project details. The platform ultimately generated more inbound demand than the business could operationally support."}
+                  " (formerly hardcorehandymanoflawton.com), a custom lead-generation platform for a local handyman business. Built with Elixir, Phoenix LiveView, and Ecto, the system included SEO-driven service pages, conversion-focused design, and an internal admin interface for managing customer quote requests with photo uploads of project details. "},
+                 {:strong,
+                  "The platform ultimately generated more inbound demand than the business could operationally support."}
                ]},
               {:parts,
                [
                  {:text, "Built and operate "},
                  {:link, "https://revstack.fly.dev/", "revstack.fly.dev"},
                  {:text,
-                  ", a Phoenix LiveView application used as a professional portfolio, lead generation platform, and development sandbox for new ideas."}
+                  ", a Phoenix LiveView application serving as a professional portfolio, lead-generation platform, and development sandbox for new ideas."}
                ]},
               "Provide consulting and technical services including custom web application development, systems architecture guidance, and local technology support for individuals and small businesses.",
               "Use the company as a vehicle for experimentation with Elixir, distributed systems, infrastructure tooling, and small SaaS-style projects."
@@ -1108,6 +1110,8 @@ defmodule RevstackWeb.WhoamiLive do
             >
               {label}<.icon name="hero-arrow-top-right-on-square" class="size-3 ml-0.5 shrink-0" />
             </a>
+          <% {:strong, text} -> %>
+            <strong class="experience-emphasis font-semibold text-base-content">{text}</strong>
         <% end %>
       <% end %>
     </span>

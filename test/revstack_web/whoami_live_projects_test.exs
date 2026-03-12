@@ -134,13 +134,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       assert has_element?(
                view,
                "#personal-email-link[href='mailto:nealkyle5@gmail.com']",
-               "Personal: nealkyle5@gmail.com"
-             )
-
-      assert has_element?(
-               view,
-               "#business-email-link[href='mailto:kyle.neal.lucidsoftwaresolutions@gmail.com']",
-               "Business: kyle.neal.lucidsoftwaresolutions@gmail.com"
+               "nealkyle5@gmail.com"
              )
 
       assert has_element?(

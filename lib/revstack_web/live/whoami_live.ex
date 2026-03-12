@@ -142,7 +142,6 @@ defmodule RevstackWeb.WhoamiLive do
       <.professional_summary_section />
       <.technical_expertise_section />
       <.professional_experience_section />
-      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
       <.career_portfolio_section
         career_phases={@career_phases}
         expanded_phase_id={@career_expanded_phase_id}
@@ -158,6 +157,7 @@ defmodule RevstackWeb.WhoamiLive do
         images={@admin_gallery_images}
         current_index={@admin_gallery_index}
       />
+      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
       <.leadership_section />
       <.team_work_section />
       <.education_section />
@@ -193,12 +193,6 @@ defmodule RevstackWeb.WhoamiLive do
           Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
         </p>
         <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <.link
-            navigate={~p"/contact"}
-            class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-          >
-            <.icon name="hero-envelope" class="size-5" /> Contact Me
-          </.link>
           <div class="flex items-center gap-2">
             <a
               id="view-resume-link"
@@ -219,37 +213,35 @@ defmodule RevstackWeb.WhoamiLive do
             >
               <.icon name="hero-arrow-down-tray" class="size-5" />
             </a>
+            <.link
+              navigate={~p"/contact"}
+              class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <.icon name="hero-envelope" class="size-5" /> Contact Me
+            </.link>
           </div>
         </div>
         <%!-- Quick links --%>
         <div class="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/50">
-          <a
-            id="whoami-github-link"
-            href="https://github.com/kyle-neal"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-          >
-            <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
-              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-            </svg>
-            GitHub
-          </a>
           <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+            <a
+              id="whoami-github-link"
+              href="https://github.com/kyle-neal"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
+            >
+              <svg viewBox="0 0 16 16" class="size-4 fill-current" aria-hidden="true">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+              </svg>
+              GitHub
+            </a>
             <a
               id="personal-email-link"
               href="mailto:nealkyle5@gmail.com"
               class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
             >
-              <.icon name="hero-envelope" class="size-4" /> Personal: nealkyle5@gmail.com
-            </a>
-            <a
-              id="business-email-link"
-              href="mailto:kyle.neal.lucidsoftwaresolutions@gmail.com"
-              class="inline-flex items-center gap-1.5 hover:text-base-content transition-colors"
-            >
-              <.icon name="hero-briefcase" class="size-4" />
-              Business: kyle.neal.lucidsoftwaresolutions@gmail.com
+              <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
             </a>
           </div>
         </div>
@@ -377,6 +369,20 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
         <div class="space-y-8">
           <.experience_card
+            title="Lead Distributed Systems Engineer"
+            company="Ubiquity Agency an Ionik company"
+            period="October 2014 — 2026"
+            current?={false}
+            items={[
+              "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
+              "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
+              "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
+              "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
+              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
+              "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
+            ]}
+          />
+          <.experience_card
             title="Founder & Software Engineer"
             company="RevenueLink Technologies LLC"
             period="2023 — Present"
@@ -401,20 +407,6 @@ defmodule RevstackWeb.WhoamiLive do
                ]},
               "Provide consulting and technical services including custom web application development, systems architecture guidance, and local technology support for individuals and small businesses.",
               "Use the company as a vehicle for experimentation with Elixir, distributed systems, infrastructure tooling, and small SaaS-style projects."
-            ]}
-          />
-          <.experience_card
-            title="Lead Distributed Systems Engineer"
-            company="Ubiquity Agency an Ionik company"
-            period="October 2014 — 2026"
-            current?={false}
-            items={[
-              "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
-              "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
-              "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
-              "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
-              "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
             ]}
           />
           <.experience_card
@@ -476,9 +468,9 @@ defmodule RevstackWeb.WhoamiLive do
     <section id="live-projects" class="py-16 sm:py-20">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-14">
-          <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
+          <%!-- <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
             <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
-          </div>
+          </div> --%>
           <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Personal Live Projects</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
@@ -726,23 +718,39 @@ defmodule RevstackWeb.WhoamiLive do
     <section class="py-20 sm:py-28">
       <div class="mx-auto max-w-3xl">
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+          <!-- Primary: Hiring -->
+          <div class="group rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary mx-auto mb-4 group-hover:bg-primary/25 transition-colors">
               <.icon name="hero-briefcase" class="size-7" />
             </div>
-            <h3 class="text-lg font-bold text-base-content mb-2">Hiring for a role?</h3>
-            <p class="text-sm text-base-content/70 mb-4">I'd love to hear about the opportunity.</p>
+
+            <h3 class="text-lg font-bold text-base-content mb-2">
+              Hiring for a role?
+            </h3>
+
+            <p class="text-sm text-base-content/70 mb-4">
+              I'm always open to discussing the right engineering opportunity.
+            </p>
+
             <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
-              <.icon name="hero-envelope" class="size-4" /> Contact Me
+              <.icon name="hero-envelope" class="size-4" /> Get in Touch
             </.link>
           </div>
+          <!-- Secondary: Consulting -->
           <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-200 text-base-content mx-auto mb-4 group-hover:bg-base-300 transition-colors">
               <.icon name="hero-wrench-screwdriver" class="size-7" />
             </div>
-            <h3 class="text-lg font-bold text-base-content mb-2">Need consulting or project work?</h3>
-            <p class="text-sm text-base-content/70 mb-4">Explore services and request an estimate.</p>
-            <.link navigate={~p"/services"} class="btn btn-primary gap-2">
+
+            <h3 class="text-lg font-bold text-base-content mb-2">
+              Need consulting or project work?
+            </h3>
+
+            <p class="text-sm text-base-content/70 mb-4">
+              I occasionally take on consulting and small project engagements.
+            </p>
+
+            <.link navigate={~p"/services"} class="btn btn-outline gap-2">
               <.icon name="hero-briefcase" class="size-4" /> View Services
             </.link>
           </div>
@@ -1676,7 +1684,7 @@ defmodule RevstackWeb.WhoamiLive do
       title: "Data Verification & Email Infrastructure Foundations",
       card_title: "MTA & Verification Systems",
       card_icon: "hero-signal",
-      card_era: "2014 — Early Career",
+      card_era: "2014-2018 — Early Career",
       card_summary:
         "Built distributed Erlang systems powering large-scale email verification and sending infrastructure, including DNS/SMTP services, operational tooling, and backend automation for high-volume deliverability systems.",
       card_badges: [
@@ -2061,7 +2069,7 @@ defmodule RevstackWeb.WhoamiLive do
       title: "Affiliate Network Platform & Infrastructure Leadership",
       card_title: "Affiliate Network Platform",
       card_icon: "hero-chart-bar",
-      card_era: "2018–2026 — Mid to Senior Career",
+      card_era: "2018–2026 — Senior Engineer & Platform Ownership",
       card_summary:
         "Built and owned a revenue-critical affiliate network platform end-to-end, spanning high-throughput Erlang services, internal Elixir/Phoenix tooling, and large-scale Cassandra, Elasticsearch, and PostgreSQL data systems.",
       card_badges: [

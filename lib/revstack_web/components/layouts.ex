@@ -97,7 +97,7 @@ defmodule RevstackWeb.Layouts do
           >
             Services
           </.link>
-          <.link
+          <%!-- <.link
             id="nav-estimate"
             navigate={~p"/estimate"}
             class={[
@@ -109,8 +109,8 @@ defmodule RevstackWeb.Layouts do
             ]}
           >
             Estimate
-          </.link>
-          <.link
+          </.link> --%>
+          <%!-- <.link
             id="nav-contact"
             navigate={~p"/contact"}
             class={[
@@ -122,7 +122,7 @@ defmodule RevstackWeb.Layouts do
             ]}
           >
             Contact
-          </.link>
+          </.link> --%>
           <%= if @current_user do %>
             <details id="desktop-user-menu" class="dropdown dropdown-end ml-2">
               <summary
@@ -240,7 +240,7 @@ defmodule RevstackWeb.Layouts do
                 >
                   <.icon name="hero-briefcase" class="size-5" /> Services
                 </.link>
-                <.link
+                <%!-- <.link
                   id="mobile-nav-estimate"
                   navigate={~p"/estimate"}
                   class={[
@@ -267,7 +267,7 @@ defmodule RevstackWeb.Layouts do
                   ]}
                 >
                   <.icon name="hero-envelope" class="size-5" /> Contact
-                </.link>
+                </.link> --%>
               </div>
             </div>
           </details>

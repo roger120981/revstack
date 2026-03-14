@@ -1,5 +1,5 @@
 defmodule RevstackWeb.LiveVisitorTrackingTest do
-  use RevstackWeb.ConnCase, async: true
+  use RevstackWeb.ConnCase, async: false
 
   import ExUnit.CaptureLog
   import Phoenix.LiveViewTest

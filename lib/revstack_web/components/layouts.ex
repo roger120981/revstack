@@ -275,7 +275,7 @@ defmodule RevstackWeb.Layouts do
       </nav>
     </header>
 
-    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <main class="mx-auto max-w-6xl overflow-x-hidden px-4 py-8 sm:px-6 lg:px-8">
       {render_slot(@inner_block)}
     </main>
 

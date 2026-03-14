@@ -137,15 +137,23 @@ defmodule RevstackWeb.WhoamiLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
-      <.hero_section />
-      <.at_a_glance_section />
-      <.professional_summary_section />
-      <.technical_expertise_section />
-      <.professional_experience_section />
-      <.career_portfolio_section
-        career_phases={@career_phases}
-        expanded_phase_id={@career_expanded_phase_id}
-      />
+      <div id="whoami-sections" class="space-y-6 sm:space-y-8 lg:space-y-10">
+        <.hero_section />
+        <.at_a_glance_section />
+        <.professional_summary_section />
+        <.technical_expertise_section />
+        <.professional_experience_section />
+        <.career_portfolio_section
+          career_phases={@career_phases}
+          expanded_phase_id={@career_expanded_phase_id}
+        />
+        <.live_projects_section admin_gallery_images={@admin_gallery_images} />
+        <.leadership_and_teamwork_section />
+        <.education_section />
+        <.personal_interests_section />
+        <.closing_cta_section />
+        <.github_repository_section />
+      </div>
       <.career_portfolio_modal
         :if={@career_modal_open?}
         phases={@career_phases}
@@ -157,13 +165,6 @@ defmodule RevstackWeb.WhoamiLive do
         images={@admin_gallery_images}
         current_index={@admin_gallery_index}
       />
-      <.live_projects_section admin_gallery_images={@admin_gallery_images} />
-      <.leadership_section />
-      <.team_work_section />
-      <.education_section />
-      <.personal_interests_section />
-      <.closing_cta_section />
-      <.github_repository_section />
     </Layouts.app>
     """
   end
@@ -192,14 +193,14 @@ defmodule RevstackWeb.WhoamiLive do
           10+ years building revenue-critical distributed systems on the BEAM.
           Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
         </p>
-        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div class="mt-8 flex flex-col items-center gap-3">
           <div class="flex items-center gap-2">
             <a
               id="view-resume-link"
               href="/resume/kyle-neal-resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+              class="btn btn-outline btn-md sm:btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
             >
               <.icon name="hero-eye" class="size-5" /> View Resume
             </a>
@@ -209,17 +210,18 @@ defmodule RevstackWeb.WhoamiLive do
               download
               title="Download Kyle's Resume"
               aria-label="Download Kyle's Resume"
-              class="btn btn-outline btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+              class="btn btn-outline btn-md sm:btn-lg gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
             >
               <.icon name="hero-arrow-down-tray" class="size-5" />
             </a>
-            <.link
-              navigate={~p"/contact"}
-              class="btn btn-primary btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <.icon name="hero-envelope" class="size-5" /> Contact Me
-            </.link>
           </div>
+          <.link
+            navigate={~p"/contact"}
+            id="hero-contact-link"
+            class="btn btn-primary btn-md sm:btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto max-w-xs"
+          >
+            <.icon name="hero-envelope" class="size-5" /> Contact Me
+          </.link>
         </div>
         <%!-- Quick links --%>
         <div class="mt-6 flex flex-col items-center gap-3 text-sm text-base-content/50">
@@ -267,7 +269,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp professional_summary_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20">
+    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Professional Summary</h2>
@@ -314,7 +316,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp technical_expertise_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Technical Expertise</h2>
@@ -361,7 +363,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp professional_experience_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20">
+    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
@@ -437,7 +439,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp career_portfolio_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20">
+    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
@@ -465,7 +467,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp live_projects_section(assigns) do
     ~H"""
-    <section id="live-projects" class="py-16 sm:py-20">
+    <section id="live-projects" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-14">
           <%!-- <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
@@ -519,7 +521,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp education_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Education</h2>
@@ -695,7 +697,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp personal_interests_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl">
+    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">When I'm Not Coding</h2>

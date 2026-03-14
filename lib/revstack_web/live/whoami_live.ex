@@ -628,7 +628,7 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Ultimately rewrote more of the system than the original team release contained.
+                  Ultimately rewrote more of the system than the original team-built release contained.
                 </span>
               </li>
             </ul>

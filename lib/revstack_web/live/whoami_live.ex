@@ -546,55 +546,51 @@ defmodule RevstackWeb.WhoamiLive do
     """
   end
 
-  defp leadership_section(assigns) do
+  defp leadership_and_teamwork_section(assigns) do
     ~H"""
-    <section class="py-16 sm:py-20">
-      <div class="mx-auto max-w-4xl">
+    <section
+      id="leadership-teamwork"
+      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8"
+    >
+      <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-base-content">Leadership</h2>
+          <h2 class="text-3xl font-bold text-base-content">Leadership &amp; Teamwork</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+          <p class="mt-4 max-w-3xl mx-auto text-base text-base-content/70 leading-relaxed">
+            Technical leadership across distributed teams, from architecting production systems to
+            mentoring engineers and coordinating cross-functional delivery.
+          </p>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <%!-- Leadership highlights --%>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <.leadership_item
             icon="hero-building-office"
             text="Architecture ownership across all production systems"
           />
-          <.leadership_item icon="hero-academic-cap" text="Mentoring and managing 5 engineers" />
+          <.leadership_item
+            icon="hero-academic-cap"
+            text="Mentored & managed 5 engineers across backend and infrastructure"
+          />
           <.leadership_item
             icon="hero-arrows-right-left"
-            text="Coordinating frontend & infrastructure teams"
+            text="Coordinated frontend, backend & infrastructure teams"
           />
           <.leadership_item
             icon="hero-arrow-trending-up"
-            text="Scaling platforms to $2.5M+ monthly revenue"
+            text="Scaled platforms to $2.5M+ monthly revenue"
           />
-          <.leadership_item icon="hero-calendar" text="Managing delivery timelines and releases" />
+          <.leadership_item
+            icon="hero-calendar"
+            text="Managed delivery timelines, releases & incident response"
+          />
           <.leadership_item
             icon="hero-wrench-screwdriver"
-            text="Hands-on across backend and full-stack delivery"
+            text="Hands-on across backend, full-stack & DevOps delivery"
           />
         </div>
-      </div>
-    </section>
-    """
-  end
 
-  defp team_work_section(assigns) do
-    ~H"""
-    <section
-      id="teamwork"
-      class="py-16 sm:py-20 bg-base-200/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 rounded-2xl"
-    >
-      <div class="mx-auto max-w-5xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-base-content">Team Work</h2>
-          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-          <p class="mt-4 max-w-3xl mx-auto text-base text-base-content/70 leading-relaxed">
-            I have led, collaborated with, and supported distributed engineering teams while building
-            a multi-million-dollar affiliate network platform and the infrastructure around it.
-          </p>
-        </div>
-
+        <%!-- Team collaboration cards --%>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div
             id="teamwork-poland"
@@ -605,9 +601,9 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-user-group" class="size-5" />
               </div>
               <div>
-                <h3 class="text-lg font-bold text-base-content">Affiliate Platform Build Team</h3>
+                <h3 class="text-lg font-bold text-base-content">Affiliate Platform Team</h3>
                 <p class="text-sm text-base-content/60">
-                  Poland-based backend and DevOps collaboration
+                  Poland-based backend &amp; DevOps collaboration
                 </p>
               </div>
             </div>
@@ -616,34 +612,23 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Worked closely with <b>5 backend engineers</b>
-                  in Poland and <b>3 DevOps engineers</b>
-                  in Poland while actively building the affiliate network platform, a
-                  multi-million-dollar production system.
+                  Collaborated with <b>5 backend</b>
+                  and <b>3 DevOps engineers</b>
+                  to build a multi-million-dollar affiliate network platform.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Initially partnered with the <b>2 lead backend engineers</b>
-                  who started the platform,
-                  collaborating on architecture, implementation, and getting the system into a
-                  production-ready state.
+                  Partnered with <b>2 lead engineers</b>
+                  on architecture and initial production launch, then became the <b>sole owner</b>
+                  for features, maintenance, and major rewrites.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Later became the <b>solo engineer</b> responsible for new features, maintenance,
-                  long-term ownership, and major rewrites across the affiliate network platform.
-                </span>
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-                <span>
-                  Spent more years evolving the platform independently than were spent building the
-                  original larger-team release, and ultimately rewrote more of the system than the first
-                  production-ready version contained.
+                  Ultimately rewrote more of the system than the original team release contained.
                 </span>
               </li>
             </ul>
@@ -658,9 +643,9 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-wrench-screwdriver" class="size-5" />
               </div>
               <div>
-                <h3 class="text-lg font-bold text-base-content">Infrastructure Team Support</h3>
+                <h3 class="text-lg font-bold text-base-content">Infrastructure Team</h3>
                 <p class="text-sm text-base-content/60">
-                  Operational leadership with hands-on support
+                  Built &amp; led a self-managed ops team
                 </p>
               </div>
             </div>
@@ -669,22 +654,16 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Regularly stepped in to help the Philippines-based infrastructure team during heavy
-                  operational grinds and high-pressure delivery periods.
+                  Built a Philippines-based infrastructure team to operate as a
+                  <b>self-managed unit</b>
+                  with the structure and autonomy to run independently.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Built that team to operate as a mostly self-managed <b>black box</b>, giving it the
-                  structure and autonomy to run effectively without constant oversight.
-                </span>
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-                <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-                <span>
-                  Balanced delegation with direct technical involvement, stepping into difficult work when
-                  needed while keeping the team sustainable and operationally independent.
+                  Balanced delegation with hands-on involvement during high-pressure delivery periods,
+                  keeping the team sustainable and operationally independent.
                 </span>
               </li>
             </ul>

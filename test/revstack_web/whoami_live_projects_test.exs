@@ -72,20 +72,20 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
-  describe "team work section" do
-    test "renders the team work collaboration narrative", %{conn: conn} do
+  describe "leadership and teamwork section" do
+    test "renders the leadership and teamwork collaboration narrative", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
-      assert has_element?(view, "#teamwork")
+      assert has_element?(view, "#leadership-teamwork")
       assert has_element?(view, "#teamwork-poland")
       assert has_element?(view, "#teamwork-ph-infra")
 
       html = render(view)
 
-      assert html =~ "5 backend engineers"
+      assert html =~ "5 backend"
       assert html =~ "3 DevOps engineers"
-      assert html =~ "solo engineer"
-      assert html =~ "black box"
+      assert html =~ "sole owner"
+      assert html =~ "self-managed unit"
     end
   end
 

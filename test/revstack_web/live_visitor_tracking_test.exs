@@ -1,5 +1,5 @@
 defmodule RevstackWeb.LiveVisitorTrackingTest do
-  use RevstackWeb.ConnCase, async: true
+  use RevstackWeb.ConnCase, async: false
 
   import ExUnit.CaptureLog
   import Phoenix.LiveViewTest
@@ -17,7 +17,7 @@ defmodule RevstackWeb.LiveVisitorTrackingTest do
 
     {:ok, contact_view, _html} =
       view
-      |> element("a.btn.btn-primary.btn-lg[href='/contact']")
+      |> element("#hero-contact-link")
       |> render_click()
       |> follow_redirect(conn, ~p"/contact")
 

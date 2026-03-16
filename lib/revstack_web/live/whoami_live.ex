@@ -46,6 +46,21 @@ defmodule RevstackWeb.WhoamiLive do
     }
   ]
 
+  @section_navigation_items [
+    %{id: "whoami-hero", label: "Hero"},
+    %{id: "whoami-glance", label: "At A Glance"},
+    %{id: "whoami-summary", label: "Professional Summary"},
+    %{id: "whoami-expertise", label: "Technical Expertise"},
+    %{id: "whoami-experience", label: "Professional Experience"},
+    %{id: "whoami-portfolio", label: "Career Portfolio"},
+    %{id: "live-projects", label: "Personal Live Projects"},
+    %{id: "leadership-teamwork", label: "Leadership & Teamwork"},
+    %{id: "whoami-education", label: "Education"},
+    %{id: "whoami-interests", label: "When I'm Not Coding"},
+    %{id: "whoami-contact", label: "Contact"},
+    %{id: "whoami-source", label: "Source Code"}
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
     socket =
@@ -57,6 +72,8 @@ defmodule RevstackWeb.WhoamiLive do
         admin_gallery_open?: false,
         admin_gallery_index: 0,
         admin_gallery_images: @admin_gallery_images,
+        section_nav_open?: false,
+        section_navigation_items: @section_navigation_items,
         career_modal_open?: false,
         career_selected_project_id: nil,
         career_detail_view?: false,
@@ -89,6 +106,14 @@ defmodule RevstackWeb.WhoamiLive do
 
   def handle_event("admin_gallery_select", %{"index" => index}, socket) do
     {:noreply, assign(socket, :admin_gallery_index, String.to_integer(index))}
+  end
+
+  def handle_event("toggle_section_nav", _params, socket) do
+    {:noreply, assign(socket, :section_nav_open?, !socket.assigns.section_nav_open?)}
+  end
+
+  def handle_event("close_section_nav", _params, socket) do
+    {:noreply, assign(socket, :section_nav_open?, false)}
   end
 
   def handle_event("expand_career_phase", %{"phase-id" => phase_id}, socket) do
@@ -137,6 +162,13 @@ defmodule RevstackWeb.WhoamiLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_user={assigns[:current_user]} current_path={@current_path}>
+      <:header_left>
+        <.section_navigation_toggle menu_open?={@section_nav_open?} />
+      </:header_left>
+      <.section_navigation_panel
+        :if={@section_nav_open?}
+        items={@section_navigation_items}
+      />
       <div id="whoami-sections" class="space-y-6 sm:space-y-8 lg:space-y-10">
         <.hero_section />
         <.at_a_glance_section />
@@ -175,7 +207,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp hero_section(assigns) do
     ~H"""
-    <section class="py-20 sm:py-28">
+    <section id="whoami-hero" class="py-20 sm:py-28 scroll-mt-24">
       <div class="mx-auto max-w-4xl text-center">
         <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
           <.icon name="hero-user" class="size-4" /> Technical Profile
@@ -254,7 +286,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp at_a_glance_section(assigns) do
     ~H"""
-    <section class="py-12">
+    <section id="whoami-glance" class="py-12 scroll-mt-24">
       <div class="mx-auto max-w-5xl">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <.stat_card value="10+" label="Years on the BEAM" />
@@ -269,7 +301,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp professional_summary_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section id="whoami-summary" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24">
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Professional Summary</h2>
@@ -316,7 +348,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp technical_expertise_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
+    <section
+      id="whoami-expertise"
+      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8 scroll-mt-24"
+    >
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Technical Expertise</h2>
@@ -363,7 +398,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp professional_experience_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section
+      id="whoami-experience"
+      class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24"
+    >
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
@@ -439,7 +477,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp career_portfolio_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
+    <section
+      id="whoami-portfolio"
+      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8 scroll-mt-24"
+    >
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
@@ -467,7 +508,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp live_projects_section(assigns) do
     ~H"""
-    <section id="live-projects" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section id="live-projects" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-14">
           <%!-- <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
@@ -521,7 +562,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp education_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+    <section
+      id="whoami-education"
+      class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24"
+    >
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">Education</h2>
@@ -550,7 +594,7 @@ defmodule RevstackWeb.WhoamiLive do
     ~H"""
     <section
       id="leadership-teamwork"
-      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8"
+      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8 scroll-mt-24"
     >
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-12">
@@ -676,7 +720,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp personal_interests_section(assigns) do
     ~H"""
-    <section class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8">
+    <section
+      id="whoami-interests"
+      class="section-card py-16 sm:py-20 bg-base-200/30 px-4 sm:px-6 lg:px-8 scroll-mt-24"
+    >
       <div class="mx-auto max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl font-bold text-base-content">When I'm Not Coding</h2>
@@ -696,7 +743,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp closing_cta_section(assigns) do
     ~H"""
-    <section class="py-20 sm:py-28">
+    <section id="whoami-contact" class="py-20 sm:py-28 scroll-mt-24">
       <div class="mx-auto max-w-3xl">
         <div class="flex flex-col sm:flex-row justify-center gap-6">
           <!-- Primary: Hiring -->
@@ -743,7 +790,7 @@ defmodule RevstackWeb.WhoamiLive do
 
   defp github_repository_section(assigns) do
     ~H"""
-    <section class="pb-20">
+    <section id="whoami-source" class="pb-20 scroll-mt-24">
       <div class="mx-auto max-w-3xl">
         <div class="rounded-2xl border border-base-300 bg-base-200/50 p-8 text-center">
           <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-content/10 mx-auto mb-4">
@@ -894,6 +941,54 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
       </a>
     <% end %>
+    """
+  end
+
+  defp section_navigation_toggle(assigns) do
+    ~H"""
+    <button
+      id="section-nav-toggle"
+      phx-click="toggle_section_nav"
+      aria-label="Toggle section navigation"
+      aria-expanded={@menu_open?}
+      class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-base-300 bg-base-100 text-base-content/80 shadow-sm transition-all duration-200 hover:border-primary/40 hover:text-primary"
+    >
+      <.icon name="hero-bars-3" class="size-5" />
+    </button>
+    """
+  end
+
+  defp section_navigation_panel(assigns) do
+    ~H"""
+    <div id="section-nav" class="fixed left-3 top-16 z-40 sm:left-5 sm:top-20">
+      <div
+        id="section-nav-panel"
+        class="w-[min(85vw,20rem)] rounded-2xl border border-base-300 bg-base-100/95 p-3 shadow-2xl backdrop-blur"
+      >
+        <div class="mb-2 flex items-center justify-between gap-3 px-1">
+          <p class="text-xs font-bold uppercase tracking-wide text-primary">Jump to Section</p>
+          <button
+            id="section-nav-close"
+            phx-click="close_section_nav"
+            class="inline-flex h-7 w-7 items-center justify-center rounded-md text-base-content/60 hover:bg-base-200 hover:text-base-content transition-colors"
+            aria-label="Close section navigation"
+          >
+            <.icon name="hero-x-mark" class="size-4" />
+          </button>
+        </div>
+        <nav id="section-nav-links" class="max-h-[60vh] overflow-y-auto pr-1">
+          <a
+            :for={item <- @items}
+            id={"section-nav-link-#{item.id}"}
+            href={"##{item.id}"}
+            phx-click="close_section_nav"
+            class="block rounded-lg px-3 py-2 text-sm font-medium text-base-content/75 transition-colors hover:bg-primary/10 hover:text-primary"
+          >
+            {item.label}
+          </a>
+        </nav>
+      </div>
+    </div>
     """
   end
 

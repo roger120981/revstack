@@ -9,6 +9,9 @@ defmodule RevstackWeb.LayoutsUserMenuTest do
 
     refute has_element?(view, "#desktop-user-menu")
     refute has_element?(view, "#mobile-user-menu")
+    refute has_element?(view, "#mobile-nav-user-section")
+    refute has_element?(view, "#mobile-nav-admin-link")
+    refute has_element?(view, "#mobile-nav-sign-out-link")
     refute render(view) =~ "Signed In"
   end
 
@@ -21,7 +24,11 @@ defmodule RevstackWeb.LayoutsUserMenuTest do
     assert has_element?(view, "#desktop-user-menu")
     assert has_element?(view, "#desktop-user-menu-admin-link")
     assert has_element?(view, "#desktop-user-menu-sign-out-link")
-    assert has_element?(view, "#mobile-user-menu")
+    refute has_element?(view, "#mobile-user-menu")
+    assert has_element?(view, "#mobile-nav-user-section")
+    assert has_element?(view, "#mobile-nav-user-email", to_string(user.email))
+    assert has_element?(view, "#mobile-nav-admin-link")
+    assert has_element?(view, "#mobile-nav-sign-out-link")
     assert render(view) =~ to_string(user.email)
   end
 

@@ -42,6 +42,10 @@ defmodule RevstackWeb.Layouts do
     doc: "the current request path for active nav highlighting"
   )
 
+  slot(:header_left,
+    doc: "optional content rendered to the left of the brand title in the header"
+  )
+
   slot(:inner_block, required: true)
 
   def app(assigns) do
@@ -52,20 +56,23 @@ defmodule RevstackWeb.Layouts do
     >
       <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <div class="min-w-0 flex-1">
-          <.link
-            id="nav-brand"
-            navigate={~p"/"}
-            data-scroll-top="true"
-            phx-click-capture={JS.dispatch("phx:scroll-top")}
-            class="inline-flex min-w-0 flex-col text-left hover:opacity-80 transition-opacity"
-          >
-            <span class="truncate text-lg font-extrabold tracking-tight text-primary sm:text-xl">
-              Kyle Neal
-            </span>
-            <span class="hidden text-xs font-medium text-base-content/60 sm:block lg:text-sm">
-              Distributed Systems Engineer
-            </span>
-          </.link>
+          <div id="header-brand-row" class="inline-flex min-w-0 items-center gap-2">
+            {render_slot(@header_left)}
+            <.link
+              id="nav-brand"
+              navigate={~p"/"}
+              data-scroll-top="true"
+              phx-click-capture={JS.dispatch("phx:scroll-top")}
+              class="inline-flex min-w-0 flex-col text-left hover:opacity-80 transition-opacity"
+            >
+              <span class="truncate text-lg font-extrabold tracking-tight text-primary sm:text-xl">
+                Kyle Neal
+              </span>
+              <span class="hidden text-xs font-medium text-base-content/60 sm:block lg:text-sm">
+                Distributed Systems Engineer
+              </span>
+            </.link>
+          </div>
         </div>
 
         <div class="hidden items-center gap-1 lg:flex">
@@ -163,37 +170,6 @@ defmodule RevstackWeb.Layouts do
         </div>
 
         <div class="flex items-center gap-2 lg:hidden">
-          <%= if @current_user do %>
-            <details id="mobile-user-menu" class="dropdown dropdown-end">
-              <summary
-                id="mobile-user-menu-trigger"
-                class="btn btn-ghost btn-sm h-auto min-h-0 gap-2 rounded-xl px-3 py-2 normal-case"
-              >
-                <span class="max-w-28 truncate text-sm font-medium text-base-content">
-                  {@current_user.email}
-                </span>
-                <.icon name="hero-chevron-down" class="size-4 text-base-content/55" />
-              </summary>
-              <ul class="menu dropdown-content z-50 mt-3 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
-                <li>
-                  <.link id="mobile-user-menu-admin-link" navigate="/admin" class="rounded-xl">
-                    <.icon name="hero-squares-2x2" class="size-4" /> Admin Dashboard
-                  </.link>
-                </li>
-                <li>
-                  <.link
-                    id="mobile-user-menu-sign-out-link"
-                    href={~p"/sign-out"}
-                    method="get"
-                    class="rounded-xl text-error"
-                  >
-                    <.icon name="hero-arrow-left-on-rectangle" class="size-4" /> Sign out
-                  </.link>
-                </li>
-              </ul>
-            </details>
-          <% end %>
-
           <.theme_toggle />
           <details id="mobile-nav-menu" class="dropdown dropdown-end">
             <summary
@@ -240,6 +216,35 @@ defmodule RevstackWeb.Layouts do
                 >
                   <.icon name="hero-briefcase" class="size-5" /> Services
                 </.link>
+                <%= if @current_user do %>
+                  <div class="my-2 border-t border-base-300"></div>
+                  <div id="mobile-nav-user-section" class="px-3 pb-1">
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-base-content/45">
+                      Signed In
+                    </p>
+                    <p
+                      id="mobile-nav-user-email"
+                      class="mt-1 truncate text-sm font-medium text-base-content"
+                    >
+                      {@current_user.email}
+                    </p>
+                  </div>
+                  <.link
+                    id="mobile-nav-admin-link"
+                    navigate="/admin"
+                    class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
+                  >
+                    <.icon name="hero-squares-2x2" class="size-5" /> Admin Dashboard
+                  </.link>
+                  <.link
+                    id="mobile-nav-sign-out-link"
+                    href={~p"/sign-out"}
+                    method="get"
+                    class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-error/90 transition-colors hover:bg-error/10 hover:text-error"
+                  >
+                    <.icon name="hero-arrow-left-on-rectangle" class="size-5" /> Sign out
+                  </.link>
+                <% end %>
                 <%!-- <.link
                   id="mobile-nav-estimate"
                   navigate={~p"/estimate"}

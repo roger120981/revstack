@@ -26,6 +26,7 @@ defmodule RevstackWeb.Router do
   scope "/", RevstackWeb do
     pipe_through :browser
 
+    get "/sitemap.xml", SitemapController, :index
     get "/resume/kyle-neal-resume.pdf", ResumeController, :view
     get "/resume/download/kyle-neal-resume.pdf", ResumeController, :download
 

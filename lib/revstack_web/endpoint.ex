@@ -27,6 +27,11 @@ defmodule RevstackWeb.Endpoint do
     only: RevstackWeb.static_paths(),
     raise_on_missing_only: false
 
+  # Tidewave MCP server — dev only, exposes BEAM introspection to AI agents
+  if Code.ensure_loaded?(Tidewave) do
+    plug Tidewave
+  end
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

@@ -42,6 +42,7 @@ defmodule Revstack.MixProject do
   defp deps do
     [
       {:picosat_elixir, "~> 0.2"},
+      {:tidewave, "~> 0.5", only: :dev},
       {:sourceror, "~> 1.8", only: [:dev, :test]},
       {:live_debugger, "~> 0.6", only: [:dev]},
       {:ash_admin, "~> 0.14"},

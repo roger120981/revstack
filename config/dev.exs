@@ -68,6 +68,11 @@ config :revstack, RevstackWeb.Endpoint,
     ]
   ]
 
+# Enable enhanced HEEx debugging info surfaced by Tidewave to AI agents
+config :phoenix_live_view,
+  debug_heex_annotations: true,
+  debug_attributes: true
+
 # Enable dev routes for dashboard and mailbox
 config :revstack, dev_routes: true, token_signing_secret: "MduSjK8bg5vmRM3yRCAErmrftwaxOH8P"
 

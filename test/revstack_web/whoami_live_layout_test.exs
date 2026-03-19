@@ -33,10 +33,21 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
 
       assert has_element?(view, "#whoami-role-fit", "Staff Backend Engineer")
       assert has_element?(view, "#whoami-role-fit", "Technical Lead Who Still Codes")
-      assert has_element?(view, "#whoami-proof-points", "6-node")
-      assert has_element?(view, "#whoami-proof-points", "Cassandra event store")
+      assert has_element?(view, "#whoami-proof-points", "1.5M+")
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points",
+               "events/day processed by systems I've built"
+             )
+
       assert has_element?(view, "#whoami-proof-points", "~25%")
-      assert has_element?(view, "#whoami-proof-points", "infra cost reduction")
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points",
+               "infrastructure cost reduction through workflow and scaling improvements"
+             )
     end
   end
 

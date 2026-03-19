@@ -259,8 +259,14 @@ defmodule RevstackWeb.WhoamiLive do
             <div class="mt-6">
               <div id="whoami-proof-points" class="mt-3 flex flex-wrap gap-2.5">
                 <.proof_point_chip value="1.5M+" label="events/day processed by systems I've built" />
-                <.proof_point_chip value="$2.5M+" label="monthly revenue supported on systems I've built" />
-                <.proof_point_chip value="~25%" label="infrastructure cost reduction achieved as a result of workflow improvements by systems I've built" />
+                <.proof_point_chip
+                  value="$2.5M+"
+                  label="monthly revenue supported on systems I've built"
+                />
+                <.proof_point_chip
+                  value="~25%"
+                  label="infrastructure cost reduction through workflow and scaling improvements"
+                />
                 <.proof_point_chip value="5" label="engineers led hands-on" />
               </div>
             </div>

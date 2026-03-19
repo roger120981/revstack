@@ -90,39 +90,76 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
   end
 
   describe "professional experience emphasis" do
-    test "renders Ionik experience with resume-aligned scale and NetAdmin language", %{conn: conn} do
+    test "keeps Ionik concise on the surface with recruiter-facing proof points", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
       assert has_element?(view, "#experience-ionik", "Ionik (formerly VeriAS)")
-      assert has_element?(view, "#experience-ionik li", "$2.5M+ monthly revenue")
-      assert has_element?(view, "#experience-ionik li", "1.5M+ events daily")
-      assert has_element?(view, "#experience-ionik li", "NetAdmin")
+      assert has_element?(view, "#experience-ionik", "NetAdmin")
+      assert has_element?(view, "#experience-ionik", "$2.5M+ monthly revenue")
+      assert has_element?(view, "#experience-ionik", "6-node Cassandra event store")
+
+      assert has_element?(
+               view,
+               "#experience-ionik-toggle[aria-expanded='false']",
+               "Show full scope"
+             )
+
+      refute has_element?(view, "#experience-ionik-details")
     end
 
-    test "renders the demand outcome sentence in bold", %{conn: conn} do
+    test "expands Ionik experience details on click", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      view
+      |> element("#experience-ionik-toggle")
+      |> render_click()
+
+      assert has_element?(
+               view,
+               "#experience-ionik-toggle[aria-expanded='true']",
+               "Hide full scope"
+             )
+
+      assert has_element?(view, "#experience-ionik-details li", "1.5M+ events daily")
+      assert has_element?(view, "#experience-ionik-details li", "NetAdmin")
+
+      view
+      |> element("#experience-ionik-toggle")
+      |> render_click()
+
+      refute has_element?(view, "#experience-ionik-details")
+    end
+
+    test "surfaces the handyman demand outcome before founder details are expanded", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
       assert has_element?(
                view,
-               "strong.experience-emphasis",
-               "The platform ultimately generated more inbound demand than the business could operationally support."
+               "#experience-revenuelink strong.experience-emphasis",
+               "Hardcore Handyman generated more inbound demand than the business could operationally support."
              )
+
+      refute has_element?(view, "#experience-revenuelink-details")
     end
 
-    test "renders handyman SEO and implementation details in founder experience", %{
+    test "renders handyman SEO and implementation details after founder card expansion", %{
       conn: conn
     } do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
+      view
+      |> element("#experience-revenuelink-toggle")
+      |> render_click()
+
       assert has_element?(
                view,
-               "#experience-revenuelink li",
+               "#experience-revenuelink-details li",
                "SEO-driven service pages, a quote workflow with photo uploads"
              )
 
       assert has_element?(
                view,
-               "#experience-revenuelink li",
+               "#experience-revenuelink-details li",
                "consulting, hands-on product work"
              )
     end

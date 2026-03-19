@@ -28,13 +28,15 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-skill-signature", "1.5M+ events/day")
     end
 
-    test "at a glance surfaces recruiter-facing scale metrics", %{conn: conn} do
+    test "hero surfaces recruiter-facing fit and proof points without a stat grid", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(view, "#whoami-glance", "6-node")
-      assert has_element?(view, "#whoami-glance", "Cassandra event store")
-      assert has_element?(view, "#whoami-glance", "~25%")
-      assert has_element?(view, "#whoami-glance", "audits and scaling changes")
+      assert has_element?(view, "#whoami-role-fit", "Staff Backend Engineer")
+      assert has_element?(view, "#whoami-role-fit", "Technical Lead Who Still Codes")
+      assert has_element?(view, "#whoami-proof-points", "6-node")
+      assert has_element?(view, "#whoami-proof-points", "Cassandra event store")
+      assert has_element?(view, "#whoami-proof-points", "~25%")
+      assert has_element?(view, "#whoami-proof-points", "infra cost reduction")
     end
   end
 

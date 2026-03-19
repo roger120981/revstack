@@ -82,14 +82,23 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       html = render(view)
 
-      assert html =~ "5 backend"
-      assert html =~ "3 DevOps engineers"
-      assert html =~ "sole owner"
-      assert html =~ "self-managed unit"
+      assert html =~ "long-term owner of backend architecture"
+      assert html =~ "CTO on business rules"
+      assert html =~ "3 infrastructure engineers"
+      assert html =~ "~25%"
     end
   end
 
   describe "professional experience emphasis" do
+    test "renders Ionik experience with resume-aligned scale and NetAdmin language", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(view, "#experience-ionik", "Ionik (formerly VeriAS)")
+      assert has_element?(view, "#experience-ionik li", "$2.5M+ monthly revenue")
+      assert has_element?(view, "#experience-ionik li", "1.5M+ events daily")
+      assert has_element?(view, "#experience-ionik li", "NetAdmin")
+    end
+
     test "renders the demand outcome sentence in bold", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
@@ -107,14 +116,14 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
       assert has_element?(
                view,
-               "li",
-               "the system included SEO-driven service pages, conversion-focused design"
+               "#experience-revenuelink li",
+               "SEO-driven service pages, a quote workflow with photo uploads"
              )
 
       assert has_element?(
                view,
-               "li",
-               "Built with Elixir, Phoenix LiveView, and Ecto"
+               "#experience-revenuelink li",
+               "consulting, hands-on product work"
              )
     end
   end

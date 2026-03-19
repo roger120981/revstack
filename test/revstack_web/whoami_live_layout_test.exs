@@ -24,8 +24,17 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
     test "renders role title and skill signature", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(view, "#whoami-role-title")
-      assert has_element?(view, "#whoami-skill-signature")
+      assert has_element?(view, "#whoami-role-title", "Lead Distributed Systems Engineer")
+      assert has_element?(view, "#whoami-skill-signature", "1.5M+ events/day")
+    end
+
+    test "at a glance surfaces recruiter-facing scale metrics", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#whoami-glance", "6-node")
+      assert has_element?(view, "#whoami-glance", "Cassandra event store")
+      assert has_element?(view, "#whoami-glance", "~25%")
+      assert has_element?(view, "#whoami-glance", "audits and scaling changes")
     end
   end
 
@@ -46,8 +55,8 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
     test "renders leadership items within the combined section", %{conn: conn} do
       {:ok, _view, html} = live(conn, ~p"/")
 
-      assert html =~ "Architecture ownership"
-      assert html =~ "Scaled platforms"
+      assert html =~ "Long-term ownership of revenue-critical backend platforms"
+      assert html =~ "Reduced infrastructure operating costs by ~25%"
       assert html =~ "leadership-teamwork"
     end
   end

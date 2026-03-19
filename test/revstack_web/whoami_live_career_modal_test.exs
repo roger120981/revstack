@@ -41,6 +41,34 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
       assert has_element?(view, "button[phx-click='open_career_modal']")
     end
 
+    test "phase two highlights flagship systems and groups supporting systems beneath them", %{
+      conn: conn
+    } do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-2']")
+      |> render_click()
+
+      assert has_element?(view, "#career-featured-phase-2")
+
+      assert has_element?(
+               view,
+               "#career-project-card-affiliate-network-platform",
+               "Affiliate Marketing Platform"
+             )
+
+      assert has_element?(view, "#career-project-card-netadmin-platform", "NetAdmin")
+      assert has_element?(view, "#career-group-tracking-attribution")
+      assert has_element?(view, "#career-group-analytics-reporting")
+
+      assert has_element?(
+               view,
+               "#career-project-list-edge-redirect-service",
+               "Tracking Edge Service"
+             )
+    end
+
     test "collapsing a phase hides project cards", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
@@ -78,6 +106,21 @@ defmodule RevstackWeb.WhoamiLiveCareerModalTest do
       |> render_click()
 
       assert has_element?(view, "#career-portfolio-modal")
+    end
+
+    test "featured affiliate platform card opens the modal from phase two", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button[phx-click='expand_career_phase'][phx-value-phase-id='phase-2']")
+      |> render_click()
+
+      view
+      |> element("#career-project-card-affiliate-network-platform")
+      |> render_click()
+
+      assert has_element?(view, "#career-portfolio-modal")
+      assert has_element?(view, "h4", "Affiliate Marketing Platform")
     end
 
     test "modal has phx-hook LockBodyScroll for scroll locking", %{conn: conn} do

@@ -65,9 +65,9 @@ defmodule RevstackWeb.WhoamiLive do
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
-        page_title: "Kyle Neal | Lead Elixir & Erlang Engineer",
+        page_title: "Kyle Neal | Lead Distributed Systems Engineer",
         page_description:
-          "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, Phoenix LiveView, high-volume event processing, and technical leadership.",
+          "Kyle Neal — Lead Distributed Systems Engineer specializing in Erlang/OTP, Elixir, high-throughput event systems, distributed data platforms, and hands-on technical leadership.",
         current_path: "/whoami",
         admin_gallery_open?: false,
         admin_gallery_index: 0,
@@ -210,20 +210,21 @@ defmodule RevstackWeb.WhoamiLive do
     <section id="whoami-hero" class="py-20 sm:py-28 scroll-mt-24">
       <div class="mx-auto max-w-4xl text-center">
         <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
-          <.icon name="hero-user" class="size-4" /> Technical Profile
+          <.icon name="hero-cpu-chip" class="size-4" /> Distributed Systems Engineer
         </div>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
           Kyle Neal
         </h1>
         <p id="whoami-role-title" class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
-          Lead Elixir &amp; Erlang Engineer
+          Lead Distributed Systems Engineer
         </p>
         <p
           id="whoami-skill-signature"
           class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
         >
-          10+ years building revenue-critical distributed systems on the BEAM.
-          Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
+          Erlang/OTP and Elixir engineer building revenue-critical systems on the BEAM.
+          I&apos;ve owned affiliate tracking, attribution, reporting, and infrastructure platforms
+          supporting 1.5M+ events/day, $2.5M+ monthly revenue, and hands-on leadership of up to 5 engineers.
         </p>
         <div class="mt-8 flex flex-col items-center gap-3">
           <div class="flex items-center gap-2">
@@ -288,11 +289,37 @@ defmodule RevstackWeb.WhoamiLive do
     ~H"""
     <section id="whoami-glance" class="py-12 scroll-mt-24">
       <div class="mx-auto max-w-5xl">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <.stat_card value="10+" label="Years on the BEAM" />
-          <.stat_card value="1.5M+" label="Daily events processed by systems I built" />
-          <.stat_card value="$2.5M+" label="Monthly revenue supported by systems I built" />
-          <.stat_card value="5" label="Engineers managed" />
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <.stat_card
+            value="10+"
+            headline="Years building on the BEAM"
+            detail="Erlang/OTP + Elixir in production"
+          />
+          <.stat_card
+            value="1.5M+"
+            headline="Events processed per day"
+            detail="tracking, attribution, and reporting workloads"
+          />
+          <.stat_card
+            value="$2.5M+"
+            headline="Monthly revenue supported"
+            detail="revenue-critical platform ownership"
+          />
+          <.stat_card
+            value="6-node"
+            headline="Cassandra event store"
+            detail="operated in production for high-volume tracking data"
+          />
+          <.stat_card
+            value="~25%"
+            headline="Infrastructure cost reduction"
+            detail="delivered through audits and scaling changes"
+          />
+          <.stat_card
+            value="5"
+            headline="Engineers led hands-on"
+            detail="across UI and infrastructure"
+          />
         </div>
       </div>
     </section>
@@ -310,35 +337,35 @@ defmodule RevstackWeb.WhoamiLive do
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <.summary_item
             icon="hero-cpu-chip"
-            text="Lead Distributed Systems Engineer focused on long-lived, production BEAM systems (Erlang/OTP + Elixir)"
+            text="Lead distributed systems engineer specializing in long-lived production systems built with Erlang/OTP and Elixir"
           />
           <.summary_item
             icon="hero-server-stack"
-            text="Builds and operates high-throughput, revenue-critical platforms with a strong performance and operability mindset"
-          />
-          <.summary_item
-            icon="hero-circle-stack"
-            text="Designs distributed data + messaging architectures across Cassandra/PostgreSQL, RabbitMQ, and search/analytics"
-          />
-          <.summary_item
-            icon="hero-magnifying-glass"
-            text="Owns data modeling and query tuning across OLTP and time-series workloads, with deep comfort debugging production paths"
+            text="Built and operated a revenue-critical affiliate platform handling high-volume click tracking, attribution, callbacks, analytics, and partner reporting"
           />
           <.summary_item
             icon="hero-cog-6-tooth"
-            text="Reliability-first engineering: OTP fault tolerance, BEAM VM tuning, release strategy, CI/CD automation, and incident response"
+            text="Architected NetAdmin, an Elixir/Phoenix LiveView + Ash control plane for lifecycle orchestration, monitoring, auditability, and automation"
           />
           <.summary_item
-            icon="hero-computer-desktop"
-            text="Full-stack builder with Phoenix/LiveView and Ash; ships internal platforms and tooling from concept to production"
+            icon="hero-circle-stack"
+            text="Designs distributed data and messaging systems across Cassandra, PostgreSQL, RabbitMQ, Elasticsearch/OpenSearch, and Spark pipelines"
+          />
+          <.summary_item
+            icon="hero-globe-alt"
+            text="Comfortable close to the wire with HTTP, WebSockets, DNS, SMTP, and proxying in production systems"
+          />
+          <.summary_item
+            icon="hero-bolt"
+            text="Reliability-focused owner of OTP supervision, BEAM tuning, relup upgrades, CI/CD, and production incident debugging"
           />
           <.summary_item
             icon="hero-user-group"
-            text="Hands-on technical leader: mentors engineers, aligns cross-team delivery, and stays deep in the code"
+            text="Hands-on technical lead who hired, mentored, and managed up to 5 engineers without stepping away from architecture or code"
           />
           <.summary_item
             icon="hero-cloud"
-            text="Infrastructure-aware across AWS and Linux, with pragmatic automation experience (Jenkins/Ansible)"
+            text="Infrastructure-aware across AWS, Linux, VPS fleets, Jenkins, and Ansible, with a practical cost and operability mindset"
           />
         </div>
       </div>
@@ -361,33 +388,34 @@ defmodule RevstackWeb.WhoamiLive do
           <.expertise_group
             title="BEAM & Languages"
             items={[
-              "Erlang/OTP (GenServers, Supervisors, clustering)",
-              "Elixir",
+              "Erlang/OTP for high-throughput, fault-tolerant services",
+              "Elixir application and platform development",
               "Phoenix + LiveView",
               "Ash Framework",
-              "BEAM VM tuning & relup zero-downtime upgrades",
-              "REST API design & third-party integrations"
+              "BEAM VM tuning and relup zero-downtime upgrades",
+              "REST API design and third-party integrations"
             ]}
           />
           <.expertise_group
             title="Data & Messaging"
             items={[
-              "Cassandra (6-node production cluster)",
-              "PostgreSQL",
-              "Elasticsearch / OpenSearch analytics",
-              "Apache Spark (AWS EMR)",
+              "Cassandra (6-node production cluster, time-series modeling)",
+              "PostgreSQL query tuning and reporting workloads",
               "RabbitMQ distributed messaging pipelines",
-              "Time-series data modeling (1.5M+ events/day)"
+              "Elasticsearch / OpenSearch analytics",
+              "Apache Spark (Scala, AWS EMR)",
+              "Event ingestion and reporting pipelines at 1.5M+ events/day"
             ]}
           />
           <.expertise_group
-            title="Infrastructure & DevOps"
+            title="Infrastructure & Protocols"
             items={[
               "AWS (EC2, RDS, S3)",
               "Linux operations & administration",
               "Ansible automation",
-              "CI/CD (Jenkins, Ansible)",
-              "Observability & reliability engineering"
+              "CI/CD with Jenkins",
+              "HTTP, WebSockets, DNS, SMTP, and proxies",
+              "Observability, monitoring, and reliability engineering"
             ]}
           />
         </div>
@@ -409,32 +437,37 @@ defmodule RevstackWeb.WhoamiLive do
         </div>
         <div class="space-y-8">
           <.experience_card
+            id="experience-ionik"
             title="Lead Distributed Systems Engineer"
-            company="Ubiquity Agency an Ionik company"
-            period="October 2014 — 2026"
-            current?={false}
+            company="Ionik (formerly VeriAS)"
+            period="October 2014 — Present"
+            current?={true}
             items={[
-              "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
-              "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
-              "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
-              "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
-              "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
+              "Lead architect and primary backend engineer for a revenue-critical affiliate marketing platform using Erlang/OTP. The platform supports $2.5M+ monthly revenue, processes 1.5M+ events daily, and powers high-volume click tracking, attribution, and real-time partner reporting.",
+              "Owned backend platform design across tracking, analytics, and partner connectivity, including REST APIs and internal service integrations used throughout the product.",
+              "Designed and operated distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
+              "Owned data modeling across Cassandra and PostgreSQL; routinely debugged and optimized high-volume transaction paths, production SQL, and reporting workloads.",
+              "Built Apache Spark (Scala, AWS EMR) pipelines that aggregated Cassandra raw event data into PostgreSQL datasets used for analytics and financial reporting.",
+              "Architected and built NetAdmin, an internal Elixir platform using Phoenix, LiveView, and Ash Framework for resource lifecycle orchestration, distributed systems monitoring, operational auditability, and cross-system automation.",
+              "Owned system reliability across BEAM VM tuning, relup strategy, CI/CD automation, Ansible-based infrastructure automation, and production incident debugging in distributed environments.",
+              "Led and managed up to 5 engineers across UI and infrastructure while remaining hands-on in backend development, data architecture, and full-stack delivery. Conducted technical interviews and hiring evaluations.",
+              "Managed cloud and infrastructure operations across AWS, domains, and VPS providers, and implemented audits and scaling changes that reduced infrastructure operating costs by ~25%."
             ]}
           />
           <.experience_card
+            id="experience-revenuelink"
             title="Founder & Software Engineer"
             company="RevenueLink Technologies LLC"
             period="2023 — Present"
             current?={true}
             items={[
-              "Founded a consulting and technology services company used for independent software projects, consulting engagements, and local technology services.",
+              "Founded a consulting and software vehicle for independent projects, select consulting engagements, and Elixir/Phoenix experiments.",
               {:parts,
                [
                  {:text, "Designed and built "},
                  {:link, "https://hardcorehandyman.fly.dev/", "hardcorehandyman.fly.dev"},
                  {:text,
-                  " (formerly hardcorehandymanoflawton.com), a custom lead-generation platform for a local handyman business. Built with Elixir, Phoenix LiveView, and Ecto, the system included SEO-driven service pages, conversion-focused design, and an internal admin interface for managing customer quote requests with photo uploads of project details. "},
+                  ", a custom Phoenix LiveView lead-generation platform for a local handyman business. The system included SEO-driven service pages, a quote workflow with photo uploads, and an internal admin interface for managing requests. "},
                  {:strong,
                   "The platform ultimately generated more inbound demand than the business could operationally support."}
                ]},
@@ -443,10 +476,9 @@ defmodule RevstackWeb.WhoamiLive do
                  {:text, "Built and operate "},
                  {:link, "https://revstack.fly.dev/", "revstack.fly.dev"},
                  {:text,
-                  ", a Phoenix LiveView application serving as a professional portfolio, lead-generation platform, and development sandbox for new ideas."}
+                  ", a Phoenix LiveView application serving as a recruiter-facing portfolio, lead-generation platform, and sandbox for new ideas."}
                ]},
-              "Provide consulting and technical services including custom web application development, systems architecture guidance, and local technology support for individuals and small businesses.",
-              "Use the company as a vehicle for experimentation with Elixir, distributed systems, infrastructure tooling, and small SaaS-style projects."
+              "Use the company as a vehicle for consulting, hands-on product work, and experimentation with Elixir, infrastructure tooling, and small SaaS-style projects."
             ]}
           />
           <.experience_card
@@ -486,7 +518,9 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Two major chapters of production systems engineering on the BEAM. <br />
+            The affiliate platform is the centerpiece of my career story, and NetAdmin is the major
+            Elixir platform I built alongside it. Supporting systems are grouped the way they were
+            actually owned in production. <br />
             <.icon
               name="hero-cursor-arrow-rays"
               class="size-7 inline-block align-text-bottom"
@@ -517,7 +551,8 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Personal Live Projects</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Production applications I designed, built, and deployed on my spare time <br />
+            Recent side projects and deployed experiments outside the affiliate platform and NetAdmin work.
+            <br />
             <.icon
               name="hero-cursor-arrow-rays"
               class="size-5 inline-block align-text-bottom"
@@ -529,7 +564,7 @@ defmodule RevstackWeb.WhoamiLive do
           <.project_card
             id="project-handyman"
             title="Hardcore Handyman"
-            subtitle="Production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications for a streamlined quoting workflow."
+            subtitle="Phoenix LiveView lead-generation system with quote requests, photo uploads, SEO-driven service pages, and an admin workflow that generated more demand than the business could operationally support."
             href="https://hardcorehandyman.fly.dev/"
             icon="hero-wrench-screwdriver"
             preview_src={~p"/images/hardcorehandyman_preview.png"}
@@ -537,18 +572,18 @@ defmodule RevstackWeb.WhoamiLive do
           />
           <.project_card
             id="project-admin"
-            title="Admin Dashboard (for this site!)"
-            subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
+            title="Revstack Admin Dashboard"
+            subtitle="Internal Phoenix LiveView admin surface for managing leads and estimates, with real-time data grids, filtering, status workflows, and authenticated operations."
             href="https://github.com/kyle-neal/revstack"
             icon="hero-cog-6-tooth"
             preview_src={~p"/images/admin_panel/admin_dashboard.png"}
-            tech={~w(Elixir Phoenix LiveView Ash Postgres)}
+            tech={["Elixir", "Phoenix", "LiveView", "Ash Framework", "Postgres"]}
             on_click="open_admin_gallery"
           />
           <.project_card
             id="project-revenuelink"
             title="RevenueLink"
-            subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
+            subtitle="Consulting and business site for RevenueLink Technologies, used as a public home for services, projects, and lightweight product experiments."
             href="https://revenuelink.net/"
             icon="hero-building-office-2"
             preview_src={~p"/images/revenuelink_preview.png"}
@@ -575,13 +610,13 @@ defmodule RevstackWeb.WhoamiLive do
           <.education_card
             degree="B.S. Computer Science"
             school="Cameron University"
-            period="2010 — 2014"
+            period="Fall 2010 — July 2014"
             honors="Magna Cum Laude"
           />
           <.education_card
             degree="A.S. Information Technology"
             school="Cameron University"
-            period="2014 — 2016"
+            period="Fall 2012 — June 2014"
             honors="Magna Cum Laude"
           />
         </div>
@@ -601,8 +636,9 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl font-bold text-base-content">Leadership &amp; Teamwork</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 max-w-3xl mx-auto text-base text-base-content/70 leading-relaxed">
-            Technical leadership across distributed teams, from architecting production systems to
-            mentoring engineers and coordinating cross-functional delivery.
+            Hands-on technical leadership across backend, infrastructure, and delivery. I stayed
+            responsible for architecture and production systems while leading engineers, hiring, and
+            driving operational decisions.
           </p>
         </div>
 
@@ -610,27 +646,27 @@ defmodule RevstackWeb.WhoamiLive do
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <.leadership_item
             icon="hero-building-office"
-            text="Architecture ownership across all production systems"
+            text="Long-term ownership of revenue-critical backend platforms"
           />
           <.leadership_item
             icon="hero-academic-cap"
-            text="Mentored & managed 5 engineers across backend and infrastructure"
+            text="Led, mentored, and managed up to 5 engineers"
           />
           <.leadership_item
-            icon="hero-arrows-right-left"
-            text="Coordinated frontend, backend & infrastructure teams"
+            icon="hero-user-plus"
+            text="Conducted technical interviews and engineering evaluations"
           />
           <.leadership_item
             icon="hero-arrow-trending-up"
-            text="Scaled platforms to $2.5M+ monthly revenue"
+            text="Scaled systems supporting $2.5M+ monthly revenue"
           />
           <.leadership_item
             icon="hero-calendar"
-            text="Managed delivery timelines, releases & incident response"
+            text="Managed releases, incidents, and infrastructure operations"
           />
           <.leadership_item
             icon="hero-wrench-screwdriver"
-            text="Hands-on across backend, full-stack & DevOps delivery"
+            text="Reduced infrastructure operating costs by ~25%"
           />
         </div>
 
@@ -645,9 +681,9 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-user-group" class="size-5" />
               </div>
               <div>
-                <h3 class="text-lg font-bold text-base-content">Affiliate Platform Team</h3>
+                <h3 class="text-lg font-bold text-base-content">Affiliate Platform Ownership</h3>
                 <p class="text-sm text-base-content/60">
-                  Poland-based backend &amp; DevOps collaboration
+                  Distributed backend and operations collaboration
                 </p>
               </div>
             </div>
@@ -656,23 +692,23 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Collaborated with <b>5 backend</b>
-                  and <b>3 DevOps engineers</b>
-                  to build a multi-million-dollar affiliate network platform.
+                  Partnered with backend and infrastructure engineers across multiple stages of the
+                  platform, then became the long-term owner of backend architecture, features, and
+                  production operations.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Partnered with <b>2 lead engineers</b>
-                  on architecture and initial production launch, then became the <b>sole owner</b>
-                  for features, maintenance, and major rewrites.
+                  Worked directly with the CTO on business rules, partner integrations, reporting
+                  requirements, and production decision-making for the affiliate platform.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Ultimately rewrote more of the system than the original team-built release contained.
+                  Rewrote and expanded major portions of the system over time while keeping the
+                  platform live, revenue-critical, and operationally stable.
                 </span>
               </li>
             </ul>
@@ -689,7 +725,7 @@ defmodule RevstackWeb.WhoamiLive do
               <div>
                 <h3 class="text-lg font-bold text-base-content">Infrastructure Team</h3>
                 <p class="text-sm text-base-content/60">
-                  Built &amp; led a self-managed ops team
+                  Hands-on infrastructure and operational leadership
                 </p>
               </div>
             </div>
@@ -698,16 +734,16 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Built a Philippines-based infrastructure team to operate as a
-                  <b>self-managed unit</b>
-                  with the structure and autonomy to run independently.
+                  Led up to <b>3 infrastructure engineers</b>
+                  and <b>2 UI engineers</b>
+                  while still owning critical backend architecture, reliability work, and escalations.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Balanced delegation with hands-on involvement during high-pressure delivery periods,
-                  keeping the team sustainable and operationally independent.
+                  Managed AWS, VPS, domain, and operational cost decisions directly, including audits
+                  and scaling changes that lowered infrastructure spend by <b>~25%</b>.
                 </span>
               </li>
             </ul>
@@ -753,11 +789,11 @@ defmodule RevstackWeb.WhoamiLive do
             </div>
 
             <h3 class="text-lg font-bold text-base-content mb-2">
-              Hiring for a role?
+              Hiring for a remote role?
             </h3>
 
             <p class="text-sm text-base-content/70 mb-4">
-              I'm always open to discussing the right engineering opportunity.
+              Open to the right Erlang/Elixir, platform, or distributed systems opportunity.
             </p>
 
             <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
@@ -1108,10 +1144,20 @@ defmodule RevstackWeb.WhoamiLive do
   end
 
   defp stat_card(assigns) do
+    assigns =
+      assigns
+      |> assign(:headline, Map.get(assigns, :headline, Map.get(assigns, :label)))
+      |> assign_new(:detail, fn -> nil end)
+
     ~H"""
-    <div class="rounded-2xl border border-base-300 bg-base-100 p-5 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200">
-      <p class="text-2xl sm:text-3xl font-extrabold text-primary">{@value}</p>
-      <p class="mt-1 text-xs sm:text-sm text-base-content/60">{@label}</p>
+    <div class="rounded-2xl border border-base-300 bg-base-100 px-5 py-6 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200">
+      <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">{@value}</p>
+      <p class="mt-2 text-sm sm:text-base font-semibold leading-snug text-base-content">
+        {@headline}
+      </p>
+      <p :if={@detail} class="mt-1 text-[11px] sm:text-xs leading-relaxed text-base-content/55">
+        {@detail}
+      </p>
     </div>
     """
   end
@@ -1142,8 +1188,13 @@ defmodule RevstackWeb.WhoamiLive do
   end
 
   defp experience_card(assigns) do
+    assigns = assign_new(assigns, :id, fn -> nil end)
+
     ~H"""
-    <div class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div
+      id={@id}
+      class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-200"
+    >
       <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
         <div>
           <h3 class="text-lg font-bold text-base-content">{@title}</h3>
@@ -1348,7 +1399,30 @@ defmodule RevstackWeb.WhoamiLive do
           {@phase.overview}
         </p>
         <.phase_scale_metrics :if={Map.get(@phase, :metrics)} metrics={@phase.metrics} />
-        <div>
+        <div :if={Map.get(@phase, :featured_project_ids)} id={"career-featured-#{@phase.id}"}>
+          <p class="text-sm font-bold text-primary uppercase tracking-wide mb-4">
+            Flagship systems
+          </p>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <.career_project_card
+              :for={project <- phase_projects(@phase, Map.get(@phase, :featured_project_ids, []))}
+              project={project}
+              featured?={true}
+            />
+          </div>
+        </div>
+        <div
+          :if={Map.get(@phase, :project_groups)}
+          id={"career-groups-#{@phase.id}"}
+          class="space-y-4"
+        >
+          <.career_project_group
+            :for={group <- @phase.project_groups}
+            phase={@phase}
+            group={group}
+          />
+        </div>
+        <div :if={!Map.get(@phase, :project_groups)}>
           <p class="text-sm font-bold text-primary uppercase tracking-wide mb-4">
             <.icon name="hero-cursor-arrow-rays" class="size-4 inline-block align-text-bottom" />
             Click any project for the full story
@@ -1403,12 +1477,26 @@ defmodule RevstackWeb.WhoamiLive do
   end
 
   defp career_project_card(assigns) do
+    assigns = assign_new(assigns, :featured?, fn -> false end)
+
     ~H"""
     <button
+      id={"career-project-card-#{@project.id}"}
       phx-click="open_career_modal"
       phx-value-project-id={@project.id}
-      class="group text-left rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer w-full"
+      class={[
+        "group text-left rounded-2xl border p-5 transition-all duration-200 cursor-pointer w-full",
+        if(@featured?,
+          do: "border-primary/20 bg-primary/5 shadow-md hover:shadow-lg hover:border-primary/40",
+          else: "border-base-300 bg-base-100 shadow-sm hover:shadow-md hover:border-primary/30"
+        )
+      ]}
     >
+      <div :if={Map.get(@project, :featured_label)} class="mb-3">
+        <span class="inline-flex items-center rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+          {@project.featured_label}
+        </span>
+      </div>
       <div class="flex items-center gap-3 mb-3">
         <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
           <.icon name={@project.icon} class="size-5" />
@@ -1424,7 +1512,65 @@ defmodule RevstackWeb.WhoamiLive do
       <div class="flex flex-wrap gap-1.5 mb-3">
         <.tech_badge :for={tech <- Enum.take(@project.tech_used, 3)} label={tech} />
       </div>
-      <p class="text-sm text-base-content/70 leading-relaxed line-clamp-2">{@project.card_copy}</p>
+      <p class={[
+        "text-base-content/70 leading-relaxed",
+        if(@featured?, do: "text-sm sm:text-[15px] line-clamp-4", else: "text-sm line-clamp-2")
+      ]}>
+        {@project.card_copy}
+      </p>
+    </button>
+    """
+  end
+
+  defp career_project_group(assigns) do
+    assigns = assign(assigns, :projects, phase_projects(assigns.phase, assigns.group.project_ids))
+
+    ~H"""
+    <section
+      id={"career-group-#{@group.id}"}
+      class="rounded-2xl border border-base-300 bg-base-100 p-5 sm:p-6 shadow-sm"
+    >
+      <div class="flex items-start gap-3 mb-4">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <.icon name={@group.icon} class="size-5" />
+        </div>
+        <div class="min-w-0">
+          <h4 class="font-bold text-base-content">{@group.title}</h4>
+          <p class="mt-1 text-sm text-base-content/65 leading-relaxed">{@group.description}</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <.career_project_list_item :for={project <- @projects} project={project} />
+      </div>
+    </section>
+    """
+  end
+
+  defp career_project_list_item(assigns) do
+    ~H"""
+    <button
+      id={"career-project-list-#{@project.id}"}
+      phx-click="open_career_modal"
+      phx-value-project-id={@project.id}
+      class="group w-full rounded-xl border border-base-300 bg-base-200/20 p-4 text-left transition-all duration-200 hover:border-primary/30 hover:bg-primary/5"
+    >
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h5 class="font-semibold text-base-content group-hover:text-primary transition-colors">
+              {@project.title}
+            </h5>
+            <span class="text-xs text-base-content/45">{@project.period_label}</span>
+          </div>
+          <p class="mt-1 text-sm text-base-content/70 leading-relaxed">{@project.tagline}</p>
+        </div>
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-base-300 bg-base-100 text-primary group-hover:border-primary/30">
+          <.icon name="hero-arrow-right" class="size-4" />
+        </div>
+      </div>
+      <div class="mt-3 flex flex-wrap gap-1.5">
+        <.tech_badge :for={tech <- Enum.take(@project.tech_used, 3)} label={tech} />
+      </div>
     </button>
     """
   end
@@ -1448,12 +1594,14 @@ defmodule RevstackWeb.WhoamiLive do
       label in [
         "Cassandra",
         "Elasticsearch",
+        "Elasticsearch/OpenSearch",
         "PostgreSQL",
         "RabbitMQ",
         "Distributed Systems",
         "Infrastructure Reliability",
         "Platform Ownership",
-        "Leadership"
+        "Leadership",
+        "Technical Leadership"
       ] ->
         "skill-badge-subtle"
 
@@ -1741,6 +1889,13 @@ defmodule RevstackWeb.WhoamiLive do
   # ---------------------------------------------------------------------------
   # Career Portfolio Data
   # ---------------------------------------------------------------------------
+
+  defp phase_projects(phase, project_ids) do
+    Enum.map(project_ids, fn project_id ->
+      Enum.find(phase.projects, &(&1.id == project_id))
+    end)
+    |> Enum.reject(&is_nil/1)
+  end
 
   defp find_career_project(phases, project_id) do
     Enum.find_value(phases, fn phase ->
@@ -2145,108 +2300,141 @@ defmodule RevstackWeb.WhoamiLive do
       title: "Affiliate Network Platform & Infrastructure Leadership",
       card_title: "Affiliate Network Platform",
       card_icon: "hero-chart-bar",
-      card_era: "2018–2026 — Senior Engineer & Platform Ownership",
+      card_era: "2018–Present — Senior Engineer & Platform Ownership",
       card_summary:
-        "Built and owned a revenue-critical affiliate network platform end-to-end, spanning high-throughput Erlang services, internal Elixir/Phoenix tooling, and large-scale Cassandra, Elasticsearch, and PostgreSQL data systems.",
+        "Long-term ownership of a revenue-critical affiliate marketing platform in Erlang/OTP, complemented by NetAdmin, the Elixir control plane I built for infrastructure lifecycle orchestration and monitoring.",
       card_badges: [
         "Erlang/OTP",
         "Elixir",
         "Phoenix LiveView",
         "Ash Framework",
         "Cassandra",
-        "Elasticsearch",
+        "Elasticsearch/OpenSearch",
         "RabbitMQ",
         "PostgreSQL",
-        "Apache Spark (scala)",
+        "Apache Spark",
         "REST APIs",
-        "High-Throughput Backends",
-        "Leadership over UI and Infrastructure Engineers",
-        "Event Driven Architecture and Pipelines",
-        "Big Data Processing",
-        "Reporting and Analytics",
+        "HTTP",
+        "WebSockets",
+        "DNS",
+        "SMTP",
+        "Technical Leadership",
         "Affiliate Marketing Technology"
       ],
       card_bullets: [
-        "Owned the entire backend stack of a $2.5M+/month affiliate network platform",
-        "Designed event-driven click tracking, redirect, and conversion systems at scale",
-        "Operated Cassandra, Elasticsearch, and Spark across ~1.2PB of combined data",
-        "Led supporting engineers while remaining hands-on across all backend systems"
+        "Owned the backend architecture of a $2.5M+/month affiliate platform processing 1.5M+ events/day",
+        "Built click tracking, attribution, reporting, and partner integration systems in Erlang/OTP",
+        "Architected NetAdmin in Elixir/Phoenix LiveView/Ash as the internal infrastructure control plane",
+        "Led UI and infrastructure engineers while staying hands-on in architecture, code, and operations"
       ],
       overview:
-        "Architected and operated backend systems powering a large affiliate marketing platform processing millions of daily events. Later built internal infrastructure management tooling used across multiple company systems.",
+        "This phase is the core of my professional story: long-term ownership of a revenue-critical affiliate marketing platform, plus the Elixir control plane I built to manage infrastructure and operational workflows around it.",
       metrics: [
         %{value: "1.5M+", label: "events / day"},
-        %{value: "~250", label: "peak events / sec"},
-        %{value: "~600", label: "peak redirects / sec"},
+        %{value: "$2.5M+", label: "monthly revenue"},
         %{value: "6-node", label: "Cassandra cluster"},
-        %{value: "3-node", label: "ES cluster"},
-        %{value: "~600 TB", label: "Cassandra footprint"},
-        %{value: "~600 TB", label: "ES analytics"},
-        %{value: "12+", label: "years ownership"}
+        %{value: "~25%", label: "lower infra costs"},
+        %{value: "5", label: "engineers led"}
       ],
       team: %{
         description:
-          "Kyle served as the lead backend engineer for the affiliate platform, responsible for architecture, development, and production operations.",
+          "I stayed hands-on while leading engineers, owning backend architecture, and driving production operations for the affiliate platform and the systems around it.",
         members: [
-          "Worked closely with the CTO on business issues and core technology",
-          "Kyle owned the entire affiliate network platform backend stack",
-          "Led 2 UI engineers building customer-facing tools on top of the platform",
-          "Led 3 infrastructure engineers that managed the underlying VPS, DNS, and monitoring infrastructure supporting the platform"
+          "Worked closely with the CTO on partner requirements, reporting needs, business rules, and core technology decisions",
+          "Owned the long-term backend architecture for the affiliate platform and its supporting services",
+          "Led up to 2 UI engineers and 3 infrastructure engineers while remaining active in system design and implementation",
+          "Handled releases, production debugging, infrastructure audits, and cost strategy without stepping away from code"
         ]
       },
+      featured_project_ids: ["affiliate-network-platform", "netadmin-platform"],
+      project_groups: [
+        %{
+          id: "tracking-attribution",
+          title: "Tracking, Attribution & Partner Integrations",
+          description:
+            "Supporting services that turned incoming traffic into attributable, reportable partner outcomes.",
+          icon: "hero-arrows-right-left",
+          project_ids: [
+            "edge-redirect-service",
+            "conversion-callback-engine",
+            "tracking-domain-infra"
+          ]
+        },
+        %{
+          id: "analytics-reporting",
+          title: "Analytics, Reporting & Data Infrastructure",
+          description:
+            "The ingestion, storage, aggregation, and reporting systems behind partner analytics and operational visibility.",
+          icon: "hero-circle-stack",
+          project_ids: [
+            "traffic-analytics-pipeline",
+            "distributed-data-platform"
+          ]
+        }
+      ],
       projects: [
         %{
           id: "affiliate-network-platform",
-          title: "Affiliate Network Platform",
+          title: "Affiliate Marketing Platform",
           tagline:
-            "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations",
+            "Flagship Erlang/OTP platform for click tracking, attribution, reporting, and partner integrations",
           period_label: "Core Platform",
           phase: 2,
           icon: "hero-chart-bar",
+          featured_label: "Flagship Distributed System",
           card_copy:
-            "Revenue-critical Erlang platform handling click tracking, conversion attribution, campaign management, reporting, and partner integrations across millions of daily events.",
+            "Revenue-critical Erlang/OTP system supporting $2.5M+ monthly revenue and 1.5M+ daily events across click tracking, attribution, campaign logic, reporting, and partner APIs.",
           summary:
-            "Core backend platform powering affiliate campaign tracking, conversion attribution, reporting, and partner integrations. Built in Erlang/OTP with Cassandra, Elasticsearch, RabbitMQ, and PostgreSQL as the primary data and messaging layer.",
+            "The core backend platform I owned for the affiliate business. It handled click, impression, and conversion tracking; attribution; reporting; partner integrations; and the operational workflows that made the platform revenue-critical.",
           tech_used: [
             "Erlang/OTP",
+            "Cassandra",
             "PostgreSQL",
             "RabbitMQ",
-            "Cassandra",
-            "Elasticsearch",
+            "Elasticsearch/OpenSearch",
+            "REST APIs",
             "Apache Spark"
           ],
+          architecture: [
+            "Event-driven Erlang services handled tracking, attribution, routing, and partner workflows",
+            "Cassandra stored high-volume raw event data and time-series traffic history",
+            "PostgreSQL supported operational workflows, reporting datasets, and financial views",
+            "RabbitMQ connected ingestion, callbacks, and downstream processing services",
+            "Elasticsearch/OpenSearch powered detailed partner reporting and performance analytics",
+            "Spark pipelines aggregated raw event data into reporting datasets used for analytics and finance"
+          ],
           responsibilities: [
-            "Click tracking",
-            "Impression tracking",
-            "Conversion attribution",
-            "Affiliate management",
-            "Advertiser management",
-            "Campaign configuration and payout rules",
-            "Reporting and analytics",
-            "CSV export pipelines",
-            "Moderation workflows",
-            "Suppression list management",
-            "Creative and landing page management",
-            "External APIs and integrations"
+            "Owned backend architecture, features, and production operations for the platform",
+            "Built and maintained click, impression, and conversion tracking paths",
+            "Implemented attribution, routing, campaign configuration, and payout workflows",
+            "Designed partner-facing and internal REST APIs plus service integrations",
+            "Owned data modeling, query tuning, and reporting paths across Cassandra and PostgreSQL"
           ],
           scale: [
-            "Millions of events processed daily",
-            "Revenue-critical production system supporting $2.5M+ monthly revenue"
+            "1.5M+ events processed daily",
+            "$2.5M+ monthly revenue supported by the platform",
+            "6-node Cassandra production cluster",
+            "Real-time partner reporting and high-volume transaction paths"
+          ],
+          business_impact: [
+            "Served as the primary technical engine behind a long-running affiliate business",
+            "Demonstrated sustained ownership of a revenue-critical distributed system on the BEAM"
           ],
           timeline_order: 1
         },
         %{
           id: "netadmin-platform",
-          title: "NetAdmin/Infra Platform",
+          title: "NetAdmin",
           tagline:
-            "Internal infrastructure management platform supporting affiliate network, MTA, data verification, and external systems",
+            "Elixir control plane for lifecycle orchestration, monitoring, log streaming, and operational auditability",
           period_label: "Internal Tooling",
           phase: 2,
           icon: "hero-cog-6-tooth",
+          featured_label: "Featured Elixir Platform",
           card_copy:
-            "Full-stack Elixir/Phoenix/Ash internal platform managing infrastructure provisioning, VPS lifecycle, domain management, and service automation across company systems.",
+            "Phoenix + LiveView + Ash platform for provisioning, service lifecycle automation, monitoring, auditability, and cross-system operational workflows.",
           summary:
-            "Internal infrastructure management platform originally created to manage affiliate network infrastructure and later expanded to support company-wide systems including MTA infrastructure, data verification systems, and external affiliate network platforms. Served as a DevOps dashboard for provisioniong and monitoring all company infrastructure.",
+            "NetAdmin was the internal infrastructure platform I architected and built in Elixir. It started as a way to manage affiliate platform infrastructure and expanded into a control plane for MTA, verification, and other company systems.",
           tech_used: [
             "Elixir",
             "Phoenix",
@@ -2256,46 +2444,50 @@ defmodule RevstackWeb.WhoamiLive do
             "Ansible"
           ],
           architecture: [
-            "Full-stack Elixir application built with Phoenix and Ash Framework",
-            "PostgreSQL for persistent data storage",
-            "Ansible integration for infrastructure automation",
-            "Multi-system management across affiliate network, MTA, data verification, and external platforms",
-            "Real-time monitoring and dashboards for infrastructure visibility",
-            "Log streaming and alerting for operational awareness"
+            "Phoenix + LiveView UI backed by Ash resources and authorization rules",
+            "PostgreSQL as the system of record for infrastructure state and operational history",
+            "Ansible integration for provisioning and lifecycle automation",
+            "Cross-system workflows spanning the affiliate platform, MTA, verification systems, and external platforms",
+            "Real-time dashboards, operational monitoring, and log visibility for daily operations",
+            "Operational auditability built into the platform rather than bolted on afterward"
           ],
           responsibilities: [
-            "Infrastructure provisioning",
-            "VPS lifecycle management",
-            "Domain and SSL management",
-            "Payment method tracking",
-            "Service lifecycle automation",
-            "Infrastructure visibility dashboards"
+            "Resource lifecycle orchestration",
+            "VPS, service, domain, and SSL management",
+            "Monitoring dashboards and operational visibility",
+            "Real-time log streaming and cross-system troubleshooting support",
+            "Authorization modeling and auditability",
+            "Automation across multiple internal platforms"
+          ],
+          business_impact: [
+            "Centralized infrastructure operations that had previously been spread across scripts and tribal knowledge",
+            "Showcases deep Elixir, Phoenix LiveView, and Ash experience in a production internal platform"
           ],
           timeline_order: 2
         },
         %{
           id: "edge-redirect-service",
-          title: "Edge Redirect Service",
+          title: "Tracking Edge Service",
           tagline:
-            "High-performance edge service handling affiliate tracking links and routing traffic based on campaign rules",
+            "High-performance Erlang service handling tracking links and routing traffic based on campaign rules",
           period_label: "Edge Infrastructure",
           phase: 2,
           icon: "hero-arrows-right-left",
           card_copy:
-            "Erlang edge service on disposable VPS nodes generating real-time redirect responses for affiliate tracking links based on campaign routing rules.",
+            "Erlang edge service generating real-time redirect decisions for tracking links based on campaign routing, geo rules, and cap logic.",
           summary:
-            "High-performance edge service responsible for handling affiliate tracking links and routing traffic based on campaign rules. Deployed on disposable VPS nodes with DNS tracking domains pointed to these nodes.",
+            "High-performance edge service responsible for handling affiliate tracking links and routing traffic based on campaign rules. It sat close to incoming HTTP traffic and turned campaign configuration into live redirect behavior.",
           tech_used: [
             "Erlang/OTP",
-            "DNS",
             "HTTP",
+            "DNS",
             "VPS Infrastructure"
           ],
           architecture: [
-            "Erlang service deployed on disposable VPS nodes",
-            "DNS tracking domains pointed to these nodes",
-            "Nodes retrieved campaign configuration from backend services",
-            "Redirect responses generated in real time"
+            "Erlang service deployed on tracking edge nodes close to incoming traffic",
+            "Tracking domains routed HTTP requests into the service",
+            "Nodes pulled campaign configuration and routing rules from backend systems",
+            "Redirect responses were generated in real time based on live business logic"
           ],
           responsibilities: [
             "Campaign routing",
@@ -2315,14 +2507,20 @@ defmodule RevstackWeb.WhoamiLive do
           phase: 2,
           icon: "hero-circle-stack",
           card_copy:
-            "Distributed pipeline ingesting click, impression, and conversion events into Cassandra and Elasticsearch, powering real-time analytics and report aggregation.",
+            "Distributed ingestion and indexing pipeline feeding partner analytics, reporting, and downstream aggregation from raw traffic events.",
           summary:
-            "Distributed event pipeline responsible for ingesting click, impression, and conversion events and powering analytics and reporting across the affiliate network.",
+            "Distributed event pipeline responsible for ingesting click, impression, and conversion events and turning them into the analytics and reports used throughout the affiliate platform.",
           tech_used: [
             "Cassandra",
-            "Elasticsearch",
             "RabbitMQ",
+            "Elasticsearch/OpenSearch",
             "Apache Spark"
+          ],
+          architecture: [
+            "RabbitMQ buffered and distributed event work between services",
+            "Cassandra stored high-volume event data for long-term analysis",
+            "Search and analytics infrastructure powered detailed reporting views",
+            "Spark aggregation jobs transformed raw data into reporting-friendly datasets"
           ],
           responsibilities: [
             "Event ingestion",
@@ -2332,8 +2530,8 @@ defmodule RevstackWeb.WhoamiLive do
             "Export dataset generation"
           ],
           scale: [
-            "~150\u2013250 peak events per second",
-            "Multi-terabyte traffic datasets"
+            "1.5M+ daily events across click, impression, and conversion paths",
+            "High-volume analytics and reporting workloads running continuously"
           ],
           timeline_order: 4
         },
@@ -2345,9 +2543,9 @@ defmodule RevstackWeb.WhoamiLive do
           phase: 2,
           icon: "hero-paper-airplane",
           card_copy:
-            "Reliable server-to-server callback delivery system handling conversion notifications with retry logic, macro substitution, and delivery tracking.",
+            "Reliable server-to-server callback delivery system with retry logic, macro substitution, delivery tracking, and failure handling.",
           summary:
-            "Reliable delivery system for advertiser and affiliate conversion callbacks. Handles server-to-server conversion notifications with retries, macro substitution, and failure tracking.",
+            "Reliable delivery system for advertiser and affiliate conversion callbacks. It handled server-to-server notifications, retry behavior, macro substitution, and tracking around partner delivery failures.",
           tech_used: [
             "RabbitMQ",
             "Erlang Worker Pools",
@@ -2365,16 +2563,18 @@ defmodule RevstackWeb.WhoamiLive do
         %{
           id: "tracking-domain-infra",
           title: "Tracking Domain Infrastructure",
-          tagline: "Infrastructure for managing tracking domains and routing configuration",
+          tagline:
+            "Domain, SSL, and routing infrastructure behind tracking links and redirect services",
           period_label: "Infrastructure",
           phase: 2,
           icon: "hero-globe-alt",
           card_copy:
-            "Managed tracking domain lifecycle including SSL certificates, DNS routing, and domain rotation experiments to reduce blacklist risk.",
+            "Managed the lifecycle of tracking domains, SSL certificates, routing configuration, and domain rotation experiments.",
           summary:
-            "Infrastructure responsible for managing tracking domains and routing configuration. Handled domain lifecycle, SSL certificates, and DNS routing across the affiliate network.",
+            "Infrastructure responsible for managing tracking domains and routing configuration. It handled the DNS and SSL layer that allowed tracking services to operate cleanly and evolve over time.",
           tech_used: [
-            "Routing Configuration + DNS",
+            "DNS",
+            "HTTP",
             "SSL/TLS + letsencrypt",
             "Domain Management"
           ],
@@ -2395,20 +2595,20 @@ defmodule RevstackWeb.WhoamiLive do
           phase: 2,
           icon: "hero-server-stack",
           card_copy:
-            "Operated a 6-node Cassandra cluster, 3-node Elasticsearch cluster, Spark aggregation jobs, and RabbitMQ pipelines supporting ~600TB of combined data.",
+            "Operated the core data layer behind the platform, including Cassandra, analytics infrastructure, Spark jobs, and RabbitMQ pipelines.",
           summary:
-            "Large-scale data storage and analytics infrastructure supporting event ingestion and reporting across the affiliate network platform.",
+            "Large-scale data storage and analytics infrastructure supporting event ingestion and reporting across the affiliate platform.",
           tech_used: [
             "Cassandra",
-            "Elasticsearch",
+            "Elasticsearch/OpenSearch",
             "Apache Spark (Scala)",
             "RabbitMQ"
           ],
           architecture: [
             "Cassandra cluster (6 nodes) for high-throughput event storage",
-            "Elasticsearch analytics cluster (3 nodes) for search and reporting",
-            "Spark aggregation jobs for batch processing",
-            "Ingested RabbitMQ messages via Erlang worker services for real-time processing"
+            "Search and analytics infrastructure for detailed reporting",
+            "Spark aggregation jobs for batch processing and reporting dataset generation",
+            "RabbitMQ-fed services for near-real-time downstream processing"
           ],
           responsibilities: [
             "High-throughput event ingestion",
@@ -2417,10 +2617,8 @@ defmodule RevstackWeb.WhoamiLive do
             "Reporting aggregation"
           ],
           scale: [
-            "~600TB Cassandra data footprint",
-            "~600TB Elasticsearch analytics dataset",
             "6-node Cassandra production cluster",
-            "3-node Elasticsearch cluster"
+            "Large reporting and analytics workloads across raw and aggregated event data"
           ],
           timeline_order: 7
         }
@@ -2439,6 +2637,7 @@ defmodule RevstackWeb.WhoamiLive do
         "Postgres",
         "RabbitMQ",
         "Elasticsearch",
+        "Elasticsearch/OpenSearch",
         "OpenSearch",
         "Apache Spark",
         "AWS",

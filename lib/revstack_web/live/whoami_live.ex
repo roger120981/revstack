@@ -249,7 +249,8 @@ defmodule RevstackWeb.WhoamiLive do
                 <.icon name="hero-currency-dollar" class="size-4" /> Powered <b>$2.5M+/mo</b> Revenue
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-                <.icon name="hero-arrow-trending-down" class="size-4" /> Enabled <b>~25%</b> Lower Infra Cost
+                <.icon name="hero-arrow-trending-down" class="size-4" /> Enabled <b>~25%</b>
+                Lower Infra Cost
               </span>
             </div>
           </div>

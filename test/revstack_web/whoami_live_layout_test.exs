@@ -36,13 +36,28 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-proof-points-scale")
       assert has_element?(view, "#whoami-proof-points-strengths p", "What I Bring")
       assert has_element?(view, "#whoami-proof-points-scale p", "Systems I've Built")
+      assert has_element?(view, "#whoami-proof-points-strengths span", "12+ Years on the BEAM")
 
-      html = render(view)
-      assert html =~ "12+ Years on the BEAM"
-      assert html =~ "5 Engineers Led"
-      assert html =~ "1.5M+ Events/Day"
-      assert html =~ "$2.5M+/mo Revenue Powered"
-      assert html =~ "~25% Lower Infra Cost"
+      assert has_element?(
+               view,
+               "#whoami-proof-points-strengths span",
+               "5 Engineers Led & Mentored"
+             )
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points-strengths span",
+               "End-to-End Platform Ownership"
+             )
+
+      assert has_element?(view, "#whoami-proof-points-scale span", "Supported 1.5M+ Events/Day")
+      assert has_element?(view, "#whoami-proof-points-scale span", "Powered $2.5M+/mo Revenue")
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points-scale span",
+               "Enabled ~25% Lower Infra Cost"
+             )
     end
   end
 

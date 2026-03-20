@@ -48,8 +48,8 @@ defmodule RevstackWeb.WhoamiLive do
 
   @section_navigation_items [
     %{id: "whoami-hero", label: "Hero"},
-    %{id: "whoami-portfolio", label: "Career Portfolio"},
     %{id: "whoami-experience", label: "Career Highlights"},
+    %{id: "whoami-portfolio", label: "Career Portfolio"},
     %{id: "whoami-expertise", label: "Technical Expertise"},
     %{id: "live-projects", label: "Independent Projects"},
     %{id: "leadership-teamwork", label: "Leadership & Teamwork"},
@@ -169,11 +169,11 @@ defmodule RevstackWeb.WhoamiLive do
       />
       <div id="whoami-sections" class="space-y-6 sm:space-y-8 lg:space-y-10">
         <.hero_section />
+        <.professional_experience_section />
         <.career_portfolio_section
           career_phases={@career_phases}
           expanded_phase_id={@career_expanded_phase_id}
         />
-        <.professional_experience_section />
         <.technical_expertise_section />
         <.live_projects_section admin_gallery_images={@admin_gallery_images} />
         <.leadership_and_teamwork_section />

@@ -96,13 +96,13 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       assert has_element?(
                view,
                "#career-highlight-ionik li",
-               "Own the revenue-critical affiliate platform backend in Erlang/OTP, supporting $2.5M+ monthly revenue and processing 1.5M+ events per day."
+               "Architected, built, and ultimately owned a revenue-critical affiliate network platform in Erlang/OTP"
              )
 
       assert has_element?(
                view,
                "#career-highlight-ionik li",
-               "Built NetAdmin in Elixir, Phoenix LiveView, and Ash as the internal platform"
+               "Built NetAdmin in Elixir, Phoenix LiveView, and Ash Framework as the internal platform"
              )
 
       assert has_element?(

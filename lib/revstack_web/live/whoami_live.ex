@@ -330,33 +330,35 @@ defmodule RevstackWeb.WhoamiLive do
           <.expertise_group
             title="BEAM & Languages"
             items={[
-              "Erlang/OTP (GenServers, Supervisors, clustering)",
-              "Elixir",
-              "Phoenix + LiveView",
-              "Ash Framework",
+              "Erlang/OTP",
+              "Elixir (Phoenix + LiveView + Ash Framework)",
               "BEAM VM tuning & relup zero-downtime upgrades",
-              "REST API design & third-party integrations"
+              "REST API design & third-party integrations",
+              "Distributed systems design (clustering, fault tolerance, supervision)",
+              "Real-time systems & high-throughput processing"
             ]}
           />
           <.expertise_group
             title="Data & Messaging"
             items={[
-              "Cassandra (6-node production cluster)",
-              "PostgreSQL",
-              "Elasticsearch / OpenSearch analytics",
-              "Apache Spark (AWS EMR)",
               "RabbitMQ distributed messaging pipelines",
+              "PostgreSQL / SQL data modeling and optimization",
+              "Elasticsearch / OpenSearch analytics",
+              "Cassandra",
+              "Apache Spark (AWS EMR, scala)",
               "Time-series data modeling (1.5M+ events/day)"
             ]}
           />
           <.expertise_group
             title="Infrastructure & DevOps"
             items={[
-              "AWS (EC2, RDS, S3)",
-              "Linux operations & administration",
-              "Ansible automation",
-              "CI/CD (Jenkins, Ansible)",
-              "Observability & reliability engineering"
+              "Production Infrastructure (AWS, fly.io)",
+              "Infrastructure as Code (Ansible, CI/CD Pipelines)",
+              "VPS Provisioning & Deployment Automation",
+              "Infrastructure Cost Optimization",
+              "Docker & Containerization",
+              "Linux Systems Administration",
+              "Observability & Reliability Engineering"
             ]}
           />
         </div>

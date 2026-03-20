@@ -49,7 +49,7 @@ defmodule RevstackWeb.WhoamiLive do
   @section_navigation_items [
     %{id: "whoami-hero", label: "Hero"},
     %{id: "whoami-portfolio", label: "Career Portfolio"},
-    %{id: "whoami-experience", label: "Professional Experience"},
+    %{id: "whoami-experience", label: "Career Highlights"},
     %{id: "whoami-expertise", label: "Technical Expertise"},
     %{id: "live-projects", label: "Independent Projects"},
     %{id: "leadership-teamwork", label: "Leadership & Teamwork"},
@@ -76,8 +76,7 @@ defmodule RevstackWeb.WhoamiLive do
         career_selected_project_id: nil,
         career_detail_view?: false,
         career_expanded_phase_id: nil,
-        career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()],
-        experience_expanded?: false
+        career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()]
       )
 
     {:ok, socket}
@@ -157,10 +156,6 @@ defmodule RevstackWeb.WhoamiLive do
     {:noreply, assign(socket, career_detail_view?: false)}
   end
 
-  def handle_event("toggle_experience", _params, socket) do
-    {:noreply, assign(socket, experience_expanded?: !socket.assigns.experience_expanded?)}
-  end
-
   @impl true
   def render(assigns) do
     ~H"""
@@ -178,7 +173,7 @@ defmodule RevstackWeb.WhoamiLive do
           career_phases={@career_phases}
           expanded_phase_id={@career_expanded_phase_id}
         />
-        <.professional_experience_section experience_expanded?={@experience_expanded?} />
+        <.professional_experience_section />
         <.technical_expertise_section />
         <.live_projects_section admin_gallery_images={@admin_gallery_images} />
         <.leadership_and_teamwork_section />
@@ -220,8 +215,7 @@ defmodule RevstackWeb.WhoamiLive do
           id="whoami-skill-signature"
           class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
         >
-          12+ years building and owning revenue-critical, high-throughput production systems on the BEAM.
-          <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
+          12+ years building and owning revenue-critical, high-throughput production systems on the BEAM. <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
         </p>
 
         <%!-- Compact proof points --%>
@@ -355,128 +349,101 @@ defmodule RevstackWeb.WhoamiLive do
       id="whoami-experience"
       class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24"
     >
-      <div class="mx-auto max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
-          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-        </div>
-
-        <%!-- Condensed Summary View --%>
-        <div
-          id="experience-summary"
-          class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm"
-        >
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
-            <div>
-              <h3 class="text-lg font-bold text-base-content">Lead Distributed Systems Engineer</h3>
-              <p class="text-primary font-medium">Ubiquity Agency an Ionik company</p>
-            </div>
-            <span class="text-sm text-base-content/60 shrink-0">October 2014 — 2026</span>
+      <div class="mx-auto max-w-5xl">
+        <div class="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div class="max-w-3xl">
+            <h2 class="mt-4 text-3xl font-bold text-base-content">Career Highlights</h2>
+            <p
+              id="career-highlights-subtitle"
+              class="mt-3 text-sm sm:text-base leading-relaxed text-base-content/70"
+            >
+              Curated highlights for a quick read — full experience and detail available in my resume.
+            </p>
           </div>
-          <ul class="space-y-3">
-            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-              <span>
-                Owned the entire backend stack of a revenue-critical affiliate network platform in Erlang — $2.5M+/mo revenue, 1.5M+ events/day
-              </span>
-            </li>
-            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-              <span>
-                Architected and built NetAdmin, an internal Elixir/Phoenix/Ash infrastructure management platform from inception
-              </span>
-            </li>
-            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-              <span>
-                Operated distributed data infrastructure: 6-node Cassandra cluster, Elasticsearch analytics, RabbitMQ pipelines
-              </span>
-            </li>
-            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
-              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-              <span>
-                Led 5 engineers (UI + infrastructure) while remaining hands-on across backend, data, and full-stack delivery
-              </span>
-            </li>
-          </ul>
 
-          <%!-- Expand/collapse toggle --%>
-          <button
-            id="experience-toggle"
-            phx-click="toggle_experience"
-            class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-          >
-            <%= if @experience_expanded? do %>
-              <.icon name="hero-chevron-up" class="size-4" /> Show less
-            <% else %>
-              <.icon name="hero-chevron-down" class="size-4" /> Show full experience
-            <% end %>
-          </button>
+          <div class="flex flex-wrap gap-3">
+            <a
+              id="career-highlights-view-resume-link"
+              href="/resume/kyle-neal-resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline btn-sm sm:btn-md gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <.icon name="hero-eye" class="size-4" /> View Resume
+            </a>
+            <a
+              id="career-highlights-download-resume-link"
+              href="/resume/download/kyle-neal-resume.pdf"
+              download
+              title="Download Kyle's Resume"
+              aria-label="Download Kyle's Resume"
+              class="btn btn-outline btn-sm sm:btn-md gap-2 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            >
+              <.icon name="hero-arrow-down-tray" class="size-4" /> Download Resume
+            </a>
+          </div>
         </div>
 
-        <%!-- Expanded Detail View --%>
-        <div :if={@experience_expanded?} id="experience-detail" class="mt-6 space-y-8">
-          <.experience_card
+        <div id="career-highlights-grid" class="space-y-4">
+          <.career_highlight_card
+            id="career-highlight-ionik"
             title="Lead Distributed Systems Engineer"
-            company="Ubiquity Agency an Ionik company"
-            period="October 2014 — 2026"
-            current?={false}
+            company="Ionik (formerly VeriAS)"
+            period="October 2014 — March 2026"
+            featured?={true}
             items={[
-              "Lead architect and primary backend engineer for a revenue-critical affiliate network platform written in Erlang, supporting $2.5M+ monthly revenue and processing 1.5M+ events daily (~20+ events/sec average with significantly higher peak throughput).",
-              "Design and operate distributed data and messaging architecture including a 6-node Cassandra production cluster, RabbitMQ event pipelines, and Elasticsearch/OpenSearch analytics infrastructure.",
-              "Own data modeling and performance strategy across Cassandra and PostgreSQL; routinely debug and optimize complex production queries and high-volume transaction paths.",
-              "Responsible for system reliability, BEAM VM tuning, release strategy (relup), CI/CD automation, and production incident debugging across distributed environments.",
-              "Architected and built an internal infrastructure management platform from inception, a full-stack Elixir (Phoenix + Ash) internal infrastructure control platform enabling resource lifecycle orchestration, authorization modeling, operational auditability, and cross-system automation.",
-              "Lead and managed 5 engineers (UI + infrastructure) while remaining hands-on across backend, data architecture, and full-stack feature delivery. Conducted technical interviews and evaluated engineering candidates as part of the hiring process."
+              "Architected, built, and ultimately owned a revenue-critical affiliate network platform in Erlang/OTP, replacing HitPath and scaling it to support $2.5M+ monthly revenue and 1.5M+ events/day, spanning initial development, multi-team expansion, and full system ownership and rewrite.",
+              "Built NetAdmin in Elixir, Phoenix LiveView, and Ash Framework as the internal platform for orchestration, monitoring, auditability, and cross-system automation. Enabled ~25% reduction in company infrastructure costs.",
+              "Designed and operated the data and reporting stack across Cassandra, RabbitMQ, Elasticsearch/OpenSearch, PostgreSQL, and Spark on AWS EMR while leading 5 engineers and reducing infrastructure spend by roughly 25%."
             ]}
           />
-          <.experience_card
-            title="Founder & Software Engineer"
-            company="RevenueLink Technologies LLC"
-            period="2023 — Present"
-            current?={true}
-            items={[
-              "Founded a consulting and technology services company used for independent software projects, consulting engagements, and local technology services.",
-              {:parts,
-               [
-                 {:text, "Designed and built "},
-                 {:link, "https://hardcorehandyman.fly.dev/", "hardcorehandyman.fly.dev"},
-                 {:text,
-                  " (formerly hardcorehandymanoflawton.com), a custom lead-generation platform for a local handyman business. Built with Elixir, Phoenix LiveView, and Ecto, the system included SEO-driven service pages, conversion-focused design, and an internal admin interface for managing customer quote requests with photo uploads of project details. "},
-                 {:strong,
-                  "The platform ultimately generated more inbound demand than the business could operationally support."}
-               ]},
-              {:parts,
-               [
-                 {:text, "Built and operate "},
-                 {:link, "https://revstack.fly.dev/", "revstack.fly.dev"},
-                 {:text,
-                  ", a Phoenix LiveView application serving as a professional portfolio, lead-generation platform, and development sandbox for new ideas."}
-               ]},
-              "Provide consulting and technical services including custom web application development, systems architecture guidance, and local technology support for individuals and small businesses.",
-              "Use the company as a vehicle for experimentation with Elixir, distributed systems, infrastructure tooling, and small SaaS-style projects."
-            ]}
-          />
-          <.experience_card
-            title="Application Programmer"
-            company="CGI Federal"
-            period="December 2013 — October 2014"
-            current?={false}
-            items={[
-              "Performed detailed source code analysis for enterprise Java/ADA systems.",
-              "Developed tooling and assisted with build/release workflows for multi-million SLOC applications.",
-              "Created smoke and sanity testing processes supporting production releases."
-            ]}
-          />
-          <.experience_card
-            title="In-House Technician"
-            company="Wichita Online"
-            period="April 2013 — December 2013"
-            current?={false}
-            items={[
-              "Provided in-field network troubleshooting and wireless equipment deployment (MikroTik, Canopy routers)."
-            ]}
-          />
+
+          <div class="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+            <div class="space-y-4">
+              <.career_highlight_card
+                id="career-highlight-revenuelink"
+                title="Founder & Software Engineer"
+                company="RevenueLink Technologies LLC"
+                period="2023 — Present"
+                items={[
+                  "Founded RevenueLink as a vehicle for independent product work, consulting, and hands-on experimentation with Elixir systems and small SaaS-style platforms.",
+                  "Built Hardcore Handyman end-to-end with Phoenix LiveView, conversion-focused UX, and internal quoting workflows; the platform generated more inbound demand than the business could operationally support."
+                ]}
+              />
+
+              <.career_highlight_card
+                id="career-highlight-cgi"
+                title="Application Programmer"
+                company="CGI Federal"
+                period="December 2013 — October 2014"
+                items={[
+                  "Analyzed enterprise Java and ADA codebases and supported tooling plus build and release workflows for multi-million-line systems."
+                ]}
+              />
+            </div>
+
+            <div class="space-y-4">
+              <.career_highlight_card
+                id="career-highlight-wichita"
+                title="In-House Technician"
+                company="Wichita Online"
+                period="April 2013 — December 2013"
+                items={[
+                  "Handled in-field and remote network troubleshooting plus wireless equipment deployment for production ISP infrastructure."
+                ]}
+              />
+
+              <.career_highlight_card
+                id="career-highlight-tutor"
+                title="Computer Science Tutor"
+                company="Academic Tutoring"
+                period="See Resume"
+                items={[
+                  "Provided one-on-one computer science tutoring with a focus on programming fundamentals, problem solving, and helping students work through technical course material."
+                ]}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1145,64 +1112,44 @@ defmodule RevstackWeb.WhoamiLive do
     """
   end
 
-  defp experience_card(assigns) do
+  defp career_highlight_card(assigns) do
+    assigns = assign_new(assigns, :featured?, fn -> false end)
+
     ~H"""
-    <div class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-200">
-      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
+    <article
+      id={@id}
+      class={[
+        "rounded-2xl border p-5 sm:p-6 shadow-sm transition-all duration-300 hover:shadow-md",
+        if(@featured?,
+          do: "border-primary/20 bg-gradient-to-br from-primary/8 via-base-100 to-base-100",
+          else: "border-base-300 bg-base-100"
+        )
+      ]}
+    >
+      <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h3 class="text-lg font-bold text-base-content">{@title}</h3>
-          <p class="text-primary font-medium">{@company}</p>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <span class="text-sm text-base-content/60">{@period}</span>
-          <span
-            :if={@current?}
-            class="inline-flex items-center rounded-full bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success"
+          <div
+            :if={@featured?}
+            class="mb-2 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary"
           >
-            Current
-          </span>
+            Primary Career Role
+          </div>
+          <h3 class="text-lg font-bold text-base-content sm:text-xl">{@title}</h3>
+          <p class="mt-1 text-sm font-medium text-primary sm:text-base">{@company}</p>
         </div>
+        <span class="shrink-0 text-sm text-base-content/60">{@period}</span>
       </div>
-      <ul class="space-y-3">
+
+      <ul class="space-y-2.5">
         <li
           :for={item <- @items}
           class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed"
         >
           <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
-          <.experience_item item={item} />
+          <span>{item}</span>
         </li>
       </ul>
-    </div>
-    """
-  end
-
-  defp experience_item(%{item: item} = assigns) when is_binary(item) do
-    ~H"<span>{@item}</span>"
-  end
-
-  defp experience_item(%{item: {:parts, parts}} = assigns) do
-    assigns = assign(assigns, :parts, parts)
-
-    ~H"""
-    <span>
-      <%= for part <- @parts do %>
-        <%= case part do %>
-          <% {:text, text} -> %>
-            {text}
-          <% {:link, url, label} -> %>
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary hover:underline font-medium inline-flex items-center gap-0.5"
-            >
-              {label}<.icon name="hero-arrow-top-right-on-square" class="size-3 ml-0.5 shrink-0" />
-            </a>
-          <% {:strong, text} -> %>
-            <strong class="experience-emphasis font-semibold text-base-content">{text}</strong>
-        <% end %>
-      <% end %>
-    </span>
+    </article>
     """
   end
 

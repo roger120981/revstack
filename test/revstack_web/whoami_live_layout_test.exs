@@ -98,34 +98,36 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
     end
   end
 
-  describe "professional experience condensed view" do
-    test "renders condensed summary by default", %{conn: conn} do
+  describe "career highlights section" do
+    test "renders curated summary framing and in-section resume CTAs", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      assert has_element?(view, "#experience-summary")
-      assert has_element?(view, "#experience-toggle")
-      refute has_element?(view, "#experience-detail")
+      assert has_element?(view, "#whoami-experience")
+      assert has_element?(view, "#career-highlights-subtitle")
+
+      assert has_element?(
+               view,
+               "#career-highlights-view-resume-link[href='/resume/kyle-neal-resume.pdf'][target='_blank']",
+               "View Resume"
+             )
+
+      assert has_element?(
+               view,
+               "#career-highlights-download-resume-link[href='/resume/download/kyle-neal-resume.pdf'][download]",
+               "Download Resume"
+             )
     end
 
-    test "clicking toggle expands full experience", %{conn: conn} do
+    test "renders compact highlight cards instead of an expandable resume mirror", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
-      refute has_element?(view, "#experience-detail")
+      assert has_element?(view, "#career-highlight-ionik")
+      assert has_element?(view, "#career-highlight-revenuelink")
+      assert has_element?(view, "#career-highlight-cgi")
+      assert has_element?(view, "#career-highlight-wichita")
+      assert has_element?(view, "#career-highlight-tutor")
 
-      view
-      |> element("#experience-toggle")
-      |> render_click()
-
-      assert has_element?(view, "#experience-detail")
-    end
-
-    test "clicking toggle again collapses experience", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/")
-
-      view |> element("#experience-toggle") |> render_click()
-      assert has_element?(view, "#experience-detail")
-
-      view |> element("#experience-toggle") |> render_click()
+      refute has_element?(view, "#experience-toggle")
       refute has_element?(view, "#experience-detail")
     end
   end

@@ -89,32 +89,56 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
-  describe "professional experience emphasis" do
-    test "renders the demand outcome sentence in bold", %{conn: conn} do
+  describe "career highlights emphasis" do
+    test "keeps the Ionik role as the dominant recruiter-facing summary", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
       assert has_element?(
                view,
-               "strong.experience-emphasis",
-               "The platform ultimately generated more inbound demand than the business could operationally support."
+               "#career-highlight-ionik li",
+               "Architected, built, and ultimately owned a revenue-critical affiliate network platform in Erlang/OTP"
+             )
+
+      assert has_element?(
+               view,
+               "#career-highlight-ionik li",
+               "Built NetAdmin in Elixir, Phoenix LiveView, and Ash Framework as the internal platform"
+             )
+
+      assert has_element?(
+               view,
+               "#career-highlight-ionik li",
+               "Cassandra, RabbitMQ, Elasticsearch/OpenSearch, PostgreSQL, and Spark on AWS EMR"
              )
     end
 
-    test "renders handyman SEO and implementation details in founder experience", %{
+    test "shows entrepreneurial and real-world demand proof in the RevenueLink role", %{
       conn: conn
     } do
       {:ok, view, _html} = live(conn, ~p"/whoami")
 
       assert has_element?(
                view,
-               "li",
-               "the system included SEO-driven service pages, conversion-focused design"
+               "#career-highlight-revenuelink li",
+               "Founded RevenueLink as a vehicle for independent product work, consulting, and hands-on experimentation"
              )
 
       assert has_element?(
                view,
-               "li",
-               "Built with Elixir, Phoenix LiveView, and Ecto"
+               "#career-highlight-revenuelink li",
+               "the platform generated more inbound demand than the business could operationally support"
+             )
+    end
+
+    test "includes the tutor role alongside the other supporting experience cards", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      assert has_element?(view, "#career-highlight-tutor")
+
+      assert has_element?(
+               view,
+               "#career-highlight-tutor li",
+               "Provided one-on-one computer science tutoring"
              )
     end
   end

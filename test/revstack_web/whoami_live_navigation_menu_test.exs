@@ -45,8 +45,20 @@ defmodule RevstackWeb.WhoamiLiveNavigationMenuTest do
 
       assert has_element?(
                view,
+               "#section-nav-link-whoami-experience[href='#whoami-experience']",
+               "Career Highlights"
+             )
+
+      assert has_element?(
+               view,
                "#section-nav-link-leadership-teamwork[href='#leadership-teamwork']",
                "Leadership & Teamwork"
+             )
+
+      assert has_element?(
+               view,
+               "#section-nav-link-live-projects[href='#live-projects']",
+               "Independent Projects"
              )
 
       assert has_element?(

@@ -27,6 +27,38 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-role-title")
       assert has_element?(view, "#whoami-skill-signature")
     end
+
+    test "renders grouped proof points for strengths and system scale", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#whoami-proof-points")
+      assert has_element?(view, "#whoami-proof-points-strengths")
+      assert has_element?(view, "#whoami-proof-points-scale")
+      assert has_element?(view, "#whoami-proof-points-strengths p", "What I Bring")
+      assert has_element?(view, "#whoami-proof-points-scale p", "Systems I've Built")
+      assert has_element?(view, "#whoami-proof-points-strengths span", "12+ Years on the BEAM")
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points-strengths span",
+               "5 Engineers Led & Mentored"
+             )
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points-strengths span",
+               "End-to-End Platform Ownership"
+             )
+
+      assert has_element?(view, "#whoami-proof-points-scale span", "Supported 1.5M+ Events/Day")
+      assert has_element?(view, "#whoami-proof-points-scale span", "Powered $2.5M+/mo Revenue")
+
+      assert has_element?(
+               view,
+               "#whoami-proof-points-scale span",
+               "Enabled ~25% Lower Infra Cost"
+             )
+    end
   end
 
   describe "combined leadership and teamwork section" do
@@ -83,6 +115,40 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       section = LazyHTML.filter(document, "#leadership-teamwork.section-card")
 
       refute section == []
+    end
+  end
+
+  describe "career highlights section" do
+    test "renders curated summary framing and in-section resume CTAs", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#whoami-experience")
+      assert has_element?(view, "#career-highlights-subtitle")
+
+      assert has_element?(
+               view,
+               "#career-highlights-view-resume-link[href='/resume/kyle-neal-resume.pdf'][target='_blank']",
+               "View Resume"
+             )
+
+      assert has_element?(
+               view,
+               "#career-highlights-download-resume-link[href='/resume/download/kyle-neal-resume.pdf'][download]",
+               "Download Resume"
+             )
+    end
+
+    test "renders compact highlight cards instead of an expandable resume mirror", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#career-highlight-ionik")
+      assert has_element?(view, "#career-highlight-revenuelink")
+      assert has_element?(view, "#career-highlight-cgi")
+      assert has_element?(view, "#career-highlight-wichita")
+      assert has_element?(view, "#career-highlight-tutor")
+
+      refute has_element?(view, "#experience-toggle")
+      refute has_element?(view, "#experience-detail")
     end
   end
 end

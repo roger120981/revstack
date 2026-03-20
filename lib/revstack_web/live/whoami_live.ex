@@ -571,7 +571,7 @@ defmodule RevstackWeb.WhoamiLive do
           <.education_card
             degree="A.S. Information Technology"
             school="Cameron University"
-            period="2014 — 2016"
+            period="2012 — 2014"
             honors="Magna Cum Laude"
           />
         </div>

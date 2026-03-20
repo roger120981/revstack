@@ -48,12 +48,10 @@ defmodule RevstackWeb.WhoamiLive do
 
   @section_navigation_items [
     %{id: "whoami-hero", label: "Hero"},
-    %{id: "whoami-glance", label: "At A Glance"},
-    %{id: "whoami-summary", label: "Professional Summary"},
-    %{id: "whoami-expertise", label: "Technical Expertise"},
-    %{id: "whoami-experience", label: "Professional Experience"},
     %{id: "whoami-portfolio", label: "Career Portfolio"},
-    %{id: "live-projects", label: "Personal Live Projects"},
+    %{id: "whoami-experience", label: "Professional Experience"},
+    %{id: "whoami-expertise", label: "Technical Expertise"},
+    %{id: "live-projects", label: "Independent Projects"},
     %{id: "leadership-teamwork", label: "Leadership & Teamwork"},
     %{id: "whoami-education", label: "Education"},
     %{id: "whoami-interests", label: "When I'm Not Coding"},
@@ -78,7 +76,8 @@ defmodule RevstackWeb.WhoamiLive do
         career_selected_project_id: nil,
         career_detail_view?: false,
         career_expanded_phase_id: nil,
-        career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()]
+        career_phases: [career_portfolio_phase_two(), career_portfolio_phase_one()],
+        experience_expanded?: false
       )
 
     {:ok, socket}
@@ -158,6 +157,10 @@ defmodule RevstackWeb.WhoamiLive do
     {:noreply, assign(socket, career_detail_view?: false)}
   end
 
+  def handle_event("toggle_experience", _params, socket) do
+    {:noreply, assign(socket, experience_expanded?: !socket.assigns.experience_expanded?)}
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -171,14 +174,12 @@ defmodule RevstackWeb.WhoamiLive do
       />
       <div id="whoami-sections" class="space-y-6 sm:space-y-8 lg:space-y-10">
         <.hero_section />
-        <.at_a_glance_section />
-        <.professional_summary_section />
-        <.technical_expertise_section />
-        <.professional_experience_section />
         <.career_portfolio_section
           career_phases={@career_phases}
           expanded_phase_id={@career_expanded_phase_id}
         />
+        <.professional_experience_section experience_expanded?={@experience_expanded?} />
+        <.technical_expertise_section />
         <.live_projects_section admin_gallery_images={@admin_gallery_images} />
         <.leadership_and_teamwork_section />
         <.education_section />
@@ -209,22 +210,36 @@ defmodule RevstackWeb.WhoamiLive do
     ~H"""
     <section id="whoami-hero" class="py-20 sm:py-28 scroll-mt-24">
       <div class="mx-auto max-w-4xl text-center">
-        <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-6">
-          <.icon name="hero-user" class="size-4" /> Technical Profile
-        </div>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-base-content leading-tight">
           Kyle Neal
         </h1>
         <p id="whoami-role-title" class="mt-2 text-xl sm:text-2xl text-primary font-semibold">
-          Lead Elixir &amp; Erlang Engineer
+          Lead Distributed Systems Engineer
         </p>
         <p
           id="whoami-skill-signature"
           class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
         >
-          10+ years building revenue-critical distributed systems on the BEAM.
-          Erlang/OTP, Elixir, Phoenix LiveView, Cassandra, RabbitMQ, and technical leadership.
+          12+ years building and owning revenue-critical, high-throughput production systems on the BEAM.
+          <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
         </p>
+
+        <%!-- Compact proof points --%>
+        <div id="whoami-proof-points" class="mt-8 flex flex-wrap justify-center gap-3">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+            <.icon name="hero-clock" class="size-4" /> 12+ Years on the BEAM
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+            <.icon name="hero-bolt" class="size-4" /> 1.5M+ Events/Day
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+            <.icon name="hero-currency-dollar" class="size-4" /> $2.5M+/mo Revenue Supported
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+            <.icon name="hero-user-group" class="size-4" /> 5 Engineers Led
+          </span>
+        </div>
+
         <div class="mt-8 flex flex-col items-center gap-3">
           <div class="flex items-center gap-2">
             <a
@@ -252,7 +267,7 @@ defmodule RevstackWeb.WhoamiLive do
             id="hero-contact-link"
             class="btn btn-primary btn-md sm:btn-lg gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto max-w-xs"
           >
-            <.icon name="hero-envelope" class="size-5" /> Contact Me
+            <.icon name="hero-envelope" class="size-5" /> Get in Touch
           </.link>
         </div>
         <%!-- Quick links --%>
@@ -278,68 +293,6 @@ defmodule RevstackWeb.WhoamiLive do
               <.icon name="hero-envelope" class="size-4" /> nealkyle5@gmail.com
             </a>
           </div>
-        </div>
-      </div>
-    </section>
-    """
-  end
-
-  defp at_a_glance_section(assigns) do
-    ~H"""
-    <section id="whoami-glance" class="py-12 scroll-mt-24">
-      <div class="mx-auto max-w-5xl">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <.stat_card value="10+" label="Years on the BEAM" />
-          <.stat_card value="1.5M+" label="Daily events processed by systems I built" />
-          <.stat_card value="$2.5M+" label="Monthly revenue supported by systems I built" />
-          <.stat_card value="5" label="Engineers managed" />
-        </div>
-      </div>
-    </section>
-    """
-  end
-
-  defp professional_summary_section(assigns) do
-    ~H"""
-    <section id="whoami-summary" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24">
-      <div class="mx-auto max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-base-content">Professional Summary</h2>
-          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <.summary_item
-            icon="hero-cpu-chip"
-            text="Lead Distributed Systems Engineer focused on long-lived, production BEAM systems (Erlang/OTP + Elixir)"
-          />
-          <.summary_item
-            icon="hero-server-stack"
-            text="Builds and operates high-throughput, revenue-critical platforms with a strong performance and operability mindset"
-          />
-          <.summary_item
-            icon="hero-circle-stack"
-            text="Designs distributed data + messaging architectures across Cassandra/PostgreSQL, RabbitMQ, and search/analytics"
-          />
-          <.summary_item
-            icon="hero-magnifying-glass"
-            text="Owns data modeling and query tuning across OLTP and time-series workloads, with deep comfort debugging production paths"
-          />
-          <.summary_item
-            icon="hero-cog-6-tooth"
-            text="Reliability-first engineering: OTP fault tolerance, BEAM VM tuning, release strategy, CI/CD automation, and incident response"
-          />
-          <.summary_item
-            icon="hero-computer-desktop"
-            text="Full-stack builder with Phoenix/LiveView and Ash; ships internal platforms and tooling from concept to production"
-          />
-          <.summary_item
-            icon="hero-user-group"
-            text="Hands-on technical leader: mentors engineers, aligns cross-team delivery, and stays deep in the code"
-          />
-          <.summary_item
-            icon="hero-cloud"
-            text="Infrastructure-aware across AWS and Linux, with pragmatic automation experience (Jenkins/Ansible)"
-          />
         </div>
       </div>
     </section>
@@ -407,7 +360,62 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl font-bold text-base-content">Professional Experience</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
         </div>
-        <div class="space-y-8">
+
+        <%!-- Condensed Summary View --%>
+        <div
+          id="experience-summary"
+          class="rounded-2xl border border-base-300 bg-base-100 p-6 sm:p-8 shadow-sm"
+        >
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-5">
+            <div>
+              <h3 class="text-lg font-bold text-base-content">Lead Distributed Systems Engineer</h3>
+              <p class="text-primary font-medium">Ubiquity Agency an Ionik company</p>
+            </div>
+            <span class="text-sm text-base-content/60 shrink-0">October 2014 — 2026</span>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+              <span>
+                Owned the entire backend stack of a revenue-critical affiliate network platform in Erlang — $2.5M+/mo revenue, 1.5M+ events/day
+              </span>
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+              <span>
+                Architected and built NetAdmin, an internal Elixir/Phoenix/Ash infrastructure management platform from inception
+              </span>
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+              <span>
+                Operated distributed data infrastructure: 6-node Cassandra cluster, Elasticsearch analytics, RabbitMQ pipelines
+              </span>
+            </li>
+            <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
+              <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
+              <span>
+                Led 5 engineers (UI + infrastructure) while remaining hands-on across backend, data, and full-stack delivery
+              </span>
+            </li>
+          </ul>
+
+          <%!-- Expand/collapse toggle --%>
+          <button
+            id="experience-toggle"
+            phx-click="toggle_experience"
+            class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+          >
+            <%= if @experience_expanded? do %>
+              <.icon name="hero-chevron-up" class="size-4" /> Show less
+            <% else %>
+              <.icon name="hero-chevron-down" class="size-4" /> Show full experience
+            <% end %>
+          </button>
+        </div>
+
+        <%!-- Expanded Detail View --%>
+        <div :if={@experience_expanded?} id="experience-detail" class="mt-6 space-y-8">
           <.experience_card
             title="Lead Distributed Systems Engineer"
             company="Ubiquity Agency an Ionik company"
@@ -486,11 +494,11 @@ defmodule RevstackWeb.WhoamiLive do
           <h2 class="text-3xl font-bold text-base-content">Career Portfolio</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Two major chapters of production systems engineering on the BEAM. <br />
+            From deep systems work to large-scale platform ownership and leadership. <br />
             <.icon
               name="hero-cursor-arrow-rays"
               class="size-7 inline-block align-text-bottom"
-            /><b class="text-lg">click a phase to explore the systems and projects behind it.</b>
+            /><b class="text-lg">Click a phase to explore the systems and projects behind it.</b>
           </p>
         </div>
         <div class="space-y-6">
@@ -511,17 +519,10 @@ defmodule RevstackWeb.WhoamiLive do
     <section id="live-projects" class="section-card py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center mb-14">
-          <%!-- <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-4">
-            <.icon name="hero-rocket-launch" class="size-4" /> Live &amp; Deployed
-          </div> --%>
-          <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Personal Live Projects</h2>
+          <h2 class="text-3xl sm:text-4xl font-bold text-base-content">Independent Projects</h2>
           <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
-            Production applications I designed, built, and deployed on my spare time <br />
-            <.icon
-              name="hero-cursor-arrow-rays"
-              class="size-5 inline-block align-text-bottom"
-            /><b class="text-lg">click a project to explore.</b>
+            Beyond production systems, I continue to build and deploy independent projects exploring new ideas and technologies.
           </p>
         </div>
 
@@ -529,7 +530,7 @@ defmodule RevstackWeb.WhoamiLive do
           <.project_card
             id="project-handyman"
             title="Hardcore Handyman"
-            subtitle="Production Phoenix LiveView system enabling customers to submit job requests with image uploads. Data is validated, stored with Ecto, and triggers email notifications for a streamlined quoting workflow."
+            subtitle="Full-stack Elixir lead-generation platform with SEO-driven service pages, conversion-focused design, and admin interface. Generated more inbound demand than the business could operationally support."
             href="https://hardcorehandyman.fly.dev/"
             icon="hero-wrench-screwdriver"
             preview_src={~p"/images/hardcorehandyman_preview.png"}
@@ -656,8 +657,8 @@ defmodule RevstackWeb.WhoamiLive do
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Collaborated with <b>5 backend</b>
-                  and <b>3 DevOps engineers</b>
+                  Collaborated with <b>5 backend</b>, <b>3 DevOps engineers</b>, and
+                  <b>2 frontend engineers</b>
                   to build a multi-million-dollar affiliate network platform.
                 </span>
               </li>
@@ -666,13 +667,13 @@ defmodule RevstackWeb.WhoamiLive do
                 <span>
                   Partnered with <b>2 lead engineers</b>
                   on architecture and initial production launch, then became the <b>sole owner</b>
-                  for features, maintenance, and major rewrites.
+                  for features, maintenance, and major rewrites. Ultimately rewrote more of the system than the original team-built release contained.
                 </span>
               </li>
               <li class="flex items-start gap-2.5 text-sm text-base-content/80 leading-relaxed">
                 <.icon name="hero-chevron-right" class="size-4 text-primary shrink-0 mt-0.5" />
                 <span>
-                  Ultimately rewrote more of the system than the original team-built release contained.
+                  Led the NetAdmin platform rewrite, initially building the foundation independently, then mentoring junior Elixir engineers on scoped features, and ultimately driving the system to full production completion as the primary owner.
                 </span>
               </li>
             </ul>
@@ -745,27 +746,50 @@ defmodule RevstackWeb.WhoamiLive do
     ~H"""
     <section id="whoami-contact" class="py-20 sm:py-28 scroll-mt-24">
       <div class="mx-auto max-w-3xl">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold text-base-content">Let's Talk</h2>
+          <div class="mt-3 w-16 h-1 bg-primary mx-auto rounded-full"></div>
+        </div>
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          <!-- Primary: Hiring -->
-          <div class="group rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
+          <%!-- Primary: Hiring --%>
+          <div class="group flex-1 rounded-2xl border border-primary/20 bg-primary/5 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/15 text-primary mx-auto mb-4 group-hover:bg-primary/25 transition-colors">
               <.icon name="hero-briefcase" class="size-7" />
             </div>
 
             <h3 class="text-lg font-bold text-base-content mb-2">
-              Hiring for a role?
+              Looking for an engineer?
             </h3>
 
             <p class="text-sm text-base-content/70 mb-4">
-              I'm always open to discussing the right engineering opportunity.
+              Open to the right distributed systems or platform engineering opportunity.
             </p>
 
             <.link navigate={~p"/contact"} class="btn btn-primary gap-2">
               <.icon name="hero-envelope" class="size-4" /> Get in Touch
             </.link>
+
+            <div class="mt-4 flex items-center justify-center gap-3">
+              <a
+                href="/resume/kyle-neal-resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm text-primary hover:underline font-medium inline-flex items-center gap-1"
+              >
+                <.icon name="hero-eye" class="size-3.5" /> View Resume
+              </a>
+              <span class="text-base-content/30">|</span>
+              <a
+                href="/resume/download/kyle-neal-resume.pdf"
+                download
+                class="text-sm text-primary hover:underline font-medium inline-flex items-center gap-1"
+              >
+                <.icon name="hero-arrow-down-tray" class="size-3.5" /> Download
+              </a>
+            </div>
           </div>
-          <!-- Secondary: Consulting -->
-          <div class="group rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
+          <%!-- Secondary: Consulting --%>
+          <div class="group flex-1 rounded-2xl border border-base-300 bg-base-100 p-8 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300">
             <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-base-200 text-base-content mx-auto mb-4 group-hover:bg-base-300 transition-colors">
               <.icon name="hero-wrench-screwdriver" class="size-7" />
             </div>
@@ -1103,26 +1127,6 @@ defmodule RevstackWeb.WhoamiLive do
           </div>
         </div>
       </div>
-    </div>
-    """
-  end
-
-  defp stat_card(assigns) do
-    ~H"""
-    <div class="rounded-2xl border border-base-300 bg-base-100 p-5 text-center shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200">
-      <p class="text-2xl sm:text-3xl font-extrabold text-primary">{@value}</p>
-      <p class="mt-1 text-xs sm:text-sm text-base-content/60">{@label}</p>
-    </div>
-    """
-  end
-
-  defp summary_item(assigns) do
-    ~H"""
-    <div class="flex items-start gap-3 rounded-xl border border-base-300 bg-base-100 p-4 shadow-sm">
-      <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-        <.icon name={@icon} class="size-4" />
-      </div>
-      <p class="text-sm text-base-content/80 leading-relaxed">{@text}</p>
     </div>
     """
   end
@@ -1762,7 +1766,7 @@ defmodule RevstackWeb.WhoamiLive do
       card_icon: "hero-signal",
       card_era: "2014-2018 — Early Career",
       card_summary:
-        "Built distributed Erlang systems powering large-scale email verification and sending infrastructure, including DNS/SMTP services, operational tooling, and backend automation for high-volume deliverability systems.",
+        "Built distributed Erlang systems powering large-scale email verification and sending — custom DNS servers, proxy infrastructure, fleet monitoring, and operational tooling.",
       card_badges: [
         "Erlang/OTP",
         "PostgreSQL",
@@ -2147,7 +2151,7 @@ defmodule RevstackWeb.WhoamiLive do
       card_icon: "hero-chart-bar",
       card_era: "2018–2026 — Senior Engineer & Platform Ownership",
       card_summary:
-        "Built and owned a revenue-critical affiliate network platform end-to-end, spanning high-throughput Erlang services, internal Elixir/Phoenix tooling, and large-scale Cassandra, Elasticsearch, and PostgreSQL data systems.",
+        "Owned end-to-end: high-throughput Erlang services, Elixir/Phoenix/Ash internal tooling, and large-scale Cassandra, Elasticsearch, and PostgreSQL data systems powering $2.5M+/mo revenue.",
       card_badges: [
         "Erlang/OTP",
         "Elixir",

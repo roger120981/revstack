@@ -27,6 +27,18 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-role-title")
       assert has_element?(view, "#whoami-skill-signature")
     end
+
+    test "renders compact proof points instead of stat cards", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#whoami-proof-points")
+
+      html = render(view)
+      assert html =~ "12+ Years on the BEAM"
+      assert html =~ "1.5M+ Events/Day"
+      assert html =~ "$2.5M+/mo Revenue Supported"
+      assert html =~ "5 Engineers Led"
+    end
   end
 
   describe "combined leadership and teamwork section" do
@@ -83,6 +95,38 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       section = LazyHTML.filter(document, "#leadership-teamwork.section-card")
 
       refute section == []
+    end
+  end
+
+  describe "professional experience condensed view" do
+    test "renders condensed summary by default", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(view, "#experience-summary")
+      assert has_element?(view, "#experience-toggle")
+      refute has_element?(view, "#experience-detail")
+    end
+
+    test "clicking toggle expands full experience", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      refute has_element?(view, "#experience-detail")
+
+      view
+      |> element("#experience-toggle")
+      |> render_click()
+
+      assert has_element?(view, "#experience-detail")
+    end
+
+    test "clicking toggle again collapses experience", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("#experience-toggle") |> render_click()
+      assert has_element?(view, "#experience-detail")
+
+      view |> element("#experience-toggle") |> render_click()
+      refute has_element?(view, "#experience-detail")
     end
   end
 end

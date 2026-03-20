@@ -90,8 +90,13 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
   end
 
   describe "professional experience emphasis" do
-    test "renders the demand outcome sentence in bold", %{conn: conn} do
+    test "renders the demand outcome sentence in bold in expanded view", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      # Expand the experience section first
+      view
+      |> element("#experience-toggle")
+      |> render_click()
 
       assert has_element?(
                view,
@@ -104,6 +109,11 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       conn: conn
     } do
       {:ok, view, _html} = live(conn, ~p"/whoami")
+
+      # Expand the experience section first
+      view
+      |> element("#experience-toggle")
+      |> render_click()
 
       assert has_element?(
                view,

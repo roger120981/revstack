@@ -28,16 +28,21 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-skill-signature")
     end
 
-    test "renders compact proof points instead of stat cards", %{conn: conn} do
+    test "renders grouped proof points for strengths and system scale", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
       assert has_element?(view, "#whoami-proof-points")
+      assert has_element?(view, "#whoami-proof-points-strengths")
+      assert has_element?(view, "#whoami-proof-points-scale")
+      assert has_element?(view, "#whoami-proof-points-strengths p", "What I Bring")
+      assert has_element?(view, "#whoami-proof-points-scale p", "Systems I've Built")
 
       html = render(view)
       assert html =~ "12+ Years on the BEAM"
-      assert html =~ "1.5M+ Events/Day"
-      assert html =~ "$2.5M+/mo Revenue Supported"
       assert html =~ "5 Engineers Led"
+      assert html =~ "1.5M+ Events/Day"
+      assert html =~ "$2.5M+/mo Revenue Powered"
+      assert html =~ "~25% Lower Infra Cost"
     end
   end
 

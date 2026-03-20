@@ -218,20 +218,41 @@ defmodule RevstackWeb.WhoamiLive do
           12+ years building and owning revenue-critical, high-throughput production systems on the BEAM. <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
         </p>
 
-        <%!-- Compact proof points --%>
-        <div id="whoami-proof-points" class="mt-8 flex flex-wrap justify-center gap-3">
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-            <.icon name="hero-clock" class="size-4" /> 12+ Years on the BEAM
-          </span>
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-            <.icon name="hero-bolt" class="size-4" /> 1.5M+ Events/Day
-          </span>
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-            <.icon name="hero-currency-dollar" class="size-4" /> $2.5M+/mo Revenue Supported
-          </span>
-          <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-            <.icon name="hero-user-group" class="size-4" /> 5 Engineers Led
-          </span>
+        <%!-- Grouped proof points for faster recruiter scanning --%>
+        <div id="whoami-proof-points" class="mt-8 flex flex-col items-center gap-4 sm:gap-5">
+          <div id="whoami-proof-points-strengths" class="flex flex-col items-center gap-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-base-content/45">
+              What I Bring
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-clock" class="size-4" /> 12+ Years on the BEAM
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-user-group" class="size-4" /> 5 Engineers Led & Mentored
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-server-stack" class="size-4" /> End-to-End Platform Ownership
+              </span>
+            </div>
+          </div>
+
+          <div id="whoami-proof-points-scale" class="flex flex-col items-center gap-2.5">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-base-content/45">
+              Systems I've Built
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-bolt" class="size-4" /> Supported <b>1.5M+</b> Events/Day
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-currency-dollar" class="size-4" /> Powered <b>$2.5M+/mo</b> Revenue
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
+                <.icon name="hero-arrow-trending-down" class="size-4" /> Enabled <b>~25%</b> Lower Infra Cost
+              </span>
+            </div>
+          </div>
         </div>
 
         <div class="mt-8 flex flex-col items-center gap-3">

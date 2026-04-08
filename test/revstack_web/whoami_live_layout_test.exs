@@ -36,7 +36,7 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
       assert has_element?(view, "#whoami-proof-points-scale")
       assert has_element?(view, "#whoami-proof-points-strengths p", "What I Bring")
       assert has_element?(view, "#whoami-proof-points-scale p", "Systems I've Built")
-      assert has_element?(view, "#whoami-proof-points-strengths span", "12+ Years on the BEAM")
+      assert has_element?(view, "#whoami-proof-points-strengths span", "10+ Years on the BEAM")
 
       assert has_element?(
                view,
@@ -50,7 +50,12 @@ defmodule RevstackWeb.WhoamiLiveLayoutTest do
                "End-to-End Platform Ownership"
              )
 
-      assert has_element?(view, "#whoami-proof-points-scale span", "Supported 1.5M+ Events/Day")
+      assert has_element?(
+               view,
+               "#whoami-proof-points-scale span",
+               "Supported 10M+ daily events"
+             )
+
       assert has_element?(view, "#whoami-proof-points-scale span", "Powered $2.5M+/mo Revenue")
 
       assert has_element?(

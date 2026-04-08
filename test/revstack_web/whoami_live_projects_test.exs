@@ -6,15 +6,41 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
   @moduletag capture_log: true
 
   @active_gallery_image_count 7
+  @marketmate_gallery_image_count 6
 
   describe "live projects section" do
-    test "renders the live projects section with all three cards", %{conn: conn} do
+    test "renders completed projects first, followed by in-progress projects", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
       assert has_element?(view, "#live-projects")
+      assert has_element?(view, "#live-projects-completed")
+      assert has_element?(view, "#live-projects-in-progress")
+      assert has_element?(view, "#live-projects-in-progress-badge", "In Progress")
+      assert has_element?(view, "#project-marketmate")
       assert has_element?(view, "#project-handyman")
       assert has_element?(view, "#project-admin")
       assert has_element?(view, "#project-revenuelink")
+      assert has_element?(view, "#live-projects p", "Click a project to explore")
+
+      html = render(view)
+      assert String.contains?(html, "Completed Projects")
+      assert String.contains?(html, "In Progress Projects")
+      completed_position = :binary.match(html, "live-projects-completed")
+      in_progress_position = :binary.match(html, "live-projects-in-progress")
+
+      assert completed_position != :nomatch
+      assert in_progress_position != :nomatch
+      assert elem(completed_position, 0) < elem(in_progress_position, 0)
+    end
+
+    test "marketmate card uses the dashboard preview image", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/")
+
+      document = LazyHTML.from_fragment(html)
+      marketmate = LazyHTML.query_by_id(document, "project-marketmate")
+      tree = LazyHTML.to_tree(marketmate, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_src_containing?(tree, "market_mate/dashboard.png")
     end
 
     test "hardcore handyman card uses local preview image", %{conn: conn} do
@@ -61,6 +87,17 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       assert has_element?(view, "button#project-admin[phx-click='open_admin_gallery']")
     end
 
+    test "marketmate card is a button without a duplicate card badge", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      assert has_element?(
+               view,
+               "button#project-marketmate[phx-click='open_marketmate_gallery']"
+             )
+
+      refute has_element?(view, "#project-marketmate-badge")
+    end
+
     test "admin panel card shows the GitHub URL in the card preview", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/")
 
@@ -69,6 +106,150 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
                "button#project-admin p",
                "https://github.com/kyle-neal/revstack"
              )
+    end
+  end
+
+  describe "marketmate gallery modal" do
+    test "modal is not rendered on initial page load", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      refute has_element?(view, "#marketmate-gallery-modal")
+    end
+
+    test "clicking marketmate opens the gallery modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view
+      |> element("button#project-marketmate")
+      |> render_click()
+
+      assert has_element?(view, "#marketmate-gallery-modal")
+    end
+
+    test "modal shows the first walkthrough slide and source link by default", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+
+      html = render(view)
+      assert html =~ "1 of #{@marketmate_gallery_image_count}"
+      assert html =~ "Live Portfolio Updates"
+      assert html =~ "The value is immediate market awareness delivered in real time"
+
+      assert has_element?(
+               view,
+               "#marketmate-gallery-source-link[href='https://github.com/kyle-neal/market_mate'][target='_blank'][rel='noopener noreferrer']",
+               "View Source Code on GitHub"
+             )
+    end
+
+    test "modal renders the first walkthrough slide as an mp4 video", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+
+      document = LazyHTML.from_fragment(render(view))
+      modal = LazyHTML.query_by_id(document, "marketmate-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_tag_with_attribute?(tree, "video", "autoplay")
+      assert has_tag_with_src_containing?(tree, "source", "market_mate/live_dash.mp4")
+    end
+
+    test "modal has LockBodyScroll phx-hook", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+
+      html = render(view)
+      document = LazyHTML.from_fragment(html)
+      modal = LazyHTML.query_by_id(document, "marketmate-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_hook_attribute?(tree, "LockBodyScroll")
+    end
+
+    test "next button advances to the architecture slide", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+      view |> element("#marketmate-gallery-next") |> render_click()
+
+      html = render(view)
+      assert html =~ "2 of #{@marketmate_gallery_image_count}"
+      assert html =~ "System Architecture"
+      assert html =~ "MMEX"
+      assert html =~ "MMERL"
+      assert html =~ "The architecture slide shows deliberate system boundaries"
+    end
+
+    test "previous button returns to the prior slide", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+      view |> element("#marketmate-gallery-next") |> render_click()
+      view |> element("#marketmate-gallery-prev") |> render_click()
+
+      html = render(view)
+      assert html =~ "1 of #{@marketmate_gallery_image_count}"
+      assert html =~ "Live Portfolio Updates"
+    end
+
+    test "thumbnail selection jumps to the selected walkthrough item", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+
+      view
+      |> element("#marketmate-gallery-thumb-5")
+      |> render_click()
+
+      html = render(view)
+      assert html =~ "6 of #{@marketmate_gallery_image_count}"
+      assert html =~ "Product Vision"
+      assert html =~ "intelligent personal financial advisor"
+      assert html =~ "The vision slide anchors the entire walkthrough"
+    end
+
+    test "close button dismisses the modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+      assert has_element?(view, "#marketmate-gallery-modal")
+
+      view |> element("#close-marketmate-gallery") |> render_click()
+      refute has_element?(view, "#marketmate-gallery-modal")
+    end
+
+    test "backdrop click closes the modal", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+      assert has_element?(view, "#marketmate-gallery-modal")
+
+      html = render(view)
+      document = LazyHTML.from_fragment(html)
+      modal = LazyHTML.query_by_id(document, "marketmate-gallery-modal")
+      tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
+
+      assert has_backdrop_close?(tree, "close_marketmate_gallery")
+    end
+
+    test "previous button is hidden on the first slide and next button is hidden on the last slide",
+         %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/")
+
+      view |> element("button#project-marketmate") |> render_click()
+
+      refute has_element?(view, "#marketmate-gallery-prev")
+      assert has_element?(view, "#marketmate-gallery-next")
+
+      view
+      |> element("#marketmate-gallery-thumb-5")
+      |> render_click()
+
+      assert has_element?(view, "#marketmate-gallery-prev")
+      refute has_element?(view, "#marketmate-gallery-next")
     end
   end
 
@@ -313,7 +494,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       modal = LazyHTML.query_by_id(document, "admin-gallery-modal")
       tree = LazyHTML.to_tree(modal, sort_attributes: true, skip_whitespace_nodes: true)
 
-      assert has_backdrop_close?(tree)
+      assert has_backdrop_close?(tree, "close_admin_gallery")
     end
 
     test "modal shows thumbnail strip with all images", %{conn: conn} do
@@ -402,7 +583,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
     end
   end
 
-  defp has_backdrop_close?(tree) do
+  defp has_backdrop_close?(tree, event_name) do
     find_in_tree(tree, fn
       {_tag, attrs, _children} ->
         has_class =
@@ -413,7 +594,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
 
         has_close =
           Enum.any?(attrs, fn
-            {"phx-click", "close_admin_gallery"} -> true
+            {"phx-click", ^event_name} -> true
             _ -> false
           end)
 
@@ -433,4 +614,39 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
   end
 
   defp find_in_tree(_other, _predicate), do: false
+
+  defp has_tag_with_src_containing?(tree, tag_name, substring) when is_list(tree) do
+    Enum.any?(tree, &has_tag_with_src_containing?(&1, tag_name, substring))
+  end
+
+  defp has_tag_with_src_containing?({tag, attrs, children}, tag_name, substring) do
+    src_match =
+      tag == tag_name &&
+        Enum.any?(attrs, fn
+          {"src", src} -> String.contains?(src, substring)
+          _ -> false
+        end)
+
+    src_match or has_tag_with_src_containing?(children, tag_name, substring)
+  end
+
+  defp has_tag_with_src_containing?(_other, _tag_name, _substring), do: false
+
+  defp has_tag_with_attribute?(tree, tag_name, attribute_name) when is_list(tree) do
+    Enum.any?(tree, &has_tag_with_attribute?(&1, tag_name, attribute_name))
+  end
+
+  defp has_tag_with_attribute?({tag, attrs, children}, tag_name, attribute_name) do
+    attr_match =
+      tag == tag_name &&
+        Enum.any?(attrs, fn
+          {^attribute_name, _value} -> true
+          {^attribute_name, nil} -> true
+          _ -> false
+        end)
+
+    attr_match or has_tag_with_attribute?(children, tag_name, attribute_name)
+  end
+
+  defp has_tag_with_attribute?(_other, _tag_name, _attribute_name), do: false
 end

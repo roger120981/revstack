@@ -46,6 +46,96 @@ defmodule RevstackWeb.WhoamiLive do
     }
   ]
 
+  @marketmate_gallery_items [
+    %{
+      src: "/images/market_mate/live_dash.mp4",
+      title: "Live Portfolio Updates",
+      category: "Real-Time UI",
+      description:
+        "A live portfolio dashboard that reacts to market movement in real time, giving the user instant visibility into portfolio changes without leaving the page.",
+      highlights: [
+        "Real-time stock updates flow directly into the portfolio experience.",
+        "Phoenix LiveView refreshes the UI instantly with server-rendered state updates.",
+        "An Erlang event pipeline powers the live update loop behind the dashboard."
+      ],
+      why_it_matters:
+        "This slide proves the product is not just a static dashboard. The value is immediate market awareness delivered in real time, which is the baseline for a tool that users can actually rely on throughout the trading day."
+    },
+    %{
+      src: "/images/market_mate/sys_arch.png",
+      title: "System Architecture",
+      category: "BEAM-Native Design",
+      description:
+        "MarketMate is intentionally split between MMEX, the Elixir + LiveView web layer, and MMERL, the Erlang/OTP engine responsible for long-running event-driven processing.",
+      highlights: [
+        "MMEX owns the browser experience, LiveView state, and product presentation.",
+        "MMERL was chosen for concurrency, supervision trees, and fault-tolerant background processing.",
+        "Ash accelerates domain modeling with a clean resource structure and fast iteration.",
+        "The system keeps a clear separation of concerns between UI delivery and backend event processing."
+      ],
+      why_it_matters:
+        "The architecture slide shows deliberate system boundaries instead of an all-in-one app. That separation makes the product easier to evolve, easier to reason about, and better suited for long-running event workloads on the BEAM."
+    },
+    %{
+      src: "/images/market_mate/set_alert.png",
+      title: "Set Price Alerts",
+      category: "Alerting Pipeline",
+      description:
+        "Users configure price alerts in the web application, but alert evaluation and notification generation happen inside the Erlang engine where event processing belongs.",
+      highlights: [
+        "Alerts are configured by the user in MMEX.",
+        "Alert conditions are evaluated inside MMERL.",
+        "Notifications are generated in Erlang and sent through a bridge back to MMEX.",
+        "Phoenix PubSub broadcasts the result so the UI reflects alert activity in real time."
+      ],
+      why_it_matters:
+        "Alerts are where system design turns into user utility. This flow demonstrates that MarketMate can take user intent, evaluate it continuously in the backend, and push actionable outcomes back to the interface without manual refreshes."
+    },
+    %{
+      src: "/images/market_mate/set_targets.png",
+      title: "Set Price Targets",
+      category: "Decision Support",
+      description:
+        "Price targets follow the same BEAM-native event pipeline as alerts, forming the foundation for a richer investment decision-support system.",
+      highlights: [
+        "Target updates move through the bridge between MMERL and MMEX.",
+        "Phoenix PubSub keeps the LiveView interface in sync with target changes.",
+        "Future work includes a news ingestion layer and an AI agent for context-aware analysis.",
+        "The longer-term vision includes BUY / SELL / HOLD recommendations, intrinsic value modeling, and deeper financial metrics."
+      ],
+      why_it_matters:
+        "Targets expand the product from monitoring into decision support. This is the bridge from raw market tracking to a more opinionated financial assistant that can eventually combine targets, news, and valuation context."
+    },
+    %{
+      src: "/images/market_mate/import_fidelity.png",
+      title: "Portfolio Import",
+      category: "Data Ingestion",
+      description:
+        "The current MVP supports manual Fidelity portfolio import, giving users a pragmatic path to getting real holdings into the system quickly.",
+      highlights: [
+        "Manual Fidelity import keeps the first version simple and operational.",
+        "The workflow is intentionally MVP-friendly so the product can validate core value before deeper integrations.",
+        "If API access becomes available, the next step is an automated sync pipeline."
+      ],
+      why_it_matters:
+        "Import is critical because product value depends on real user holdings, not demo data. This MVP workflow favors speed-to-utility first, while still leaving a clear path toward automated brokerage integration later."
+    },
+    %{
+      src: "/images/market_mate/landing_page.png",
+      title: "Product Vision",
+      category: "Flagship Vision",
+      description:
+        "MarketMate is being built as an intelligent personal financial advisor that combines portfolio awareness, alerts, news, and financial metrics into one decision-support experience.",
+      highlights: [
+        "The product centers on portfolio awareness instead of generic market dashboards.",
+        "Alerts, news, and metrics are designed to converge into one operator-style workflow.",
+        "The long-term goal is stronger decision support for real users making real financial calls."
+      ],
+      why_it_matters:
+        "The vision slide anchors the entire walkthrough. It clarifies that MarketMate is being built as a cohesive financial operator experience, not a collection of isolated features, and that every subsystem is serving that larger product direction."
+    }
+  ]
+
   @section_navigation_items [
     %{id: "whoami-hero", label: "Hero"},
     %{id: "whoami-experience", label: "Career Highlights"},
@@ -70,6 +160,9 @@ defmodule RevstackWeb.WhoamiLive do
         admin_gallery_open?: false,
         admin_gallery_index: 0,
         admin_gallery_images: @admin_gallery_images,
+        marketmate_gallery_open?: false,
+        marketmate_gallery_index: 0,
+        marketmate_gallery_items: @marketmate_gallery_items,
         section_nav_open?: false,
         section_navigation_items: @section_navigation_items,
         career_modal_open?: false,
@@ -104,6 +197,34 @@ defmodule RevstackWeb.WhoamiLive do
 
   def handle_event("admin_gallery_select", %{"index" => index}, socket) do
     {:noreply, assign(socket, :admin_gallery_index, String.to_integer(index))}
+  end
+
+  def handle_event("open_marketmate_gallery", _params, socket) do
+    {:noreply, assign(socket, marketmate_gallery_open?: true, marketmate_gallery_index: 0)}
+  end
+
+  def handle_event("close_marketmate_gallery", _params, socket) do
+    {:noreply, assign(socket, marketmate_gallery_open?: false)}
+  end
+
+  def handle_event("marketmate_gallery_prev", _params, socket) do
+    index = max(socket.assigns.marketmate_gallery_index - 1, 0)
+    {:noreply, assign(socket, :marketmate_gallery_index, index)}
+  end
+
+  def handle_event("marketmate_gallery_next", _params, socket) do
+    max_index = gallery_max_index(socket.assigns.marketmate_gallery_items)
+    index = min(socket.assigns.marketmate_gallery_index + 1, max_index)
+    {:noreply, assign(socket, :marketmate_gallery_index, index)}
+  end
+
+  def handle_event("marketmate_gallery_select", %{"index" => index}, socket) do
+    index =
+      index
+      |> String.to_integer()
+      |> clamp_gallery_index(socket.assigns.marketmate_gallery_items)
+
+    {:noreply, assign(socket, :marketmate_gallery_index, index)}
   end
 
   def handle_event("toggle_section_nav", _params, socket) do
@@ -175,7 +296,7 @@ defmodule RevstackWeb.WhoamiLive do
           expanded_phase_id={@career_expanded_phase_id}
         />
         <.technical_expertise_section />
-        <.live_projects_section admin_gallery_images={@admin_gallery_images} />
+        <.live_projects_section />
         <.leadership_and_teamwork_section />
         <.education_section />
         <.personal_interests_section />
@@ -192,6 +313,11 @@ defmodule RevstackWeb.WhoamiLive do
         :if={@admin_gallery_open?}
         images={@admin_gallery_images}
         current_index={@admin_gallery_index}
+      />
+      <.marketmate_gallery_modal
+        :if={@marketmate_gallery_open?}
+        items={@marketmate_gallery_items}
+        current_index={@marketmate_gallery_index}
       />
     </Layouts.app>
     """
@@ -215,7 +341,7 @@ defmodule RevstackWeb.WhoamiLive do
           id="whoami-skill-signature"
           class="mt-6 text-lg text-base-content/70 max-w-2xl mx-auto leading-relaxed"
         >
-          12+ years building and owning revenue-critical, high-throughput production systems on the BEAM. <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
+          10+ years building and owning revenue-critical, high-throughput production systems on the BEAM. <b>Erlang/OTP, Elixir, Phoenix LiveView</b>, and distributed data architecture at scale.
         </p>
 
         <%!-- Grouped proof points for faster recruiter scanning --%>
@@ -226,7 +352,7 @@ defmodule RevstackWeb.WhoamiLive do
             </p>
             <div class="flex flex-wrap justify-center gap-3">
               <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-                <.icon name="hero-clock" class="size-4" /> 12+ Years on the BEAM
+                <.icon name="hero-clock" class="size-4" /> 10+ Years on the BEAM
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
                 <.icon name="hero-user-group" class="size-4" /> 5 Engineers Led & Mentored
@@ -243,7 +369,7 @@ defmodule RevstackWeb.WhoamiLive do
             </p>
             <div class="flex flex-wrap justify-center gap-3">
               <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
-                <.icon name="hero-bolt" class="size-4" /> Supported <b>1.5M+</b> Events/Day
+                <.icon name="hero-bolt" class="size-4" /> Supported <b>10M+</b> daily events
               </span>
               <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1.5 text-sm font-medium text-primary">
                 <.icon name="hero-currency-dollar" class="size-4" /> Powered <b>$2.5M+/mo</b> Revenue
@@ -346,7 +472,7 @@ defmodule RevstackWeb.WhoamiLive do
               "Elasticsearch / OpenSearch analytics",
               "Cassandra",
               "Apache Spark (AWS EMR, scala)",
-              "Time-series data modeling (1.5M+ events/day)"
+              "Time-series data modeling (10M+ events/day)"
             ]}
           />
           <.expertise_group
@@ -515,37 +641,95 @@ defmodule RevstackWeb.WhoamiLive do
           <p class="mt-4 text-base text-base-content/70 max-w-2xl mx-auto">
             Beyond production systems, I continue to build and deploy independent projects exploring new ideas and technologies.
           </p>
+          <p class="mt-4 text-sm font-bold text-primary uppercase tracking-wide">
+            <.icon
+              name="hero-cursor-arrow-rays"
+              class="size-5 inline-block align-text-bottom"
+            /> Click a project to explore
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <.project_card
-            id="project-handyman"
-            title="Hardcore Handyman"
-            subtitle="Full-stack Elixir lead-generation platform with SEO-driven service pages, conversion-focused design, and admin interface. Generated more inbound demand than the business could operationally support."
-            href="https://hardcorehandyman.fly.dev/"
-            icon="hero-wrench-screwdriver"
-            preview_src={~p"/images/hardcorehandyman_preview.png"}
-            tech={~w(Elixir Phoenix LiveView Ecto Swoosh Fly.io)}
-          />
-          <.project_card
-            id="project-admin"
-            title="Admin Dashboard (for this site!)"
-            subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
-            href="https://github.com/kyle-neal/revstack"
-            icon="hero-cog-6-tooth"
-            preview_src={~p"/images/admin_panel/admin_dashboard.png"}
-            tech={~w(Elixir Phoenix LiveView Ash Postgres)}
-            on_click="open_admin_gallery"
-          />
-          <.project_card
-            id="project-revenuelink"
-            title="RevenueLink"
-            subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
-            href="https://revenuelink.net/"
-            icon="hero-building-office-2"
-            preview_src={~p"/images/revenuelink_preview.png"}
-            tech={~w(Next.js ReactJS TailwindCSS Vercel)}
-          />
+        <div class="space-y-12">
+          <div
+            id="live-projects-completed"
+            class="rounded-[2rem] border border-primary/20 bg-gradient-to-br from-base-100 via-base-100 to-primary/8 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.12)] ring-1 ring-primary/10 sm:p-8"
+          >
+            <div class="max-w-3xl border-b border-primary/10 pb-6">
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="text-2xl font-bold text-base-content">Completed Projects</h3>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                  Featured Work
+                </span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-base-content/70 sm:text-base">
+                Production-ready launches, deployed experiments, and supporting projects that round out the broader portfolio.
+              </p>
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+              <.project_card
+                id="project-handyman"
+                title="Hardcore Handyman"
+                subtitle="Full-stack Elixir lead-generation platform with SEO-driven service pages, conversion-focused design, and admin interface. Generated more inbound demand than the business could operationally support."
+                href="https://hardcorehandyman.fly.dev/"
+                icon="hero-wrench-screwdriver"
+                preview_src={~p"/images/hardcorehandyman_preview.png"}
+                tech={~w(Elixir Phoenix LiveView Ecto Swoosh Fly.io)}
+              />
+              <.project_card
+                id="project-admin"
+                title="Admin Dashboard (for this site!)"
+                subtitle="Custom-built admin dashboard for managing leads and estimates. Features real-time data grids, filtering, status management, and single-user authentication."
+                href="https://github.com/kyle-neal/revstack"
+                icon="hero-cog-6-tooth"
+                preview_src={~p"/images/admin_panel/admin_dashboard.png"}
+                tech={~w(Elixir Phoenix LiveView Ash Postgres)}
+                on_click="open_admin_gallery"
+              />
+              <.project_card
+                id="project-revenuelink"
+                title="RevenueLink"
+                subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
+                href="https://revenuelink.net/"
+                icon="hero-building-office-2"
+                preview_src={~p"/images/revenuelink_preview.png"}
+                tech={~w(Next.js ReactJS TailwindCSS Vercel)}
+              />
+            </div>
+          </div>
+
+          <div
+            id="live-projects-in-progress"
+            class="rounded-[2rem] border border-base-300 bg-base-100/75 p-6 shadow-sm sm:p-8"
+          >
+            <div class="max-w-3xl border-b border-base-300 pb-6">
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="text-2xl font-bold text-base-content">In Progress Projects</h3>
+                <span
+                  id="live-projects-in-progress-badge"
+                  class="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700"
+                >
+                  <span class="h-2 w-2 rounded-full bg-amber-500"></span> In Progress
+                </span>
+              </div>
+              <p class="mt-3 text-sm leading-relaxed text-base-content/70 sm:text-base">
+                Active projects currently under development. These highlight ongoing system design, architecture decisions, and evolving features.
+              </p>
+            </div>
+
+            <div class="mt-8">
+              <.project_card
+                id="project-marketmate"
+                title="MarketMate"
+                subtitle="Real-time personal finance and portfolio monitoring system built with Elixir, Erlang, LiveView, and PostgreSQL. Designed with a BEAM-native architecture separating UI and event-driven backend processing."
+                href="https://github.com/kyle-neal/market_mate"
+                icon="hero-chart-bar"
+                preview_src={~p"/images/market_mate/dashboard.png"}
+                tech={["Elixir", "Erlang/OTP", "LiveView", "Ash", "PostgreSQL"]}
+                on_click="open_marketmate_gallery"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -845,27 +1029,56 @@ defmodule RevstackWeb.WhoamiLive do
       |> assign_new(:preview_alt, fn -> "#{assigns.title} preview" end)
       |> assign_new(:tech, fn -> [] end)
       |> assign_new(:on_click, fn -> nil end)
+      |> assign_new(:badge, fn -> nil end)
+      |> assign_new(:featured?, fn -> false end)
+      |> assign(:preview_video?, preview_video?(assigns[:preview_src]))
 
     ~H"""
     <%= if @on_click do %>
       <button
         id={@id}
         phx-click={@on_click}
-        class="group block w-full text-left rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+        class={[
+          "group block w-full text-left rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden",
+          @featured? &&
+            "border-primary/20 bg-gradient-to-br from-base-100 via-base-100 to-primary/5 ring-1 ring-primary/10"
+        ]}
       >
         <div class="overflow-hidden bg-base-200/40 aspect-video relative">
           <%= if @preview_src do %>
-            <img
-              src={@preview_src}
-              alt={@preview_alt}
-              loading="lazy"
-              class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
-            />
+            <%= if @preview_video? do %>
+              <video
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label={@preview_alt}
+                class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+              >
+                <source src={@preview_src} type={preview_mime_type(@preview_src)} />
+              </video>
+            <% else %>
+              <img
+                src={@preview_src}
+                alt={@preview_alt}
+                loading="lazy"
+                class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+              />
+            <% end %>
           <% else %>
             <div class="flex h-full w-full items-center justify-center text-base-content/40">
               <.icon name="hero-photo" class="size-8" />
             </div>
           <% end %>
+          <span
+            :if={@badge}
+            id={"#{@id}-badge"}
+            class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-base-100/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur"
+          >
+            <span class="h-2 w-2 rounded-full bg-primary"></span>
+            {@badge}
+          </span>
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
             <span class="text-white text-sm font-medium flex items-center gap-1.5">
               <.icon name="hero-eye" class="size-4" /> View Screenshots
@@ -906,21 +1119,47 @@ defmodule RevstackWeb.WhoamiLive do
         href={@href}
         target="_blank"
         rel="noopener noreferrer"
-        class="group block rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+        class={[
+          "group block rounded-2xl border border-base-300 bg-base-100 shadow-sm hover:shadow-xl hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden",
+          @featured? &&
+            "border-primary/20 bg-gradient-to-br from-base-100 via-base-100 to-primary/5 ring-1 ring-primary/10"
+        ]}
       >
         <div class="overflow-hidden bg-base-200/40 aspect-video relative">
           <%= if @preview_src do %>
-            <img
-              src={@preview_src}
-              alt={@preview_alt}
-              loading="lazy"
-              class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
-            />
+            <%= if @preview_video? do %>
+              <video
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label={@preview_alt}
+                class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+              >
+                <source src={@preview_src} type={preview_mime_type(@preview_src)} />
+              </video>
+            <% else %>
+              <img
+                src={@preview_src}
+                alt={@preview_alt}
+                loading="lazy"
+                class="h-full w-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-500"
+              />
+            <% end %>
           <% else %>
             <div class="flex h-full w-full items-center justify-center text-base-content/40">
               <.icon name="hero-photo" class="size-8" />
             </div>
           <% end %>
+          <span
+            :if={@badge}
+            id={"#{@id}-badge"}
+            class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-base-100/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur"
+          >
+            <span class="h-2 w-2 rounded-full bg-primary"></span>
+            {@badge}
+          </span>
           <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
             <span class="text-white text-sm font-medium flex items-center gap-1.5">
               <.icon name="hero-arrow-top-right-on-square" class="size-4" /> Visit Site
@@ -1114,6 +1353,237 @@ defmodule RevstackWeb.WhoamiLive do
                   />
                 </button>
               <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp marketmate_gallery_modal(assigns) do
+    items = assigns.items
+    current_index = clamp_gallery_index(assigns.current_index, items)
+    current = Enum.at(items, current_index)
+    total = length(items)
+
+    assigns =
+      assign(assigns,
+        current_item: current,
+        current_index: current_index,
+        total: total
+      )
+
+    ~H"""
+    <div
+      id="marketmate-gallery-modal"
+      class="fixed inset-0 z-50 overflow-y-auto"
+      phx-window-keydown="close_marketmate_gallery"
+      phx-key="Escape"
+      phx-hook="LockBodyScroll"
+    >
+      <div
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-md"
+        phx-click="close_marketmate_gallery"
+      >
+      </div>
+      <div class="relative flex min-h-full items-start justify-center p-4 sm:p-6 lg:p-8">
+        <div class="relative my-8 w-full max-w-7xl overflow-hidden rounded-[2rem] border border-primary/15 bg-base-100 shadow-[0_40px_120px_rgba(15,23,42,0.45)]">
+          <div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-primary/15 via-transparent to-primary/10">
+          </div>
+
+          <div class="relative z-10 border-b border-base-300/80 bg-base-100/95 px-6 py-5 backdrop-blur sm:px-8">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                    <span class="h-2 w-2 rounded-full bg-primary"></span> System Design Walkthrough
+                  </span>
+                  <span class="text-xs font-medium uppercase tracking-[0.18em] text-base-content/45">
+                    {@current_index + 1} of {@total}
+                  </span>
+                </div>
+                <div class="mt-3 flex items-start gap-3">
+                  <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <.icon name="hero-chart-bar" class="size-5" />
+                  </div>
+                  <div class="min-w-0">
+                    <h3 class="text-xl font-bold text-base-content sm:text-2xl">
+                      MarketMate
+                    </h3>
+                    <p class="mt-1 max-w-3xl text-sm leading-relaxed text-base-content/65 sm:text-base">
+                      Real-time personal finance and portfolio monitoring built as a BEAM-native product system, with LiveView on the front end and Erlang/OTP event processing behind it.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 self-start">
+                <a
+                  id="marketmate-gallery-source-link"
+                  href="https://github.com/kyle-neal/market_mate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 rounded-xl border border-base-300 bg-base-100 px-4 py-2 text-sm font-semibold text-base-content shadow-sm transition-all duration-200 hover:border-primary/30 hover:text-primary hover:shadow-md"
+                >
+                  <.icon name="hero-code-bracket-square" class="size-5" /> View Source Code on GitHub
+                </a>
+                <button
+                  id="close-marketmate-gallery"
+                  phx-click="close_marketmate_gallery"
+                  class="inline-flex h-10 w-10 items-center justify-center rounded-xl text-base-content/60 transition-colors hover:bg-base-200 hover:text-base-content"
+                  aria-label="Close gallery"
+                >
+                  <.icon name="hero-x-mark" class="size-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative z-10 p-6 sm:p-8">
+            <div class="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(22rem,0.95fr)] xl:items-start">
+              <div class="space-y-4">
+                <div class="relative overflow-hidden rounded-[1.5rem] border border-base-300 bg-slate-950 shadow-2xl">
+                  <div class="absolute inset-x-0 top-0 z-10 flex items-center justify-between border-b border-white/10 bg-black/30 px-4 py-3 backdrop-blur">
+                    <div class="flex items-center gap-2">
+                      <span class="h-2.5 w-2.5 rounded-full bg-rose-400"></span>
+                      <span class="h-2.5 w-2.5 rounded-full bg-amber-300"></span>
+                      <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+                    </div>
+                    <span class="text-xs font-medium uppercase tracking-[0.18em] text-white/65">
+                      {@current_item.category}
+                    </span>
+                  </div>
+
+                  <%= if preview_video?(@current_item.src) do %>
+                    <video
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="auto"
+                      aria-label={@current_item.title}
+                      class="w-full object-cover"
+                    >
+                      <source
+                        src={@current_item.src}
+                        type={preview_mime_type(@current_item.src)}
+                      />
+                    </video>
+                  <% else %>
+                    <img
+                      src={@current_item.src}
+                      alt={@current_item.title}
+                      class="w-full object-cover"
+                    />
+                  <% end %>
+
+                  <button
+                    :if={@current_index > 0}
+                    id="marketmate-gallery-prev"
+                    phx-click="marketmate_gallery_prev"
+                    class="absolute left-4 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur transition-colors hover:bg-black/65"
+                    aria-label="Previous screenshot"
+                  >
+                    <.icon name="hero-chevron-left" class="size-5" />
+                  </button>
+
+                  <button
+                    :if={@current_index < @total - 1}
+                    id="marketmate-gallery-next"
+                    phx-click="marketmate_gallery_next"
+                    class="absolute right-4 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/45 text-white backdrop-blur transition-colors hover:bg-black/65"
+                    aria-label="Next screenshot"
+                  >
+                    <.icon name="hero-chevron-right" class="size-5" />
+                  </button>
+                </div>
+
+                <div class="flex gap-3 overflow-x-auto pb-2">
+                  <button
+                    :for={{item, idx} <- Enum.with_index(@items)}
+                    id={"marketmate-gallery-thumb-#{idx}"}
+                    phx-click="marketmate_gallery_select"
+                    phx-value-index={idx}
+                    class={[
+                      "group shrink-0 overflow-hidden rounded-2xl border bg-base-100 text-left shadow-sm transition-all duration-200",
+                      if(idx == @current_index,
+                        do: "border-primary ring-2 ring-primary/20",
+                        else: "border-base-300 hover:border-primary/30"
+                      )
+                    ]}
+                  >
+                    <%= if preview_video?(item.src) do %>
+                      <video
+                        muted
+                        loop
+                        autoplay
+                        playsinline
+                        preload="metadata"
+                        aria-label={item.title}
+                        class="h-16 w-24 object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
+                      >
+                        <source src={item.src} type={preview_mime_type(item.src)} />
+                      </video>
+                    <% else %>
+                      <img
+                        src={item.src}
+                        alt={item.title}
+                        class="h-16 w-24 object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
+                      />
+                    <% end %>
+                    <div class="w-24 px-2 py-2">
+                      <p class="truncate text-[11px] font-semibold uppercase tracking-[0.14em] text-base-content/45">
+                        {item.category}
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="rounded-[1.5rem] border border-base-300 bg-gradient-to-b from-base-100 to-base-200/35 p-6 shadow-sm">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                    {@current_item.category}
+                  </span>
+                  <span class="text-xs font-medium uppercase tracking-[0.16em] text-base-content/40">
+                    MarketMate Walkthrough
+                  </span>
+                </div>
+
+                <h4 class="mt-4 text-2xl font-bold tracking-tight text-base-content">
+                  {@current_item.title}
+                </h4>
+                <p class="mt-4 text-sm leading-relaxed text-base-content/70 sm:text-base">
+                  {@current_item.description}
+                </p>
+
+                <div class="mt-6 rounded-2xl border border-base-300/80 bg-base-100/80 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                    Architecture Notes
+                  </p>
+                  <ul class="mt-4 space-y-3">
+                    <li
+                      :for={highlight <- @current_item.highlights}
+                      class="flex items-start gap-3 text-sm leading-relaxed text-base-content/75"
+                    >
+                      <span class="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <.icon name="hero-chevron-right" class="size-3" />
+                      </span>
+                      <span>{highlight}</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="mt-6 rounded-2xl border border-primary/15 bg-primary/6 p-4">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                    Why It Matters
+                  </p>
+                  <p class="mt-2 text-sm leading-relaxed text-base-content/70">
+                    {@current_item.why_it_matters}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2157,7 +2627,7 @@ defmodule RevstackWeb.WhoamiLive do
         %{value: "3-node", label: "ES cluster"},
         %{value: "~600 TB", label: "Cassandra footprint"},
         %{value: "~600 TB", label: "ES analytics"},
-        %{value: "12+", label: "years ownership"}
+        %{value: "10+", label: "years ownership"}
       ],
       team: %{
         description:
@@ -2427,6 +2897,31 @@ defmodule RevstackWeb.WhoamiLive do
 
       true ->
         nil
+    end
+  end
+
+  defp gallery_max_index(items) do
+    max(length(items) - 1, 0)
+  end
+
+  defp clamp_gallery_index(index, items) do
+    index
+    |> max(0)
+    |> min(gallery_max_index(items))
+  end
+
+  defp preview_video?(nil), do: false
+
+  defp preview_video?(src) do
+    Path.extname(src) in [".mp4", ".webm", ".mov"]
+  end
+
+  defp preview_mime_type(src) do
+    case Path.extname(src) do
+      ".mp4" -> "video/mp4"
+      ".webm" -> "video/webm"
+      ".mov" -> "video/quicktime"
+      _ -> "video/mp4"
     end
   end
 end

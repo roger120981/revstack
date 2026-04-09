@@ -146,7 +146,7 @@ defmodule RevstackWeb.Layouts do
               </summary>
               <ul class="menu dropdown-content z-50 mt-3 w-56 rounded-2xl border border-base-300 bg-base-100 p-2 shadow-xl">
                 <li>
-                  <.link id="desktop-user-menu-admin-link" navigate="/admin" class="rounded-xl">
+                  <.link id="desktop-user-menu-admin-link" href="/admin" class="rounded-xl">
                     <.icon name="hero-squares-2x2" class="size-4" /> Admin Dashboard
                   </.link>
                 </li>
@@ -231,7 +231,7 @@ defmodule RevstackWeb.Layouts do
                   </div>
                   <.link
                     id="mobile-nav-admin-link"
-                    navigate="/admin"
+                    href="/admin"
                     class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-base-content/75 transition-colors hover:bg-base-200 hover:text-base-content"
                   >
                     <.icon name="hero-squares-2x2" class="size-5" /> Admin Dashboard

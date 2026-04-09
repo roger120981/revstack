@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: ./source
+      dockerfile: Dockerfile
+    container_name: revstack_app
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:{{ app_port }}/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

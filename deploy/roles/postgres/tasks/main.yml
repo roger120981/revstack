@@ -1,0 +1,43 @@
+---
+- name: Install PostgreSQL
+  apt:
+    name:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+      - python3-psycopg2
+    state: present
+
+- name: Ensure PostgreSQL is running
+  systemd:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Create database user
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    role_attr_flags: CREATEDB
+
+- name: Create database
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_user }}"
+    encoding: UTF-8
+
+- name: Configure PostgreSQL to listen on localhost
+  lineinfile:
+    path: /etc/postgresql/{{ postgresql_version | default('16') }}/main/postgresql.conf
+    regexp: "^#?listen_addresses"
+    line: "listen_addresses = '127.0.0.1'"
+  notify: restart postgresql
+
+- name: Allow local connections with password
+  lineinfile:
+    path: /etc/postgresql/{{ postgresql_version | default('16') }}/main/pg_hba.conf
+    regexp: "^host\\s+all\\s+{{ db_user }}"
+    line: "host    all    {{ db_user }}    127.0.0.1/32    scram-sha-256"
+  notify: restart postgresql

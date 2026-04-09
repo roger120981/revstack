@@ -1,0 +1,74 @@
+---
+- name: Install Nginx and Certbot
+  apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+    state: present
+
+- name: Remove default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Check if SSL cert exists
+  stat:
+    path: /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem
+  register: ssl_cert
+  tags: always
+
+- name: Deploy Nginx config (HTTP only for initial certbot)
+  template:
+    src: revstack-http.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}.conf
+    mode: "0644"
+  when: not ssl_cert.stat.exists
+  notify: reload nginx
+
+- name: Enable Nginx site
+  file:
+    src: /etc/nginx/sites-available/{{ app_name }}.conf
+    dest: /etc/nginx/sites-enabled/{{ app_name }}.conf
+    state: link
+  notify: reload nginx
+
+- name: Test Nginx config
+  command: nginx -t
+  changed_when: false
+
+- name: Ensure Nginx is running
+  systemd:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Obtain SSL certificate
+  command: >
+    certbot --nginx
+    -d {{ app_domain }}
+    --non-interactive
+    --agree-tos
+    -m {{ certbot_email }}
+    --redirect
+  args:
+    creates: /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem
+  tags: ssl
+
+- name: Deploy full Nginx config (with SSL)
+  template:
+    src: revstack-ssl.conf.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}.conf
+    mode: "0644"
+  when: ssl_cert.stat.exists
+  notify: reload nginx
+  tags: ssl
+
+- name: Set up certbot auto-renewal cron
+  cron:
+    name: "certbot renewal"
+    minute: "30"
+    hour: "2"
+    day: "1,15"
+    job: "certbot renew --quiet --deploy-hook 'systemctl reload nginx'"
+  tags: ssl

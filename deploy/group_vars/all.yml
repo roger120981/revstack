@@ -1,0 +1,33 @@
+---
+# Application
+app_name: revstack
+app_domain: revenuelink.net
+app_port: 4000
+app_user: deploy
+app_dir: /opt/revstack
+
+# Git
+git_repo: https://github.com/kyle-neal/revstack.git
+git_branch: main
+
+# PostgreSQL
+db_name: revstack_prod
+db_user: revstack
+db_password: "{{ vault_db_password | default('CHANGE_ME_USE_ANSIBLE_VAULT') }}"
+
+# Docker
+docker_compose_version: "2.27.0"
+
+# SSL (Let's Encrypt)
+certbot_email: nealkyle5@gmail.com
+
+# Environment variables
+secret_key_base: "{{ vault_secret_key_base | default('CHANGE_ME_USE_ANSIBLE_VAULT') }}"
+token_signing_secret: "{{ vault_token_signing_secret | default('CHANGE_ME_USE_ANSIBLE_VAULT') }}"
+admin_email: "{{ vault_admin_email | default('admin@example.com') }}"
+admin_password: "{{ vault_admin_password | default('CHANGE_ME_USE_ANSIBLE_VAULT') }}"
+
+# Optional
+maxmind_account_id: ""
+maxmind_license_key: ""
+pool_size: 10

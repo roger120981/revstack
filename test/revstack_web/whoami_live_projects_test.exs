@@ -19,7 +19,7 @@ defmodule RevstackWeb.WhoamiLiveProjectsTest do
       assert has_element?(view, "#project-marketmate")
       assert has_element?(view, "#project-handyman")
       assert has_element?(view, "#project-admin")
-      assert has_element?(view, "#project-revenuelink")
+      # assert has_element?(view, "#project-revenuelink")
       assert has_element?(view, "#live-projects p", "Click a project to explore")
 
       html = render(view)

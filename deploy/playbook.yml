@@ -1,0 +1,24 @@
+---
+# Ansible playbook for deploying Revstack to a VPS
+#
+# Usage:
+#   First-time setup:  ./deploy.sh setup
+#   Deploy app:        ./deploy.sh deploy
+#   Full (setup+deploy): ./deploy.sh
+#
+- name: Setup VPS infrastructure
+  hosts: web
+  become: true
+  tags: [setup]
+  roles:
+    - base
+    - docker
+    - postgres
+    - nginx
+
+- name: Deploy Revstack application
+  hosts: web
+  become: true
+  tags: [deploy]
+  roles:
+    - app

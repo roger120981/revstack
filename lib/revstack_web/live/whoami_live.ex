@@ -666,7 +666,7 @@ defmodule RevstackWeb.WhoamiLive do
               </p>
             </div>
 
-            <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
               <.project_card
                 id="project-handyman"
                 title="Hardcore Handyman"
@@ -686,7 +686,7 @@ defmodule RevstackWeb.WhoamiLive do
                 tech={~w(Elixir Phoenix LiveView Ash Postgres)}
                 on_click="open_admin_gallery"
               />
-              <.project_card
+              <%!-- <.project_card
                 id="project-revenuelink"
                 title="RevenueLink"
                 subtitle="My personal business website and portfolio hub. Showcases my professional profile and services, and serves as a central point for inquiries and collaborations."
@@ -694,7 +694,7 @@ defmodule RevstackWeb.WhoamiLive do
                 icon="hero-building-office-2"
                 preview_src={~p"/images/revenuelink_preview.png"}
                 tech={~w(Next.js ReactJS TailwindCSS Vercel)}
-              />
+              /> --%>
             </div>
           </div>
 

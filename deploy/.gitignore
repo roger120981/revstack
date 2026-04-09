@@ -1,0 +1,6 @@
+# Ansible secrets - NEVER commit these
+inventory.ini
+group_vars/vault.yml
+group_vars/web/
+.env.production
+*.retry

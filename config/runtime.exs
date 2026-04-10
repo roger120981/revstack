@@ -24,6 +24,8 @@ config :revstack, RevstackWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
 if config_env() == :prod do
+  fly_app_name = System.get_env("FLY_APP_NAME")
+
   config :revstack, Revstack.Repo, Revstack.RepoConfig.prod_repo_config()
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
@@ -65,6 +67,11 @@ if config_env() == :prod do
     admin_password:
       System.get_env("ADMIN_PASSWORD") ||
         raise("Missing environment variable `ADMIN_PASSWORD`!")
+
+  config :revstack, RevstackWeb.Plugs.FlyRedirect,
+    enabled: not is_nil(fly_app_name),
+    source_host: "revstack.fly.dev",
+    target_url: "https://revenuelink.net"
 
   # Trust proxy headers (X-Forwarded-For) from Fly.io load balancer
   config :revstack, trust_proxy: true

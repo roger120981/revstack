@@ -15,6 +15,7 @@ defmodule Revstack.Tracking.Visitor do
     define :read, action: :read
     define :by_ip, action: :by_ip, args: [:ip_address]
     define :record_visit, action: :record_visit
+    define :backfill_referrer, action: :backfill_referrer
     define :enrich_location, action: :enrich_location
     define :destroy, action: :destroy
   end
@@ -51,6 +52,12 @@ defmodule Revstack.Tracking.Visitor do
 
       change set_attribute(:last_visited_at, &DateTime.utc_now/0)
       change increment(:visit_count)
+    end
+
+    update :backfill_referrer do
+      require_atomic? false
+
+      accept [:referrer]
     end
 
     update :enrich_location do

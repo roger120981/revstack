@@ -41,6 +41,20 @@ defmodule Revstack.Tracking.VisitorPageVisitResourceTest do
       assert visit.method == "GET"
     end
 
+    test "stores optional referrer", %{visitor: visitor} do
+      {:ok, visit} =
+        VisitorPageVisit.create(
+          %{
+            visitor_id: visitor.id,
+            path: "/services",
+            referrer: "https://example.com/source"
+          },
+          authorize?: false
+        )
+
+      assert visit.referrer == "https://example.com/source"
+    end
+
     test "requires visitor_id", %{} do
       assert {:error, _} =
                VisitorPageVisit.create(%{path: "/test"}, authorize?: false)

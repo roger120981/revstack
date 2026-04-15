@@ -49,6 +49,28 @@ defmodule Revstack.Tracking.ServiceTest do
 
       assert visitor.referrer == "https://google.com"
     end
+
+    test "backfills referrer for existing visitor when missing" do
+      {:ok, visitor1} = Service.find_or_create_visitor("203.0.113.6", "TestAgent", nil)
+      assert is_nil(visitor1.referrer)
+
+      {:ok, visitor2} =
+        Service.find_or_create_visitor("203.0.113.6", "TestAgent", "https://google.com")
+
+      assert visitor2.id == visitor1.id
+      assert visitor2.referrer == "https://google.com"
+    end
+
+    test "does not overwrite existing referrer for existing visitor" do
+      {:ok, visitor1} =
+        Service.find_or_create_visitor("203.0.113.7", "TestAgent", "https://google.com")
+
+      {:ok, visitor2} =
+        Service.find_or_create_visitor("203.0.113.7", "TestAgent", "https://bing.com")
+
+      assert visitor2.id == visitor1.id
+      assert visitor2.referrer == "https://google.com"
+    end
   end
 
   describe "create_page_visit/5" do
@@ -78,6 +100,22 @@ defmodule Revstack.Tracking.ServiceTest do
       assert visit.method == "GET"
     end
 
+    test "stores referrer on page visit" do
+      {:ok, visitor} = Service.find_or_create_visitor("203.0.113.13")
+
+      assert {:ok, visit} =
+               Service.create_page_visit(
+                 visitor,
+                 "/services",
+                 "http://localhost/services",
+                 nil,
+                 "GET",
+                 "https://example.com/source"
+               )
+
+      assert visit.referrer == "https://example.com/source"
+    end
+
     test "creates multiple page visits for same visitor" do
       {:ok, visitor} = Service.find_or_create_visitor("203.0.113.12")
 
@@ -96,7 +134,7 @@ defmodule Revstack.Tracking.ServiceTest do
                Service.track_page_visit(%{
                  ip_address: "203.0.113.20",
                  user_agent: "TestUA",
-                 referrer: nil,
+                 referrer: "https://example.com/source",
                  path: "/",
                  full_url: "http://localhost/",
                  query_string: nil,
@@ -109,6 +147,7 @@ defmodule Revstack.Tracking.ServiceTest do
       visits = VisitorPageVisit.for_visitor!(visitor.id, authorize?: false)
       assert length(visits) == 1
       assert hd(visits).path == "/"
+      assert hd(visits).referrer == "https://example.com/source"
     end
 
     test "tracks multiple pages for the same visitor" do

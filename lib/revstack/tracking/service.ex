@@ -26,7 +26,8 @@ defmodule Revstack.Tracking.Service do
     method = Map.get(attrs, :method)
 
     with {:ok, visitor} <- find_or_create_visitor(ip, user_agent, referrer),
-         {:ok, _page_visit} <- create_page_visit(visitor, path, full_url, query_string, method) do
+         {:ok, _page_visit} <-
+           create_page_visit(visitor, path, full_url, query_string, method, referrer) do
       maybe_enrich_location(visitor)
       {:ok, visitor}
     end
@@ -39,7 +40,9 @@ defmodule Revstack.Tracking.Service do
   def find_or_create_visitor(ip_address, user_agent \\ nil, referrer \\ nil) do
     case Visitor.by_ip(ip_address, authorize?: false) do
       {:ok, visitor} ->
-        Visitor.record_visit(visitor, authorize?: false)
+        with {:ok, visitor} <- maybe_backfill_referrer(visitor, referrer) do
+          Visitor.record_visit(visitor, authorize?: false)
+        end
 
       {:error, _} ->
         Visitor.create(
@@ -56,18 +59,41 @@ defmodule Revstack.Tracking.Service do
   @doc """
   Creates a page visit record for a visitor.
   """
-  def create_page_visit(visitor, path, full_url \\ nil, query_string \\ nil, method \\ nil) do
+  def create_page_visit(
+        visitor,
+        path,
+        full_url \\ nil,
+        query_string \\ nil,
+        method \\ nil,
+        referrer \\ nil
+      ) do
     VisitorPageVisit.create(
       %{
         visitor_id: visitor.id,
         path: path,
         full_url: full_url,
         query_string: query_string,
-        method: method
+        method: method,
+        referrer: referrer
       },
       authorize?: false
     )
   end
+
+  defp maybe_backfill_referrer(visitor, referrer) do
+    cond do
+      present_referrer?(visitor.referrer) ->
+        {:ok, visitor}
+
+      present_referrer?(referrer) ->
+        Visitor.backfill_referrer(visitor, %{referrer: referrer}, authorize?: false)
+
+      true ->
+        {:ok, visitor}
+    end
+  end
+
+  defp present_referrer?(value), do: is_binary(value) and String.trim(value) != ""
 
   @doc """
   Triggers location enrichment for a visitor if location data is missing.

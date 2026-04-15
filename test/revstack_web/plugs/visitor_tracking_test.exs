@@ -24,6 +24,18 @@ defmodule RevstackWeb.Plugs.VisitorTrackingTest do
       assert get_session(conn, :visitor_referrer) == "https://example.com/source"
     end
 
+    test "preserves existing session referrer when request has no referer", %{conn: conn} do
+      conn =
+        conn
+        |> init_test_session(%{visitor_referrer: "https://example.com/original"})
+        |> put_req_header("user-agent", "TrackingTest/1.0")
+        |> get("/about")
+
+      conn = fetch_session(conn)
+
+      assert get_session(conn, :visitor_referrer) == "https://example.com/original"
+    end
+
     test "stores visitor IP in session for LiveView access", %{conn: conn} do
       conn =
         conn

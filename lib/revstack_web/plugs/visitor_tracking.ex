@@ -17,7 +17,7 @@ defmodule RevstackWeb.Plugs.VisitorTracking do
   def call(conn, _opts) do
     ip = Service.extract_ip(conn)
     user_agent = get_user_agent(conn)
-    referrer = get_referrer(conn)
+    referrer = get_referrer(conn) || Plug.Conn.get_session(conn, :visitor_referrer)
 
     conn
     |> Plug.Conn.assign(:visitor_ip, ip)
@@ -54,5 +54,15 @@ defmodule RevstackWeb.Plugs.VisitorTracking do
     conn
     |> Plug.Conn.get_req_header("referer")
     |> List.first()
+    |> normalize_blank()
   end
+
+  defp normalize_blank(value) when is_binary(value) do
+    case String.trim(value) do
+      "" -> nil
+      trimmed -> trimmed
+    end
+  end
+
+  defp normalize_blank(_value), do: nil
 end

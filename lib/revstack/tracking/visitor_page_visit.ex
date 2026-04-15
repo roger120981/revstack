@@ -26,6 +26,7 @@ defmodule Revstack.Tracking.VisitorPageVisit do
         :full_url,
         :query_string,
         :method,
+        :referrer,
         :visitor_id
       ]
 
@@ -76,6 +77,11 @@ defmodule Revstack.Tracking.VisitorPageVisit do
     end
 
     attribute :method, :string do
+      allow_nil? true
+      public? true
+    end
+
+    attribute :referrer, :string do
       allow_nil? true
       public? true
     end
